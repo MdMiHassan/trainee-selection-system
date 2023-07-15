@@ -22,6 +22,8 @@ import {
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import AdminNavbar from '../layouts/AdminNavbar';
 import AdminPanelMenuItem from '../components/AdminPanelMenuItem';
+import { Route, Router, Routes } from 'react-router-dom';
+import NoticeBoard from '../components/NoticeBoard';
 const { Header, Content, Footer, Sider } = Layout;
 function getItem(label, key, icon, children) {
   return {
@@ -93,8 +95,26 @@ const AdminPanel = () => {
               minHeight: 360,
               background: colorBgContainer,
             }}
+
           >
-            Dashboard panel.
+            <Routes>
+              <Route exact path="/" component={Home} />
+              <Route path="/stats" component={Stats} />
+              <Route path="/circular/new" component={<NoticeBoard />} />
+              <Route path="/circular/screening" component={Screening} />
+              <Route path="/circular/update" component={UpdateCircular} />
+              <Route path="/circular/all" component={AllCircular} />
+              <Route path="/notice/new" component={NewNotice} />
+              <Route path="/notice/all" component={AllNotice} />
+              <Route path="/notice/update" component={UpdateNotice} />
+              <Route path="/email/sent" component={SentEmail} />
+              <Route path="/email/configure" component={ConfigureEmail} />
+              <Route path="/admit/configure" component={ConfigureAdmit} />
+              <Route path="/user/admins" component={Admins} />
+              <Route path="/user/new" component={NewAdmin} />
+              <Route path="/user/applicants" component={Applicants} />
+              <Route path="/files" component={Files} />
+            </Routes>
           </div>
         </Content>
         <Footer
