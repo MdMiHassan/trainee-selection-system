@@ -3,14 +3,11 @@ import {
   DashboardOutlined,
   DesktopOutlined,
   FileOutlined,
-  PieChartOutlined,
-  ToolOutlined,
   TeamOutlined,
   SafetyCertificateOutlined,
   FileTextOutlined,
   UnorderedListOutlined,
   PlusOutlined,
-  StepForwardOutlined,
   FileSearchOutlined,
   FileSyncOutlined,
   NotificationOutlined,
@@ -19,13 +16,12 @@ import {
   ExperimentOutlined,
   IdcardOutlined,
   SubnodeOutlined,
-  SmileOutlined,
-  SearchOutlined,
   UserOutlined,
   SyncOutlined,
 } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import AdminNavbar from '../layouts/AdminNavbar';
+import AdminPanelMenuItem from '../components/AdminPanelMenuItem';
 const { Header, Content, Footer, Sider } = Layout;
 function getItem(label, key, icon, children) {
   return {
@@ -58,7 +54,7 @@ const items = [
   getItem('User', 'sub5', <TeamOutlined />, [
     getItem('Admins', '13', <SafetyCertificateOutlined />),
     getItem('New Admin', '14', <SubnodeOutlined />),
-    getItem('Applicants', '11', <SmileOutlined />)]),
+    getItem('Applicants', '11', <UserOutlined />)]),
   getItem('Files', '15', <FileOutlined />),
 ];
 const AdminPanel = () => {
@@ -74,7 +70,7 @@ const AdminPanel = () => {
     >
       <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
         <div className="demo-logo-vertical" />
-        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
+        <AdminPanelMenuItem />
       </Sider>
       <Layout>
         <AdminNavbar />
