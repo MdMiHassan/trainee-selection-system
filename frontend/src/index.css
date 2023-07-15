@@ -1,0 +1,197 @@
+/* :root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+} */
+:root {
+  --dark-black: #0e0e0e;
+  --medium-black: #181818;
+  --light-black: #666666;
+  --primary-btn-color-hover: #31e22e;
+  --primary-btn-color: #5fe75c;
+  --dark-gray: #999999;
+  --medium-gray: #cccccc;
+  --m1-gray: #e5e5e5;
+  --m2-gray: #e5e5e5;
+  --body-bg: #fff;
+  --primary-bg: #e5e5e5;
+  --color-on-primary-bg: #f9f9f9;
+  --light-redis: #fbf9ec;
+  --mine-shaft: #2b2b2b;
+  --pastel-green: #50e34d;
+  --desert-storm: #f0f0ef;
+  --stack: #979a97;
+  --pumice: #c9cbc9;
+  --boulder: #777271;
+  --mantis: #77ce71;
+  --chino: #cdc1a7;
+  --indian-khaki: #c7a38e;
+  --primary-color: #4d90fe;
+  --primary-text-color: #202124;
+  --secondary-text-color: #696969;
+  --secodary-card-bg: #ecedf2;
+  --bs-blue: #0d6efd;
+  --bs-indigo: #6610f2;
+  --bs-purple: #6f42c1;
+  --bs-pink: #d63384;
+  --bs-red: #dc3545;
+  --bs-orange: #fd7e14;
+  --bs-yellow: #ffc107;
+  --bs-green: #198754;
+  --bs-teal: #20c997;
+  --bs-cyan: #0dcaf0;
+  --bs-white: #fff;
+  --bs-gray: #6c757d;
+  --bs-gray-dark: #343a40;
+  --bs-primary: #0d6efd;
+  --bs-secondary: #6c757d;
+  --bs-success: #198754;
+  --bs-info: #0dcaf0;
+  --bs-warning: #ffc107;
+  --bs-danger: #dc3545;
+  --bs-light: #f8f9fa;
+  --bs-dark: #212529;
+  --bs-font-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --bs-gradient: linear-gradient(180deg, hsla(0, 0%, 100%, .15), hsla(0, 0%, 100%, 0));
+  /* font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400; */
+
+  /* color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424; */
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+html,body {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  color: inherit;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-center {
+  align-items: center;
+  justify-content: center;
+}
+.flex-start{
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.flex-space-between {
+  align-items: center;
+  justify-content: space-between;
+}
+.flex-space-between-start {
+  align-items: start;
+  justify-content: space-between;
+}
+body {
+  overflow-y: scroll; /* Enable vertical scrolling */
+}
+
+body::-webkit-scrollbar {
+  width: 10px; /* Set the width of the scrollbar */
+  /* background-color: rgba(245, 245, 245, 1); Set the background color of the scrollbar */
+}
+
+body::-webkit-scrollbar-track {
+  /* border-radius: 10px; */
+  background: rgba(0,0,0,0.1);
+}
+body::-webkit-scrollbar-thumb{
+  /* border-radius: 10px; */
+  background: rgba(0,0,0,0.2);
+}
+body::-webkit-scrollbar-thumb:hover{
+  background: rgba(0,0,0,0.4);
+}
+body::-webkit-scrollbar-thumb:active{
+  background: rgba(0,0,0,.9);
+}
+

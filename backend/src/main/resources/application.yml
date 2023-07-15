@@ -1,0 +1,22 @@
+
+spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: traineeselectionsystem@gmail.com
+    password: nehlyofmnnwlnwuj
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/tss_db
+    username: root
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+#      ddl-auto: create-drop
+    show-sql: true

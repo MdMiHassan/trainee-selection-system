@@ -1,0 +1,51 @@
+.container {
+    padding: 15px;
+}
+
+ul {
+    margin: 0px;
+    padding: 0px;
+}
+
+.footer-section {
+    background: #151414;
+    position: relative;
+}
+
+
+.single-cta i {
+    color: var(--primary-color);
+    font-size: 18px;
+    float: left;
+    margin-top: 6px;
+}
+
+.cta-text {
+    padding-left: 15px;
+    display: inline-block;
+}
+
+.cta-text h4 {
+    color: #fff;
+    margin-bottom: 2px;
+}
+
+.cta-text span {
+    color: #757575;
+    font-size: 15px;
+}
+
+
+.copyright-area {
+    background: #202020;
+}
+
+.copyright-text p {
+    margin: 0;
+    font-size: 14px;
+    color: #878787;
+}
+
+.copyright-text p a {
+    color: var(--primary-color);
+}

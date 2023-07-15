@@ -1,0 +1,25 @@
+.job-insights-card{
+    display: flex;
+    flex-direction: row;
+
+}
+.insights-cards{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+.insights-cards :not(:last-child){
+   margin-right: 20px;
+}
+.requirments-skill-list{
+    margin-left: 25px;
+
+}
+@media screen and (max-width: 512px) {
+    .insights-cards{
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+}

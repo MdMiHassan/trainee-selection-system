@@ -1,0 +1,54 @@
+.vacency {
+    background-color: #fff;
+    padding: 30px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    overflow: hidden;
+    border: 1px solid gainsboro;
+    cursor: pointer;
+}
+
+
+.vacency:hover {
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
+}
+
+
+.extra-details-icon {
+    margin-right: 5px;
+}
+
+.extra-details-icon i {
+    margin-right: 4px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: var(--secodary-card-bg);
+    color: var(--primary-color);
+}
+
+.extra-details-heading h3 {
+    font-size: 14px;
+    font-weight: 500;
+}
+.vacency{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.vacency .action{
+    width: 70px;
+}
+@media screen and (max-width: 1080px) {
+    .vacency{
+        flex-direction: column;
+        padding: 15px;
+    }
+    .vacency-details{
+        margin-bottom: 20px;
+        align-self: flex-start;
+    }
+    .action{
+        align-self: flex-end;
+    }
+}
