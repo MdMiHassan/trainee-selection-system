@@ -1,64 +1,24 @@
 import React, { useState } from 'react';
-import {
-  DashboardOutlined,
-  DesktopOutlined,
-  FileOutlined,
-  TeamOutlined,
-  SafetyCertificateOutlined,
-  FileTextOutlined,
-  UnorderedListOutlined,
-  PlusOutlined,
-  FileSearchOutlined,
-  FileSyncOutlined,
-  NotificationOutlined,
-  MailOutlined,
-  CarryOutOutlined,
-  ExperimentOutlined,
-  IdcardOutlined,
-  SubnodeOutlined,
-  UserOutlined,
-  SyncOutlined,
-} from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
-import AdminNavbar from '../layouts/AdminNavbar';
-import AdminPanelMenuItem from '../components/AdminPanelMenuItem';
 import { Route, Router, Routes } from 'react-router-dom';
-import NoticeBoard from '../components/NoticeBoard';
-const { Header, Content, Footer, Sider } = Layout;
-function getItem(label, key, icon, children) {
-  return {
-    key,
-    icon,
-    children,
-    SyncOutlined,
-    label,
-  };
-}
-const items = [
-  getItem('Dashboard', '1', <DashboardOutlined />),
-  getItem('Stats', '2', <DesktopOutlined />),
-  getItem('Circular', 'sub1', <FileTextOutlined />, [
-    getItem('New Circular', '3', <PlusOutlined />),
-    getItem('Screening', '4', <FileSearchOutlined />),
-    getItem('Update Circular', '5', <FileSyncOutlined />),
-    getItem('All Circular', '6', <UnorderedListOutlined />)
-  ]),
-  getItem('Notice', 'sub2', <NotificationOutlined />, [
-    getItem('New Notice', '7', <PlusOutlined />),
-    getItem('All Notice', '8', <UnorderedListOutlined />),
-    getItem("Update Notice", "9", <SyncOutlined />)
-  ]),
-  getItem('Email', 'sub3', <MailOutlined />, [
-    getItem('Sent on Behalf', '10', <CarryOutOutlined />),
-    getItem('Configure', '11', <ExperimentOutlined />)]),
-  getItem('Admit', 'sub4', <IdcardOutlined />, [
-    getItem('Configure', '12', <ExperimentOutlined />)]),
-  getItem('User', 'sub5', <TeamOutlined />, [
-    getItem('Admins', '13', <SafetyCertificateOutlined />),
-    getItem('New Admin', '14', <SubnodeOutlined />),
-    getItem('Applicants', '11', <UserOutlined />)]),
-  getItem('Files', '15', <FileOutlined />),
-];
+import AdminPanelMenuItem from '../components/AdminPanelMenuItem';
+import AdminNewCircular from '../layouts/Admin/AdminNewCircular';
+import AdminNavbar from '../layouts/admin/AdminNavbar';
+import AdminCircularScreening from '../layouts/admin/AdminCircularScreening';
+import AdminCircularUpdate from '../layouts/admin/AdminCircularUpdate';
+import AdminAllCirculars from '../layouts/admin/AdminAllCirculars';
+import AdminNewNotice from '../layouts/admin/AdminNewNotice';
+import AdminAllNotice from '../layouts/admin/AdminAllNotice';
+import AdminUpdateNotice from '../layouts/admin/AdminUpdateNotice';
+import AdminEmailSentBySystem from '../layouts/admin/AdminEmailSentBySystem';
+import AdminConfigureEmail from '../layouts/admin/AdminConfigureEmail';
+import AdminConfigureAdmit from '../layouts/admin/AdminConfigureAdmit';
+import AdminAllAdminUsers from '../layouts/admin/AdminAllAdmins';
+import AdminNewAdmin from '../layouts/admin/AdminNewAdmin';
+import AdminAllApplicantUsers from '../layouts/admin/AdminAllApplicantUsers';
+import AdminAllFiles from '../layouts/Admin/AdminAllFiles';
+const { Content, Footer, Sider } = Layout;
+
 const AdminPanel = () => {
   const [collapsed, setCollapsed] = useState(false);
   const {
@@ -98,22 +58,22 @@ const AdminPanel = () => {
 
           >
             <Routes>
-              <Route exact path="/" component={Home} />
-              <Route path="/stats" component={Stats} />
-              <Route path="/circular/new" component={<NoticeBoard />} />
-              <Route path="/circular/screening" component={Screening} />
-              <Route path="/circular/update" component={UpdateCircular} />
-              <Route path="/circular/all" component={AllCircular} />
-              <Route path="/notice/new" component={NewNotice} />
-              <Route path="/notice/all" component={AllNotice} />
-              <Route path="/notice/update" component={UpdateNotice} />
-              <Route path="/email/sent" component={SentEmail} />
-              <Route path="/email/configure" component={ConfigureEmail} />
-              <Route path="/admit/configure" component={ConfigureAdmit} />
-              <Route path="/user/admins" component={Admins} />
-              <Route path="/user/new" component={NewAdmin} />
-              <Route path="/user/applicants" component={Applicants} />
-              <Route path="/files" component={Files} />
+              <Route exact path="/Admin" element={<AdminNewCircular />} />
+              <Route path="/Admin/stats" element={<AdminNewCircular />} />
+              <Route path="/Admin/circular/new" element={<AdminNewCircular />} />
+              <Route path="/Admin/circular/screening" element={<AdminCircularScreening />} />
+              <Route path="/Admin/circular/update" element={<AdminCircularUpdate />} />
+              <Route path="/Admin/circular/all" element={<AdminAllCirculars />} />
+              <Route path="/Admin/notice/new" element={<AdminNewNotice />} />
+              <Route path="/Admin/notice/all" element={<AdminAllNotice />} />
+              <Route path="/Admin/notice/update" element={<AdminUpdateNotice />} />
+              <Route path="/Admin/email/sent" element={<AdminEmailSentBySystem />} />
+              <Route path="/Admin/email/configure" element={<AdminConfigureEmail />} />
+              <Route path="/Admin/admit/configure" element={<AdminConfigureAdmit />} />
+              <Route path="/Admin/user/admins" element={<AdminAllAdminUsers />} />
+              <Route path="/Admin/user/new" element={<AdminNewAdmin />} />
+              <Route path="/Admin/user/applicants" element={<AdminAllApplicantUsers />} />
+              <Route path="/Admin/files" element={<AdminAllFiles />} />
             </Routes>
           </div>
         </Content>

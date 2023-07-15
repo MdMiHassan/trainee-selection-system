@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Layout, Menu, Dropdown, Button, Avatar, Badge } from 'antd';
 import { BellOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons';
-import '../styles/AdminNavbar.css'
+import '../../styles/AdminNavbar.css'
 const { Header } = Layout;
 
 const AdminNavbar = () => {

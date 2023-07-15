@@ -1,5 +1,5 @@
 function AdminNewNotice() {
-    return ( <h1>All admins</h1> );
+    return ( <h1>new notice</h1> );
 }
 
 export default AdminNewNotice;

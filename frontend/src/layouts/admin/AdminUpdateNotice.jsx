@@ -1,5 +1,5 @@
 function AdminUpdateNotice() {
-    return ( <h1>All admins</h1> );
+    return ( <h1>update notice</h1> );
 }
 
 export default AdminUpdateNotice;

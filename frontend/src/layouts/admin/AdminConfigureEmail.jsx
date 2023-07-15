@@ -1,5 +1,5 @@
 function AdminConfigureEmail() {
-    return ( <h1>All admins</h1> );
+    return ( <h1>configure email</h1> );
 }
 
 export default AdminConfigureEmail;

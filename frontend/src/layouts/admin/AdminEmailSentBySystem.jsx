@@ -1,5 +1,5 @@
 function AdminEmailSentBySystem() {
-    return ( <h1>All admins</h1> );
+    return ( <h1>email sent by system</h1> );
 }
 
 export default AdminEmailSentBySystem;
