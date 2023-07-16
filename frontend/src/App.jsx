@@ -1,27 +1,22 @@
-import React from "react";
-import { Layout } from "antd";
-// import AppHeader from "./layouts/AppHeader";
-// import AppHero from "./layouts/AppHero";
-// import ApplicantActivity from "./layouts/ApplicantActivity";
-// import AppFooter from "./layouts/AppFooter";
-import AdminPanel from "./pages/AdminPanel";
-// import AdminNavbar from "./layouts/AdminNavbar";
-
-const { Header, Content, Footer } = Layout;
+import { Routes, Route, Navigate } from 'react-router-dom';
+import LoginForm from './context/LoginForm';
+import AdminPanel from './pages/AdminPanel';
+import ApplicantPanel from './pages/ApplicantPanel';
+import EvaluatorPanel from './pages/EvaluatorPanel';
+import PrivateRoute from './components/PrivateRoute';
 
 function App() {
-  return (
-    // <Layout style={{minHeight:'100vh',justifyContent:'space-between'}}>
-    //   <AppHeader />
-    //   <AppHero />
-    //   <ApplicantActivity />
-    //   <AppFooter />
-    // </Layout>
-    <>
-    {/* <AdminNavbar /> */}
-    <AdminPanel />
-    </>
-  );
+    return (
+        <>
+            <Routes>
+                <Route path='/' element={<LoginForm />} />
+                <Route path="/login" element={<LoginForm />} />
+                <Route path="/admin/*" element={<PrivateRoute allowedRole={"ADMIN"} children={<AdminPanel />} />} />
+                <Route path="/applicant/*" element={<PrivateRoute allowedRole={'APPLICANT'} children={<ApplicantPanel />} />} />
+                <Route path="/evaluator/*" element={<PrivateRoute allowedRole={'EVALUATOR'} children={<EvaluatorPanel />} />} />
+            </Routes>
+        </>
+    );
 }
 
 export default App;

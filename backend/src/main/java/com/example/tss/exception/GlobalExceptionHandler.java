@@ -1,8 +1,11 @@
 package com.example.tss.exception;
 
+import com.example.tss.model.AuthenticationResponse;
 import com.example.tss.model.RegistrationResponse;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -27,20 +30,22 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException e) {
         return ResponseEntity.notFound().build();
     }
-    @ExceptionHandler(UsernameNotFoundException.class)
-    public ResponseEntity<?> handleUsernameNotFoundException(UsernameNotFoundException e) {
-        return ResponseEntity.notFound().build();
-    }
+
     @ExceptionHandler(UserWithTheEmailAlreadyExistsException.class)
     public ResponseEntity<?> handleUserWithTheEmailAlreadyExistsException(UserWithTheEmailAlreadyExistsException e) {
         return ResponseEntity.badRequest().body(RegistrationResponse.builder()
                 .success(false)
-                .message("User With Email \""+e.getMessage()+"\" already exists").build());
+                .message("User With Email \"" + e.getMessage() + "\" already exists").build());
     }
-    @ExceptionHandler(CredentialException.class)
-    public ResponseEntity<?> handleCredentialException(ResourceNotFoundException e) {
-        return ResponseEntity.notFound().build();
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<?> handleBadCredentialsException(BadCredentialsException e) {
+        return new ResponseEntity<>(AuthenticationResponse.builder()
+                .success(false)
+                .message(ErrorMessage.USERNAME_OR_PASSWORD_MISMATCH)
+                .build(), HttpStatus.OK);
     }
+
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<?> handleCredentialException(NoSuchElementException e) {
         return ResponseEntity.notFound().build();

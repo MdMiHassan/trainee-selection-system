@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Layout, Menu, Dropdown, Button, Avatar, Badge } from 'antd';
 import { BellOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons';
 import '../../styles/AdminNavbar.css'
+import Logout from '../../components/auth/Logout';
 const { Header } = Layout;
 
 const AdminNavbar = () => {
@@ -30,9 +31,7 @@ const AdminNavbar = () => {
       <Menu.Item key="profile" onClick={handleProfileUpdate}>
         Profile
       </Menu.Item>
-      <Menu.Item key="logout" onClick={handleLogout}>
-        Logout
-      </Menu.Item>
+      <Logout />
     </Menu>
   );
 

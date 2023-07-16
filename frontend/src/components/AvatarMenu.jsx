@@ -1,5 +1,6 @@
 import { Avatar, Dropdown, Menu } from 'antd';
-import { UserOutlined, LogoutOutlined, UploadOutlined } from '@ant-design/icons';
+import { UserOutlined, UploadOutlined } from '@ant-design/icons';
+import Logout from './auth/Logout';
 
 const AvatarDropdown = () => {
     const handleMenuClick = (e) => {
@@ -22,12 +23,7 @@ const AvatarDropdown = () => {
                 </span>
                 Upload Resume
             </Menu.Item>
-            <Menu.Item key="logout">
-                <span style={{ paddingRight: '4px' }}>
-                    <LogoutOutlined />
-                </span>
-                Logout
-            </Menu.Item>
+            <Logout />
         </Menu>
     );
 
