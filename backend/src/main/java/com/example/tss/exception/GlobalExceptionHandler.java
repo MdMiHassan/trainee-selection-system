@@ -50,5 +50,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleCredentialException(NoSuchElementException e) {
         return ResponseEntity.notFound().build();
     }
+    @ExceptionHandler(AdmitCardGenerationFailedException.class)
+    public ResponseEntity<?> handleAdmitCardGenerationFailedException(AdmitCardGenerationFailedException e) {
+        return ResponseEntity.badRequest().build();
+    }
 
 }

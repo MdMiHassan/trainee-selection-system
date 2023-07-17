@@ -96,6 +96,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String email;
+    private Boolean emailVerified;
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;

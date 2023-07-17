@@ -1,0 +1,3 @@
+:where(.css-dev-only-do-not-override-1m62vyb).ant-form-item .ant-form-item-label >label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before{
+    display: none;
+}

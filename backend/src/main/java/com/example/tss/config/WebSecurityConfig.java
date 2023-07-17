@@ -25,7 +25,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/applicants/register", "/auth/login", "/admits/verify/{admitCardId}")
+                        .requestMatchers("/applicants/register","/applicants/register/email/verify", "/auth/login", "/admits/verify/{admitCardId}")
                         .permitAll()
                         .requestMatchers("/applicants", "/applicants/{applicantId}", "/applicants/{applicantId}/actions/lock"
                                 , "/circulars/{circularId}/applications", "/circulars/{circularId}/rounds/next/applications/{applicationId}/actions/approve"

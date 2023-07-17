@@ -2,11 +2,12 @@ package com.example.tss.controller;
 
 import com.example.tss.dto.ApplicantProfileDto;
 import com.example.tss.model.ApplicantRegistrationRequest;
+import com.example.tss.model.EmailVerificationRequest;
 import com.example.tss.service.ApplicantService;
+import com.example.tss.service.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -16,7 +17,7 @@ import java.security.Principal;
 @RequiredArgsConstructor
 public class ApplicantController {
     private final ApplicantService applicantService;
-
+private final AuthenticationService authenticationService;
     @GetMapping
     public ResponseEntity<?> getAllApplicants() {
         return applicantService.getAllApplicants();
@@ -28,16 +29,24 @@ public class ApplicantController {
     }
 
     @PostMapping("/profile")
-    public ResponseEntity<?> getProfile(Principal principal,ApplicantProfileDto applicantProfileDto) {
-        return applicantService.updateApplicantProfile(principal,applicantProfileDto);
+    public ResponseEntity<?> getProfile(Principal principal, ApplicantProfileDto applicantProfileDto) {
+        return applicantService.updateApplicantProfile(principal, applicantProfileDto);
     }
+
     @GetMapping("/profile")
     public ResponseEntity<?> updateProfile(Principal principal) {
         return applicantService.getProfile(principal);
     }
+
     @PostMapping("/register")
     public ResponseEntity<?> registerApplicant(@Valid @RequestBody ApplicantRegistrationRequest applicantRegistrationRequest) {
-        return applicantService.registerApplicant(applicantRegistrationRequest);
+        ResponseEntity<?> registrationResponseEntity = applicantService.registerApplicant(applicantRegistrationRequest);
+        return registrationResponseEntity;
+    }
+
+    @PostMapping("/register/email/verify")
+    public ResponseEntity<?> verifyEmail(@RequestBody EmailVerificationRequest emailVerificationRequest) {
+        return authenticationService.verifyEmail(emailVerificationRequest);
     }
 
     @PatchMapping("/{applicantId}")

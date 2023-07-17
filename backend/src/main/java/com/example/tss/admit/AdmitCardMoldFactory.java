@@ -1,15 +1,13 @@
 package com.example.tss.admit;
 
 import com.example.tss.constants.mold.HTMLMold;
+import com.example.tss.util.AdmitImageUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.parser.Tag;
 import org.springframework.stereotype.Component;
 
-import javax.imageio.ImageIO;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.*;
 
 @Component
@@ -20,7 +18,6 @@ public class AdmitCardMoldFactory {
 
     private static class SimpleAdmitCardMold implements AdmitCardMold {
         private final Document admit;
-
         private String companyName;
         private String companyAddress;
         private String examName;
@@ -40,23 +37,6 @@ public class AdmitCardMoldFactory {
             this.admit = admit;
         }
 
-        private static String encodeImageToBase64(byte[] imageBytes) throws IOException {
-            String imageType = ImageIO.getImageReaders(new ByteArrayInputStream(imageBytes)).next().getFormatName().toLowerCase();
-            boolean isValidImageType = isValidImageType(imageType);
-            StringBuilder imageString = new StringBuilder("data:image/");
-            if (isValidImageType) {
-                imageString.append(imageType + ";");
-            } else {
-                throw new IOException();
-            }
-            imageString.append(Base64.getEncoder().encodeToString(imageBytes));
-            return imageString.toString();
-        }
-
-        private static boolean isValidImageType(String imageType) {
-            List<String> validImageTypes = Arrays.asList("jpeg", "jpg", "png");
-            return validImageTypes.contains(imageType);
-        }
 
         public SimpleAdmitCardMold examName(String examName) {
             this.examName = examName;
@@ -174,25 +154,25 @@ public class AdmitCardMoldFactory {
                 admit.getElementById("authorityDesignation").text(authorityName);
             }
             if (companyLogoLeft != null) {
-                admit.getElementById("companyLogoLeft").attr("src", encodeImageToBase64(companyLogoLeft));
+                admit.getElementById("companyLogoLeft").attr("src", AdmitImageUtils.encodeImageToBase64(companyLogoLeft));
             }
             if (companyLogoRight != null) {
-                admit.getElementById("companyLogoRight").attr("src", encodeImageToBase64(companyLogoRight));
+                admit.getElementById("companyLogoRight").attr("src", AdmitImageUtils.encodeImageToBase64(companyLogoRight));
             }
             if (barCode != null) {
-                admit.getElementById("barCode").attr("src", encodeImageToBase64(barCode));
+                admit.getElementById("barCode").attr("src", AdmitImageUtils.encodeImageToBase64(barCode));
             }
             if (qrCode != null) {
-                admit.getElementById("qrCode").attr("src", encodeImageToBase64(qrCode));
+                admit.getElementById("qrCode").attr("src", AdmitImageUtils.encodeImageToBase64(qrCode));
             }
             if (authoritySignature != null) {
-                admit.getElementById("authoritySignature").attr("src", encodeImageToBase64(authoritySignature));
+                admit.getElementById("authoritySignature").attr("src", AdmitImageUtils.encodeImageToBase64(authoritySignature));
             }
             if (applicantSignature != null) {
-                admit.getElementById("applicantSignature").attr("src", encodeImageToBase64(applicantSignature));
+                admit.getElementById("applicantSignature").attr("src", AdmitImageUtils.encodeImageToBase64(applicantSignature));
             }
             if (applicantPhoto != null) {
-                admit.getElementById("applicantPhoto").attr("src", encodeImageToBase64(applicantPhoto));
+                admit.getElementById("applicantPhoto").attr("src", AdmitImageUtils.encodeImageToBase64(applicantPhoto));
             }
             System.out.println("time to replace: " + (System.currentTimeMillis() - start));
             return this;

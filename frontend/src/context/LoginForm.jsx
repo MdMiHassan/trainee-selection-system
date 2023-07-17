@@ -1,19 +1,19 @@
 import React, { useContext } from 'react';
-import { Form, Input, Button, Typography, Row, Col } from 'antd';
+import { Form, Input, Button, Typography, Row, Col, Card } from 'antd';
 import { API_BASE_URL } from '../Config';
-import { decodeToken} from '../utils/auth';
+import { decodeToken } from '../utils/auth';
 import { AuthContext } from './AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const { Title } = Typography;
 
 const LoginForm = () => {
-    const navigateTo=useNavigate();
+    const navigateTo = useNavigate();
     const { updateRole, updateToken } = useContext(AuthContext);
     const roleRedirections = {
         APPLICANT: '/',
         ADMIN: '/admin',
-        EVALUATOR:'/evaluator'
+        EVALUATOR: '/evaluator'
     };
 
     const onFinish = (values) => {
@@ -55,40 +55,39 @@ const LoginForm = () => {
 
     return (
         <Row justify="center" align="middle" style={{ height: '100vh' }}>
-            <Col span={5}>
-                <div style={{ textAlign: 'center' }}>
-                    <Title level={3}>Login</Title>
-                </div>
-                <Form onFinish={onFinish}>
-                    <Form.Item
-                        name="email"
-                        rules={[{ required: true, message: 'Please enter your email' }]}
-                    >
-                        <Input placeholder='Email' />
-                    </Form.Item>
-
-                    <Form.Item
-                        name="password"
-                        rules={[{ required: true, message: 'Please enter your password' }]}
+            <Col xs={22} sm={10} md={10} lg={6} xl={6} xxl={4}>
+                <Card type="inner" title={"Sign in"} >
+                    <Form onFinish={onFinish}>
+                        <Form.Item
+                            name="email"
+                            rules={[{ required: true, message: 'Please enter your email' }]}
                         >
-                        <Input.Password placeholder='Password' />
-                    </Form.Item>
+                            <Input placeholder='Email' />
+                        </Form.Item>
 
-                    <Form.Item>
-                        <Row justify="end">
-                            <Col>
-                                <Button type="link" onClick={handleForgot}>
-                                    Forgot Password?
-                                </Button>
-                            </Col>
-                            <Col>
-                                <Button type="primary" htmlType="submit">
-                                    Sign In
-                                </Button>
-                            </Col>
-                        </Row>
-                    </Form.Item>
-                </Form>
+                        <Form.Item
+                            name="password"
+                            rules={[{ required: true, message: 'Please enter your password' }]}
+                        >
+                            <Input.Password placeholder='Password' />
+                        </Form.Item>
+
+                        <Form.Item>
+                            <Row justify="end">
+                                <Col>
+                                    <Button type="link" onClick={handleForgot}>
+                                        Forgot Password?
+                                    </Button>
+                                </Col>
+                                <Col>
+                                    <Button type="primary" htmlType="submit">
+                                        Sign In
+                                    </Button>
+                                </Col>
+                            </Row>
+                        </Form.Item>
+                    </Form>
+                </Card>
             </Col>
         </Row>
     );
