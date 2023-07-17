@@ -13,7 +13,7 @@ public class ResourceController {
     private final ResourceService resourceService;
     @PostMapping("/upload")
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile multipartFile){
-        return resourceService.storeFile(multipartFile);
+        return resourceService.uploadResource(multipartFile);
     }
     @GetMapping("/{resourceId}")
     public ResponseEntity<?> downloadFile(@PathVariable Long resourceId){

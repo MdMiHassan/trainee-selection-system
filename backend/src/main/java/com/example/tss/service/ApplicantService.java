@@ -24,4 +24,5 @@ public interface ApplicantService {
     ResponseEntity<?> updateApplicantProfile(Principal principal, ApplicantProfileDto applicantProfileDto);
 
     ResponseEntity<?> getProfile(Principal principal);
+
 }

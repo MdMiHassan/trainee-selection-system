@@ -7,11 +7,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class ApplicantRegistrationResponse {
-    private Boolean success;
-    private String message;
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public class EmailVerificationRequest {
+    private String email;
+    private String verificationCode;
 }

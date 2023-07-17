@@ -173,8 +173,12 @@ html,body,#root {
 }
 body {
   overflow-y: scroll; /* Enable vertical scrolling */
+  /* background-color: #18181b; */
 }
 
+  
+  
+  
 body::-webkit-scrollbar {
   width: 10px; /* Set the width of the scrollbar */
   /* background-color: rgba(245, 245, 245, 1); Set the background color of the scrollbar */

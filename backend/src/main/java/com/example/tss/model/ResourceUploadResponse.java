@@ -11,7 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ApplicantRegistrationResponse {
-    private Boolean success;
+public class ResourceUploadResponse {
+    private boolean success;
     private String message;
+    private Long id;
+    private String name;
+    private String path;
 }
