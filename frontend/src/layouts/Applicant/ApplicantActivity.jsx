@@ -1,12 +1,12 @@
 import React from "react";
 import { Tabs } from "antd";
-import "../styles/applicantactivity.css";
-import Openings from "../components/Openings";
-import OpeningsListing from "../components/OpeningsListing";
-import JobDescription from "./Jobdescription";
-import Applied from "../components/Applied";
-import NoticeBoard from "../components/NoticeBoard";
-import NoticeDetails from "../components/NoticeDetails";
+import "../../styles/applicantactivity.css";
+import Openings from "../../components/Openings";
+import OpeningsListing from "../../components/OpeningsListing";
+import JobDescription from "../Jobdescription";
+import Applied from "../../components/Applied";
+import NoticeBoard from "../../components/NoticeBoard";
+import NoticeDetails from "../../components/NoticeDetails";
 
 const { TabPane } = Tabs;
 

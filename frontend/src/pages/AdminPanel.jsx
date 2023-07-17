@@ -1,111 +1,86 @@
 import React, { useState } from 'react';
-import {
-  DashboardOutlined,
-  DesktopOutlined,
-  FileOutlined,
-  TeamOutlined,
-  SafetyCertificateOutlined,
-  FileTextOutlined,
-  UnorderedListOutlined,
-  PlusOutlined,
-  FileSearchOutlined,
-  FileSyncOutlined,
-  NotificationOutlined,
-  MailOutlined,
-  CarryOutOutlined,
-  ExperimentOutlined,
-  IdcardOutlined,
-  SubnodeOutlined,
-  UserOutlined,
-  SyncOutlined,
-} from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
-import AdminNavbar from '../layouts/AdminNavbar';
+import { Route, Router, Routes } from 'react-router-dom';
 import AdminPanelMenuItem from '../components/AdminPanelMenuItem';
-const { Header, Content, Footer, Sider } = Layout;
-function getItem(label, key, icon, children) {
-  return {
-    key,
-    icon,
-    children,
-    SyncOutlined,
-    label,
-  };
+import AdminNewCircular from '../layouts/admin/AdminNewCircular';
+import AdminNavbar from '../layouts/admin/AdminNavbar';
+import AdminCircularScreening from '../layouts/admin/AdminCircularScreening';
+import AdminCircularUpdate from '../layouts/admin/AdminCircularUpdate';
+import AdminAllCirculars from '../layouts/admin/AdminAllCirculars';
+import AdminNewNotice from '../layouts/admin/AdminNewNotice';
+import AdminAllNotice from '../layouts/admin/AdminAllNotice';
+import AdminUpdateNotice from '../layouts/admin/AdminUpdateNotice';
+import AdminEmailSentBySystem from '../layouts/admin/AdminEmailSentBySystem';
+import AdminConfigureEmail from '../layouts/admin/AdminConfigureEmail';
+import AdminConfigureAdmit from '../layouts/admin/AdminConfigureAdmit';
+import AdminAllAdminUsers from '../layouts/admin/AdminAllAdmins';
+import AdminNewAdmin from '../layouts/admin/AdminNewAdmin';
+import AdminAllApplicantUsers from '../layouts/admin/AdminAllApplicantUsers';
+import AdminAllFiles from '../layouts/admin/AdminAllFiles';
+const { Content, Footer, Sider } = Layout;
+
+function AdminPanel() {
+    const [collapsed, setCollapsed] = useState(false);
+    const {
+        token: { colorBgContainer },
+    } = theme.useToken();
+    return (
+        <Layout
+            style={{
+                minHeight: '100vh',
+            }}
+        >
+            <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+                <div className="demo-logo-vertical" />
+                <AdminPanelMenuItem />
+            </Sider>
+            <Layout>
+                <AdminNavbar />
+                <Content
+                    style={{
+                        margin: '0 16px',
+                    }}
+                >
+                    <Breadcrumb
+                        style={{
+                            margin: '16px 0',
+                        }}
+                    >
+                        <Breadcrumb.Item>Admin</Breadcrumb.Item>
+                        <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
+                    </Breadcrumb>
+                    <div
+                        style={{
+                            padding: 24,
+                            minHeight: 360,
+                            background: colorBgContainer,
+                        }}
+                    >
+                        <Routes>
+                            <Route exact path="/admin" element={<AdminNewCircular />} />
+                            <Route path="/admin/stats" element={<AdminNewCircular />} />
+                            <Route path="/admin/circular/new" element={<AdminNewCircular />} />
+                            <Route path="/admin/circular/screening" element={<AdminCircularScreening />} />
+                            <Route path="/admin/circular/update" element={<AdminCircularUpdate />} />
+                            <Route path="/admin/circular/all" element={<AdminAllCirculars />} />
+                            <Route path="/admin/notice/new" element={<AdminNewNotice />} />
+                            <Route path="/admin/notice/all" element={<AdminAllNotice />} />
+                            <Route path="/admin/notice/update" element={<AdminUpdateNotice />} />
+                            <Route path="/admin/email/sent" element={<AdminEmailSentBySystem />} />
+                            <Route path="/admin/email/configure" element={<AdminConfigureEmail />} />
+                            <Route path="/admin/admit/configure" element={<AdminConfigureAdmit />} />
+                            <Route path="/admin/user/admins" element={<AdminAllAdminUsers />} />
+                            <Route path="/admin/user/new" element={<AdminNewAdmin />} />
+                            <Route path="/admin/user/applicants" element={<AdminAllApplicantUsers />} />
+                            <Route path="/admin/files" element={<AdminAllFiles />} />
+                        </Routes>
+                    </div>
+                </Content>
+                <Footer style={{textAlign: 'center'}}>
+                    BJIT Academy ©2023 Created by Mehedi #30069
+                </Footer>
+            </Layout>
+        </Layout>
+    );
 }
-const items = [
-  getItem('Dashboard', '1', <DashboardOutlined />),
-  getItem('Stats', '2', <DesktopOutlined />),
-  getItem('Circular', 'sub1', <FileTextOutlined />, [
-    getItem('New Circular', '3', <PlusOutlined />),
-    getItem('Screening', '4', <FileSearchOutlined />),
-    getItem('Update Circular', '5', <FileSyncOutlined />),
-    getItem('All Circular', '6', <UnorderedListOutlined />)
-  ]),
-  getItem('Notice', 'sub2', <NotificationOutlined />, [
-    getItem('New Notice', '7', <PlusOutlined />),
-    getItem('All Notice', '8', <UnorderedListOutlined />),
-    getItem("Update Notice", "9", <SyncOutlined />)
-  ]),
-  getItem('Email', 'sub3', <MailOutlined />, [
-    getItem('Sent on Behalf', '10', <CarryOutOutlined />),
-    getItem('Configure', '11', <ExperimentOutlined />)]),
-  getItem('Admit', 'sub4', <IdcardOutlined />, [
-    getItem('Configure', '12', <ExperimentOutlined />)]),
-  getItem('User', 'sub5', <TeamOutlined />, [
-    getItem('Admins', '13', <SafetyCertificateOutlined />),
-    getItem('New Admin', '14', <SubnodeOutlined />),
-    getItem('Applicants', '11', <UserOutlined />)]),
-  getItem('Files', '15', <FileOutlined />),
-];
-const AdminPanel = () => {
-  const [collapsed, setCollapsed] = useState(false);
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
-  return (
-    <Layout
-      style={{
-        minHeight: '100vh',
-      }}
-    >
-      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-        <div className="demo-logo-vertical" />
-        <AdminPanelMenuItem />
-      </Sider>
-      <Layout>
-        <AdminNavbar />
-        <Content
-          style={{
-            margin: '0 16px',
-          }}
-        >
-          <Breadcrumb
-            style={{
-              margin: '16px 0',
-            }}
-          >
-            <Breadcrumb.Item>Admin</Breadcrumb.Item>
-            <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
-          </Breadcrumb>
-          <div
-            style={{
-              padding: 24,
-              minHeight: 360,
-              background: colorBgContainer,
-            }}
-          >
-            Dashboard panel.
-          </div>
-        </Content>
-        <Footer
-          style={{
-            textAlign: 'center',
-          }}
-        >
-          BJIT Academy ©2023 Created by Mehedi #30069
-        </Footer>
-      </Layout>
-    </Layout>
-  );
-};
 export default AdminPanel;

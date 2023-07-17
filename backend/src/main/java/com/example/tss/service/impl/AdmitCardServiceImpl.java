@@ -48,7 +48,7 @@ public class AdmitCardServiceImpl implements AdmitCardService {
         ApplicantProfile applicantProfile = applicantProfileRepository.findByUserId(user.getId()).orElseThrow();
         Circular circular = circularRepository.findById(circularId).orElseThrow();
         ScreeningRound screeningRound = screeningRoundRepository.findById(roundId).orElseThrow();
-        Application application = applicationRepository.findByCircularIdAndRoundIdAndApplicantId(circularId, roundId, applicantProfile.getId()).orElseThrow();
+        Application application = applicationRepository.findByCircularIdAndCurrentRoundIdAndApplicantId(circularId, roundId, applicantProfile.getId()).orElseThrow();
         Resource admit = application.getAdmit();
         if (admit == null) {
             admit = resourceRepository.save(Resource.builder().build());

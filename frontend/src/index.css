@@ -133,7 +133,7 @@ button:focus-visible {
   -webkit-text-size-adjust: 100%;
 }
 
-html,body {
+html,body,#root {
   box-sizing: border-box;
   padding: 0;
   margin: 0;

@@ -1,28 +1,27 @@
-
-import React from "react";
-import { Layout } from "antd";
-import AppHeader from "./layouts/AppHeader";
-import AppHero from "./layouts/AppHero";
-import ApplicantActivity from "./layouts/ApplicantActivity";
-import AppFooter from "./layouts/AppFooter";
-import AdminPanel from "./pages/AdminPanel";
-import AdminNavbar from "./layouts/AdminNavbar";
-
-const { Header, Content, Footer } = Layout;
+import { Routes, Route, Navigate } from 'react-router-dom';
+import LoginForm from './context/LoginForm';
+import AdminPanel from './pages/AdminPanel';
+import ApplicantPanel from './pages/ApplicantPanel';
+import EvaluatorPanel from './pages/EvaluatorPanel';
+import PrivateRoute from './components/auth/PrivateRoute';
+import NotFoundPage from './pages/error/NotFoundPage';
+import LoginGurd from './components/auth/LoginGurd';
+import IndexGuard from './components/auth/IndexGurd';
 
 function App() {
-  return (
-    // <Layout style={{minHeight:'100vh',justifyContent:'space-between'}}>
-    //   <AppHeader />
-    //   <AppHero />
-    //   <ApplicantActivity />
-    //   <AppFooter />
-    // </Layout>
-    <>
-    {/* <AdminNavbar /> */}
-    <AdminPanel />
-    </>
-  );
+    return (
+        <>
+            <Routes>
+                <Route index element={<IndexGuard children={<ApplicantPanel />} />} />
+                <Route path="/login" element={<LoginGurd children={<LoginForm />} />} />
+                <Route path="/admin/*" element={<PrivateRoute allowedRole={"ADMIN"} children={<AdminPanel />} />} />
+                <Route path="/applicant/*" element={<PrivateRoute allowedRole={'APPLICANT'} children={<ApplicantPanel />} />} />
+                <Route path="/evaluator/*" element={<PrivateRoute allowedRole={'EVALUATOR'} children={<EvaluatorPanel />} />} />
+                <Route path='/404' element={<NotFoundPage />} />
+                <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+        </>
+    );
 }
 
 export default App;
