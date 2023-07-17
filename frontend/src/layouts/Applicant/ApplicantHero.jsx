@@ -1,8 +1,8 @@
 import { Input, Button, Typography, Row, Col } from 'antd';
-import '../styles/apphero.css';
+import '../../styles/AppplicantHero.css';
 const { Title, Paragraph } = Typography;
 
-const AppHero = () => {
+const ApplicantHero = () => {
   return (
     <div className='hero'>
       <div className='hero-container'>
@@ -35,4 +35,4 @@ const AppHero = () => {
   );
 };
 
-export default AppHero;
+export default ApplicantHero;

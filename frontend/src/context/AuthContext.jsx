@@ -5,11 +5,8 @@ const AuthContext = createContext();
 function AuthProvider({ children }) {
     const storedToken=getStoredToken();
     let storedRole=null;
-    // console.log("before  "+storedRole+"   "+storedToken);
     if(storedToken != null){
-        console.log("inside method "+ storedToken);
         storedRole=decodeToken(storedToken)?.role[0];
-
     }
     console.log("after  "+storedRole+"   "+storedToken);
     const [role, setRole] = useState(storedRole);

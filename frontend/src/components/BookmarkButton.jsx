@@ -12,7 +12,7 @@ const BookmarkButton = () => {
       <Button
         type={bookmarked ? 'primary' : 'text'}
         onClick={handleBookmarkClick}
-        icon={bookmarked ? <i class="fa-solid fa-bookmark"></i> : <i class="fa-light fa-bookmark"></i>}
+        icon={bookmarked ? <i className="fa-solid fa-bookmark"></i> : <i className="fa-light fa-bookmark"></i>}
       >
       </Button>
     );
