@@ -2,7 +2,7 @@ import { Row, Col, Form, Input, Button, Select, DatePicker, Upload, message, Ste
 import '../../styles/RegisterForm.css';
 import { useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '../../Config';
-function RegisterForm({ setStep,setUserEmail }) {
+function RegisterForm({ setStep,setUser }) {
     const navigateTo=useNavigate();
     const loginOnclick=()=>{
         navigateTo("/login")
@@ -27,7 +27,11 @@ function RegisterForm({ setStep,setUserEmail }) {
             .then((response) => response.json())
             .then((data) => {
                 if (data.success) {
-                    setUserEmail(email);
+                    const user={
+                        email,
+                        password,
+                    }
+                    setUser(user);
                     setStep(2);
                 } else {
                     console.error('Login response:', data);

@@ -12,4 +12,6 @@ public interface ResourceRepository extends JpaRepository<Resource, Long> {
     Optional<Resource> findByIdAndResourceType(Long id, ResourceType resourceType);
 
     Optional<Resource> findByIdAndResourceTypeAndOwnerId(Long resourceId, ResourceType resourceType, Long ownerId);
+
+    Optional<Resource> findByIdAndOwnerId(Long id, Long ownerId);
 }

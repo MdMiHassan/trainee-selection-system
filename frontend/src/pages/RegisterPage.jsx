@@ -17,7 +17,7 @@ const items = [
 ];
 const RegisterPage = () => {
     const [step, setStep] = useState(1);
-    const [email, setEmail] = useState(null);
+    const [user, setUser] = useState(null);
 
     return (
         <Row justify="center" align="middle" style={{ minHeight: '100vh' }}>
@@ -26,9 +26,9 @@ const RegisterPage = () => {
                     title={<div className='card-heading-steps'><Steps current={step - 1}
                         labelPlacement="vertical" items={items} size="small" direction='horizontal' /></div>}
                     style={{ marginTop: "10px" }} >
-                    {step === 1 && (<RegisterForm setStep={setStep} setUserEmail={setEmail} />)}
-                    {step === 2 && (<EmailVarification setStep={setStep} email={email}/>)}
-                    {step === 3 && (<RegisterPersonalInfo setStep={setStep} />)}
+                    {step === 1 && (<RegisterForm setStep={setStep} setUser={setUser}/>)}
+                    {step === 2 && (<EmailVarification setStep={setStep} user={user}/>)}
+                    {step === 3 && (<RegisterPersonalInfo setStep={setStep}/>)}
                 </Card>
             </Col>
         </Row>

@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
-import "../styles/AppHeader.css";
+import React, { useEffect, useState, useContext } from "react";
 import { Button, Row, Col } from "antd";
 import AvatarDropdown from "../components/AvatarMenu";
 import { useNavigate } from "react-router-dom";
-
+import { AuthContext } from "../context/AuthContext";
+import siteicon from '../../public/tsslogo.png';
+import "../styles/AppHeader.css";
 function AppHeader() {
+  const { token } = useContext(AuthContext);
   const [headerStyle, setHeaderStyle] = useState({
     backgroundColor: "transparent",
     boxShadow: "none"
@@ -46,21 +48,23 @@ function AppHeader() {
         <div className="header-left">
           <div className="header-logo">
             <a className="flex-row flex-center" href="/">
-              TSS
+              <img src={siteicon} alt="" style={{width:"40px"}}/>
             </a>
           </div>
         </div>
         <div className="header-right">
           <Row gutter={[16, 16]} justify="end">
-            <Col>
-              <Button type="text" onClick={handleSignIn}>
-                Sign in
-              </Button>
-            </Col>
-            <Col>
-              <Button type="primary">Sign up</Button>
-            </Col>
-            <AvatarDropdown />
+            {token ? <AvatarDropdown /> : (<>
+              <Col>
+                <Button type="text" onClick={handleSignIn}>
+                  Sign in
+                </Button>
+              </Col>
+              <Col>
+                <Button type="primary">Sign up</Button>
+              </Col>
+            </>)
+            }
           </Row>
         </div>
       </div>

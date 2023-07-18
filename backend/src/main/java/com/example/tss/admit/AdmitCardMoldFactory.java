@@ -1,7 +1,7 @@
 package com.example.tss.admit;
 
-import com.example.tss.constants.mold.HTMLMold;
-import com.example.tss.util.AdmitImageUtils;
+import com.example.tss.constants.molds.HTMLMold;
+import com.example.tss.util.ImageUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -154,25 +154,25 @@ public class AdmitCardMoldFactory {
                 admit.getElementById("authorityDesignation").text(authorityName);
             }
             if (companyLogoLeft != null) {
-                admit.getElementById("companyLogoLeft").attr("src", AdmitImageUtils.encodeImageToBase64(companyLogoLeft));
+                admit.getElementById("companyLogoLeft").attr("src", ImageUtils.encodeImageToBase64(companyLogoLeft));
             }
             if (companyLogoRight != null) {
-                admit.getElementById("companyLogoRight").attr("src", AdmitImageUtils.encodeImageToBase64(companyLogoRight));
+                admit.getElementById("companyLogoRight").attr("src", ImageUtils.encodeImageToBase64(companyLogoRight));
             }
             if (barCode != null) {
-                admit.getElementById("barCode").attr("src", AdmitImageUtils.encodeImageToBase64(barCode));
+                admit.getElementById("barCode").attr("src", ImageUtils.encodeImageToBase64(barCode));
             }
             if (qrCode != null) {
-                admit.getElementById("qrCode").attr("src", AdmitImageUtils.encodeImageToBase64(qrCode));
+                admit.getElementById("qrCode").attr("src", ImageUtils.encodeImageToBase64(qrCode));
             }
             if (authoritySignature != null) {
-                admit.getElementById("authoritySignature").attr("src", AdmitImageUtils.encodeImageToBase64(authoritySignature));
+                admit.getElementById("authoritySignature").attr("src", ImageUtils.encodeImageToBase64(authoritySignature));
             }
             if (applicantSignature != null) {
-                admit.getElementById("applicantSignature").attr("src", AdmitImageUtils.encodeImageToBase64(applicantSignature));
+                admit.getElementById("applicantSignature").attr("src", ImageUtils.encodeImageToBase64(applicantSignature));
             }
             if (applicantPhoto != null) {
-                admit.getElementById("applicantPhoto").attr("src", AdmitImageUtils.encodeImageToBase64(applicantPhoto));
+                admit.getElementById("applicantPhoto").attr("src", ImageUtils.encodeImageToBase64(applicantPhoto));
             }
             System.out.println("time to replace: " + (System.currentTimeMillis() - start));
             return this;

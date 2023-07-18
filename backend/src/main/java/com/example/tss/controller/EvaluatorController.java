@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/evaluators")
 @RequiredArgsConstructor
+//@CrossOrigin
 public class EvaluatorController {
     private EvaluatorService evaluatorService;
 

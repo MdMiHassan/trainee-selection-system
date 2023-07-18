@@ -19,6 +19,7 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/circulars")
 @RequiredArgsConstructor
+//@CrossOrigin
 public class CircularController {
     private final CircularService circularService;
     private final ApplicationService applicationService;

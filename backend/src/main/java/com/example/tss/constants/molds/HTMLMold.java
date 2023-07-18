@@ -1,4 +1,4 @@
-package com.example.tss.constants.mold;
+package com.example.tss.constants.molds;
 
 public interface HTMLMold {
     String ADMIT_CARD = """
