@@ -4,7 +4,7 @@ import '../styles/openingcard.css'
 import BookmarkButton from './BookmarkButton';
 const { Title, Text } = Typography;
 
-const Openings = () => {
+const Openings = ({title,type,closing,vacency}) => {
     return (
         <div className="vacency">
             <div className="vacency-details">
@@ -13,8 +13,8 @@ const Openings = () => {
                         <i className="fa-light fa-briefcase"></i>
                     </div>
                     <div className="extra-details-heading">
-                        <Title level={3} style={{ marginTop: 0 }}>Software Engineer Trainee (J2EE) <Tag color="blue">Full Time</Tag></Title>
-                        <Text>Closing - <span>19 Sept 2023</span> | Vacency - 20 </Text>
+                        <Title level={3} style={{ marginTop: 0 }}>{title} <Tag color="blue">{type}</Tag></Title>
+                        <Text>Closing - <span>{closing}</span> | Vacency - {vacency} </Text>
                     </div>
                     <BookmarkButton />
                 </div>
