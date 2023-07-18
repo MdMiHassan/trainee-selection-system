@@ -21,7 +21,7 @@ public class Resource {
     @Lob
     @Column(columnDefinition = "LONGBLOB")
     private byte[] fileData;
-    @OneToOne
+    @ManyToOne
     private User owner;
     @Enumerated(EnumType.STRING)
     private ResourceType resourceType;

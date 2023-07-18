@@ -10,7 +10,7 @@ import java.util.Base64;
 import java.util.List;
 
 @Component
-public class AdmitImageUtils {
+public class ImageUtils {
     public static String encodeImageToBase64(byte[] imageBytes) throws IOException {
         String imageType = ImageIO.getImageReaders(new ByteArrayInputStream(imageBytes)).next().getFormatName().toLowerCase();
         boolean isValidImageType = isValidImageType(imageType);
@@ -23,7 +23,7 @@ public class AdmitImageUtils {
         imageString.append(Base64.getEncoder().encodeToString(imageBytes));
         return imageString.toString();
     }
-    private static boolean isValidImageType(String imageType) {
+    public static boolean isValidImageType(String imageType) {
         List<String> validImageTypes = Arrays.asList("jpeg", "jpg", "png");
         return validImageTypes.contains(imageType);
     }

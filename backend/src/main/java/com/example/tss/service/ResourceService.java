@@ -4,12 +4,14 @@ import com.example.tss.constants.ResourceType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
+
 public interface ResourceService {
-    ResponseEntity<?> getById(Long id);
+    ResponseEntity<?> getById(Principal principal,Long id);
 
     ResponseEntity<?> getByIdAndResourceType(Long resourceId, ResourceType resourceType);
 
     ResponseEntity<?> getByIdAndResourceTypeAndOwnerId(Long resourceId, ResourceType resourceType, Long ownerId);
 
-    ResponseEntity<?> uploadResource(MultipartFile multipartFile);
+    ResponseEntity<?> uploadResource(Principal principal,MultipartFile multipartFile);
 }

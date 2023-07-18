@@ -6,17 +6,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/resource")
 @RequiredArgsConstructor
+//@CrossOrigin
 public class ResourceController {
     private final ResourceService resourceService;
     @PostMapping("/upload")
-    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile multipartFile){
-        return resourceService.uploadResource(multipartFile);
+    public ResponseEntity<?> uploadFile( Principal principal,@RequestParam("file") MultipartFile multipartFile){
+        System.out.println("upload");
+        return resourceService.uploadResource(principal,multipartFile);
     }
     @GetMapping("/{resourceId}")
-    public ResponseEntity<?> downloadFile(@PathVariable Long resourceId){
-        return resourceService.getById(resourceId);
+    public ResponseEntity<?> downloadFile(Principal principal,@PathVariable Long resourceId){
+        return resourceService.getById(principal,resourceId);
     }
 }

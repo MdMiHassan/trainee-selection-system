@@ -43,7 +43,7 @@ public class ApplicationServiceImpl implements ApplicationService {
                 .circular(circular)
                 .firstName(applicantProfileDto.getFirstName())
                 .lastName(applicantProfileDto.getLastName())
-                .email(applicantProfileDto.getEmail())
+//                .email(applicantProfileDto.getEmail())
                 .phone(applicantProfileDto.getPhone())
                 .cgpa(applicantProfileDto.getCgpa())
                 .gender(applicantProfileDto.getGender())

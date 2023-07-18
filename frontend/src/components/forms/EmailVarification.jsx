@@ -1,21 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Form, Input, Button, Steps, Row, Col, message } from 'antd';
 import { API_BASE_URL } from '../../Config';
+import { AuthContext } from '../../context/AuthContext';
+import { decodeToken } from '../../utils/auth';
 
-const EmailVarification = ({ setStep, email }) => {
-    const [verificationCode, setVerificationCode] = useState('');
-
+const EmailVarification = ({ setStep, user }) => {
+    const { updateRole, updateToken, } = useContext(AuthContext);
     const handlePrevious = () => {
         setStep(1);
-    };
-
-    const handleVerificationCodeChange = (e) => {
-        setVerificationCode(e.target.value);
     };
 
     const onFinishVerification = (values) => {
         console.log('Step 2:', values);
         const { verificationCode } = values;
+        const email = user.email;
+        const password = user.password;
         const requestData = {
             email,
             verificationCode,
@@ -31,8 +30,36 @@ const EmailVarification = ({ setStep, email }) => {
             .then((response) => response.json())
             .then((data) => {
                 if (data.verified) {
-                    message.success("Email verified")
-                    setStep(3);
+                    message.success("Email verified!")
+                    const loginRequestData = {
+                        email,
+                        password,
+                    };
+                    console.log(loginRequestData);
+                    fetch(API_BASE_URL + '/auth/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(loginRequestData),
+                    })
+                        .then((response) => response.json())
+                        .then((data) => {
+                            if (data.success) {
+                                const userToken = data.token;
+                                const userRole = decodeToken(userToken).role[0];
+                                updateRole(userRole);
+                                updateToken(userToken);
+                                message.success("Loged in");
+                                setStep(3);
+                            } else {
+                                console.error('Login response:', data);
+                            }
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                            message.error('Email verification failed!');
+                        });
                 } else {
                     console.error('Login response:', data);
                 }

@@ -1,15 +1,18 @@
 package com.example.tss.service.impl;
 
+import com.example.tss.constants.ResourceType;
 import com.example.tss.constants.Role;
 import com.example.tss.dto.ApplicantProfileDto;
 import com.example.tss.entity.ApplicantProfile;
 import com.example.tss.entity.EmailVerification;
+import com.example.tss.entity.Resource;
 import com.example.tss.entity.User;
 import com.example.tss.exception.UserWithTheEmailAlreadyExistsException;
 import com.example.tss.model.ApplicantRegistrationRequest;
 import com.example.tss.model.ApplicantRegistrationResponse;
 import com.example.tss.repository.ApplicantProfileRepository;
 import com.example.tss.repository.EmailVerificationRepository;
+import com.example.tss.repository.ResourceRepository;
 import com.example.tss.repository.UserRepository;
 import com.example.tss.service.ApplicantService;
 import com.example.tss.service.EmailService;
@@ -17,6 +20,7 @@ import com.example.tss.service.UserService;
 import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -34,22 +39,19 @@ public class ApplicantServiceImpl implements ApplicantService {
     private final UserRepository userRepository;
     private final EmailVerificationRepository emailVerificationRepository;
     private final EmailService emailService;
+    private final ResourceRepository resourceRepository;
 
     @Override
     @Transactional
     public ResponseEntity<?> registerApplicant(ApplicantRegistrationRequest request) {
         String email = request.getEmail();
-        if (userRepository.existsByEmail(email)) {
-            throw new UserWithTheEmailAlreadyExistsException(email);
-        }
-        User user = User.builder()
-                .email(request.getEmail())
-                .role(Role.APPLICANT)
-                .password(request.getPassword())
-                .enabled(true)
-                .locked(false)
-                .emailVerified(false)
-                .build();
+        User user = userRepository.findByEmail(email).orElseGet(() -> User.builder().build());
+        user.setEmail(request.getEmail());
+        user.setRole(Role.APPLICANT);
+        user.setPassword(request.getPassword());
+        user.setEnabled(true);
+        user.setLocked(false);
+        user.setEmailVerified(false);
         User savedUser = userService.save(user);
         String randomUUID = UUID.randomUUID().toString().replaceAll("-", "");
         String random6DigitNumber = randomUUID.substring(0, 6);
@@ -63,6 +65,7 @@ public class ApplicantServiceImpl implements ApplicantService {
             emailService.sendEmail(email,
                     "Email Verification Code",
                     savedEmailVerification.getVerificationCode());
+            System.out.println("email sent");
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
@@ -134,10 +137,32 @@ public class ApplicantServiceImpl implements ApplicantService {
     @Override
     @Transactional
     public ResponseEntity<?> updateApplicantProfile(Principal principal, ApplicantProfileDto applicantProfileDto) {
-        ApplicantProfile profile = getApplicantProfile(principal);
+        String email = principal.getName();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException(email));
+        ApplicantProfile applicantProfile = applicantProfileRepository.findByUserId(user.getId())
+                .orElseThrow(() -> new UsernameNotFoundException(email));
+
+        Long profileImageId = applicantProfileDto.getProfileImageId();
+        Long resumeId = applicantProfileDto.getResumeId();
+        applicantProfileDto.setProfileImageId(null);
+        applicantProfileDto.setResumeId(null);
+
         ModelMapper modelMapper = new ModelMapper();
-        modelMapper.map(applicantProfileDto, profile);
-        ApplicantProfile saved = applicantProfileRepository.save(profile);
+        modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
+        modelMapper.map(applicantProfileDto,applicantProfile);
+
+        Optional<Resource> profileImage = resourceRepository.findByIdAndResourceTypeAndOwnerId(
+                profileImageId,
+                ResourceType.PROFILEPICTURE,
+                user.getId());
+        profileImage.ifPresent(applicantProfile::setProfileImage);
+        Optional<Resource> resume = resourceRepository.findByIdAndResourceTypeAndOwnerId(
+                resumeId,
+                ResourceType.RESUME,
+                user.getId());
+        resume.ifPresent(applicantProfile::setResume);
+        ApplicantProfile saved = applicantProfileRepository.save(applicantProfile);
         return ResponseEntity.ok(modelMapper.map(saved, ApplicantProfileDto.class));
     }
 

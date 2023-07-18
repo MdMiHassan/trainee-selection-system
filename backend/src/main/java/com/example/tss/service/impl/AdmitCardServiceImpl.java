@@ -116,6 +116,7 @@ public class AdmitCardServiceImpl implements AdmitCardService {
             admit.setFileData(admitCardData);
             admit.setOwner(user);
             admit.setFileFormat("pdf");
+            admit.setResourceType(ResourceType.ADMITCARD);
             admit.setFileName(admit.getId() + ".pdf");
             admit.setFileDelete(false);
             admit.setDeletedByUser(false);

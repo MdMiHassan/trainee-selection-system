@@ -25,7 +25,6 @@ public class ApplicantProfileDto {
     private Date passingYear;
     private String presentAddress;
     private String phone;
-    private String email;
     private Long profileImageId;
     private Long resumeId;
     private String profileImagePath;
