@@ -39,11 +39,11 @@ const AdminNavbar = () => {
     <Header>
       <div className="navbar">
         <div className="right-section">
-          <Dropdown overlay={notificationMenu} trigger={['click']}>
+          {/* <Dropdown overlay={notificationMenu} trigger={['click']}>
             <Badge count={notificationCount}>
               <Button shape="circle" icon={<BellOutlined />} />
             </Badge>
-          </Dropdown>
+          </Dropdown> */}
           <Dropdown overlay={userMenu} trigger={['click']}>
             <div className="user-info">
               <Avatar icon={<UserOutlined />} />

@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -35,6 +36,7 @@ public class CircularServiceImpl implements CircularService {
     public Page<?> getAllCircular(Pageable pageable) {
         return circularRepository.findAll(pageable);
     }
+
 
     public ResponseEntity<?> createCircular(CircularDto circularDto) {
         Circular savedCircular = circularRepository.save(modelMapper.map(circularDto, Circular.class));
@@ -52,7 +54,7 @@ public class CircularServiceImpl implements CircularService {
                 .nextRound(savedScreeningRound)
                 .build();
         ScreeningRoundMeta savedScreeningRoundMeta = screeningRoundMetaRepository.save(screeningRoundMeta);
-        return ResponseEntity.ok(savedScreeningRoundMeta);
+        return ResponseEntity.ok(circularRepository.save(savedCircular));
     }
 
     public ResponseEntity<?> getCircularById(Long id) {
@@ -96,6 +98,12 @@ public class CircularServiceImpl implements CircularService {
     public ResponseEntity<?> approveApplicant(Long circularId, Long applicationId) {
         Circular circular = circularRepository.findById(circularId).orElseThrow();
         return roundService.approveApplicant(circular,applicationId);
+    }
+
+    @Override
+    public ResponseEntity<?> getAllCircular() {
+        List<Circular> circularList = circularRepository.findAll();
+        return ResponseEntity.ok(circularList);
     }
 
 }

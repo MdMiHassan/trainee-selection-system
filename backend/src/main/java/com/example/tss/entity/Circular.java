@@ -1,10 +1,13 @@
 package com.example.tss.entity;
 
+import com.example.tss.constants.CareerLevel;
+import com.example.tss.constants.TrainingType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.sql.Date;
 
 @Entity
 @Data
@@ -15,7 +18,15 @@ public class Circular {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    private String jobType;
+    private String overview;
+    @Enumerated(EnumType.STRING)
+    private TrainingType trainingType;
+    private Date closingDate;
+    private String requiredEducation;
+    private String hiringLocation;
+    @Enumerated(EnumType.STRING)
+    private CareerLevel careerLevel;
+    private Integer vacancy;
     private String skills;
     private String duties;
     private Float salary;

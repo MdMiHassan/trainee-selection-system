@@ -24,4 +24,6 @@ public interface CircularService {
     ResponseEntity<?> getApplicationByIdUnderCircular(Long circularId, Long applicationId);
 
     ResponseEntity<?> approveApplicant(Long circularId, Long applicationId);
+
+    ResponseEntity<?> getAllCircular();
 }
