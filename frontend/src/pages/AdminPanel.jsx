@@ -41,14 +41,24 @@ function AdminPanel() {
                         margin: '0 16px',
                     }}
                 >
-                    <Breadcrumb
-                        style={{
-                            margin: '16px 0',
-                        }}
-                    >
-                        <Breadcrumb.Item>Admin</Breadcrumb.Item>
-                        <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
-                    </Breadcrumb>
+                    <Breadcrumb style={{
+                        margin: '16px',
+                    }}
+                        items={[
+                            {
+                                title: 'Home',
+                            },
+                            {
+                                title: <a href="">Application Center</a>,
+                            },
+                            {
+                                title: <a href="">Application List</a>,
+                            },
+                            {
+                                title: 'An Application',
+                            },
+                        ]}
+                    />
                     <div
                         style={{
                             padding: 24,
@@ -57,26 +67,26 @@ function AdminPanel() {
                         }}
                     >
                         <Routes>
-                            <Route exact path="/admin" element={<AdminNewCircular />} />
-                            <Route path="/admin/stats" element={<AdminNewCircular />} />
-                            <Route path="/admin/circular/new" element={<AdminNewCircular />} />
-                            <Route path="/admin/circular/screening" element={<AdminCircularScreening />} />
-                            <Route path="/admin/circular/update" element={<AdminCircularUpdate />} />
-                            <Route path="/admin/circular/all" element={<AdminAllCirculars />} />
-                            <Route path="/admin/notice/new" element={<AdminNewNotice />} />
-                            <Route path="/admin/notice/all" element={<AdminAllNotice />} />
-                            <Route path="/admin/notice/update" element={<AdminUpdateNotice />} />
-                            <Route path="/admin/email/sent" element={<AdminEmailSentBySystem />} />
-                            <Route path="/admin/email/configure" element={<AdminConfigureEmail />} />
-                            <Route path="/admin/admit/configure" element={<AdminConfigureAdmit />} />
-                            <Route path="/admin/user/admins" element={<AdminAllAdminUsers />} />
-                            <Route path="/admin/user/new" element={<AdminNewAdmin />} />
-                            <Route path="/admin/user/applicants" element={<AdminAllApplicantUsers />} />
-                            <Route path="/admin/files" element={<AdminAllFiles />} />
+                            {/* <Route exact path="/admin/*" element={<AdminNewCircular />} /> */}
+                            <Route path="/admin/stats/*" element={<AdminNewCircular />} />
+                            <Route path="/admin/circular/new/" element={<AdminNewCircular />} />
+                            <Route path="/admin/circular/screening/*" element={<AdminCircularScreening />} />
+                            <Route path="/admin/circular/update/*" element={<AdminCircularUpdate />} />
+                            <Route path="/admin/circular/all/*" element={<AdminAllCirculars />} />
+                            <Route path="/admin/notice/new/*" element={<AdminNewNotice />} />
+                            <Route path="/admin/notice/all/*" element={<AdminAllNotice />} />
+                            <Route path="/admin/notice/update/*" element={<AdminUpdateNotice />} />
+                            <Route path="/admin/email/sent/*" element={<AdminEmailSentBySystem />} />
+                            <Route path="/admin/email/*" element={<AdminConfigureEmail />} />
+                            <Route path="/admin/admit/configure/*" element={<AdminConfigureAdmit />} />
+                            <Route path="/admin/user/admins/*" element={<AdminAllAdminUsers />} />
+                            <Route path="/admin/user/new/*" element={<AdminNewAdmin />} />
+                            <Route path="/admin/user/applicants/*" element={<AdminAllApplicantUsers />} />
+                            <Route path="/admin/files/*" element={<AdminAllFiles />} />
                         </Routes>
                     </div>
                 </Content>
-                <Footer style={{textAlign: 'center'}}>
+                <Footer style={{ textAlign: 'center' }}>
                     BJIT Academy ©2023 Created by Mehedi #30069
                 </Footer>
             </Layout>

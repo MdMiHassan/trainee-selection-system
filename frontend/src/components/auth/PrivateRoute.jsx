@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Navigate} from "react-router-dom";
+import { Navigate, Outlet} from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 
 
@@ -19,6 +19,8 @@ function PrivateRoute({ children, allowedRole }) {
         return <Navigate to="/404" />;
     }
 
-    return children;
+    return (<>
+    {children}<Outlet />
+    </>);
 };
 export default PrivateRoute;

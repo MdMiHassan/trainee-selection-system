@@ -172,7 +172,7 @@ const convertToMenuItems = (items) => {
 };
 
 const AdminPanelMenuItem = () => {
-  return <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">{convertToMenuItems(items)}</Menu>;
+  return <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" >{convertToMenuItems(items)}</Menu>;
 };
 export default AdminPanelMenuItem;
 
