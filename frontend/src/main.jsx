@@ -8,12 +8,10 @@ import { ConfigProvider, theme } from 'antd';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     // <ConfigProvider theme={{ algorithm: theme.darkAlgorithm }}>
-    // <BrowserRouter>
-    <Router path="/">
+    <BrowserRouter>
         <AuthProvider>
             <App />
         </AuthProvider>
-    </Router>
-    // {/* </BrowserRouter> */}
-    // </ConfigProvider>
+    </BrowserRouter>
+     // </ConfigProvider>
 )

@@ -30,6 +30,9 @@ public class CircularController {
     public Page<?> getAllCirculars(Pageable pageable) {
         return circularService.getAllCircular(pageable);
     }
+    public ResponseEntity<?> getAllCirculars() {
+        return circularService.getAllCircular();
+    }
 
     @GetMapping("/{circularId}")
     public ResponseEntity<?> getCircularById(@PathVariable Long circularId) {
@@ -38,6 +41,7 @@ public class CircularController {
 
     @PostMapping
     public ResponseEntity<?> createCircular(@Valid @RequestBody CircularDto requestDto) {
+        System.out.println("here");
         return circularService.createCircular(requestDto);
     }
 

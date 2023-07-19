@@ -31,35 +31,30 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/applicants/register","/applicants/register/email/verify", "/auth/login", "/admits/verify/{admitCardId}")
-                        .permitAll()
-                        .requestMatchers("/applicants", "/applicants/{applicantId}", "/applicants/{applicantId}/actions/lock"
-                                , "/circulars/{circularId}/applications", "/circulars/{circularId}/rounds/next/applications/{applicationId}/actions/approve"
-                                , "/circulars/{circularId}/rounds/current/actions/end", "/circulars/{circularId}/rounds"
-                                , "/circulars/{circularId}/rounds/{roundId}", "/circulars/{circularId}/rounds/{roundId}/candidates"
-                                , "/circulars/{circularId}/rounds/{roundId}/candidates/{candidateId}", "/evaluators")
+                                .anyRequest().permitAll()
+//                        .requestMatchers("/applicants/register","/applicants/register/email/verify", "/auth/login", "/admits/verify/{admitCardId}")
+//                        .permitAll()
+//                        .requestMatchers("/applicants", "/applicants/{applicantId}", "/applicants/{applicantId}/actions/lock"
+//                                , "/circulars/{circularId}/applications", "/circulars/{circularId}/rounds/next/applications/{applicationId}/actions/approve"
+//                                , "/circulars/{circularId}/rounds/current/actions/end", "/circulars/{circularId}/rounds"
+//                                , "/circulars/{circularId}/rounds/{roundId}", "/circulars/{circularId}/rounds/{roundId}/candidates"
+//                                , "/circulars/{circularId}/rounds/{roundId}/candidates/{candidateId}", "/evaluators")
 //                        .hasAuthority(Role.ADMIN.name())
-                        .permitAll()
-                        .requestMatchers("/circulars/{circularId}/apply")
+//                        .requestMatchers("/circulars/{circularId}/apply")
 //                        .hasAuthority(Role.APPLICANT.name())
-                        .permitAll()
-                        .requestMatchers("/resource/upload", "/resource/{resourceId}")
+//                        .requestMatchers("/resource/upload", "/resource/{resourceId}")
 //                        .hasAnyAuthority(Role.ADMIN.name(), Role.APPLICANT.name())
-                        .permitAll()
-                        .requestMatchers(HttpMethod.GET,"/circulars", "/circulars/{circularId}")
-                        .permitAll()
+//                        .requestMatchers(HttpMethod.GET,"/circulars", "/circulars/{circularId}")
 //                        .hasAnyAuthority(Role.ADMIN.name(), Role.APPLICANT.name())
-                        .requestMatchers(HttpMethod.POST,"/circulars", "/circulars/{circularId}")
-                        .permitAll()
+//                        .requestMatchers(HttpMethod.POST,"/circulars", "/circulars/{circularId}")
 //                        .hasAnyAuthority(Role.ADMIN.name())
-                        .requestMatchers(HttpMethod.POST,"/evaluators/{evaluatorId}/candidates")
-                        .permitAll()
+//                        .requestMatchers(HttpMethod.POST,"/evaluators/{evaluatorId}/candidates")
 //                        .hasAuthority(Role.ADMIN.name())
-                        .requestMatchers(HttpMethod.GET,"/evaluators/{evaluatorId}/candidates")
-                        .permitAll()
+//                        .requestMatchers(HttpMethod.GET,"/evaluators/{evaluatorId}/candidates")
 //                        .hasAuthority(Role.EVALUATOR.name())
-                        .anyRequest()
-                        .authenticated())
+//                        .anyRequest()
+//                        .authenticated()
+                )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

@@ -1,3 +1,4 @@
+
 import { Alert, Card, DatePicker } from "antd";
 import { API_BASE_URL } from "../../Config";
 import {
@@ -42,7 +43,7 @@ const tailFormItemLayout = {
         },
     },
 };
-function AdminNewCircular() {
+function AdminNoticeForm() {
     const [overview, setOverview] = useState('');
     const [duties, setDuties] = useState('');
     const [skills, setSkills] = useState('');
@@ -338,4 +339,4 @@ function AdminNewCircular() {
     </Card>);
 }
 
-export default AdminNewCircular;
+export default AdminNoticeForm;

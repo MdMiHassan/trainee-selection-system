@@ -1,0 +1,7 @@
+.custom-table .ant-table-thead th {
+    white-space: normal;
+}
+
+.custom-table .ant-table-tbody td {
+    white-space: normal;
+}

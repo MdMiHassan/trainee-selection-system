@@ -66,7 +66,7 @@ function AdminPanel() {
                             background: colorBgContainer,
                         }}
                     >
-                        <Routes>
+                        <Routes >
                             {/* <Route exact path="/admin/*" element={<AdminNewCircular />} /> */}
                             <Route path="/admin/stats/*" element={<AdminNewCircular />} />
                             <Route path="/admin/circular/new/" element={<AdminNewCircular />} />
