@@ -8,7 +8,7 @@ import AdminCircularScreening from '../layouts/admin/AdminCircularScreening';
 import AdminCircularUpdate from '../layouts/admin/AdminCircularUpdate';
 import AdminAllCirculars from '../layouts/admin/AdminAllCirculars';
 import AdminNewNotice from '../layouts/admin/AdminNewNotice';
-import AdminAllNotice from '../layouts/admin/AdminAllNotice';
+import AdminAllNotice from '../layouts/admin/AdminAllNotices';
 import AdminUpdateNotice from '../layouts/admin/AdminUpdateNotice';
 import AdminEmailSentBySystem from '../layouts/admin/AdminEmailSentBySystem';
 import AdminConfigureEmail from '../layouts/admin/AdminConfigureEmail';

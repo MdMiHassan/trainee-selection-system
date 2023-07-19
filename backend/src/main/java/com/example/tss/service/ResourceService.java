@@ -1,6 +1,7 @@
 package com.example.tss.service;
 
 import com.example.tss.constants.ResourceType;
+import com.example.tss.entity.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,4 +15,7 @@ public interface ResourceService {
     ResponseEntity<?> getByIdAndResourceTypeAndOwnerId(Long resourceId, ResourceType resourceType, Long ownerId);
 
     ResponseEntity<?> uploadResource(Principal principal,MultipartFile multipartFile);
+
+    Resource getResourceById(Principal principal, Long attachmentId);
+
 }

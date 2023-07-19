@@ -1,5 +1,12 @@
+import AdminNoticeForm from "../../components/forms/Admin/AdminNoticeForm";
+
 function AdminNewNotice() {
-    return ( <h1>new notice</h1> );
+    return ( 
+
+        <>
+        <AdminNoticeForm />
+        </>
+     );
 }
 
 export default AdminNewNotice;

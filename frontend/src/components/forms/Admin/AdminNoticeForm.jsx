@@ -1,6 +1,5 @@
 
-import { Alert, Card, DatePicker } from "antd";
-import { API_BASE_URL } from "../../Config";
+import { Alert, Card, DatePicker, Upload, message } from "antd";
 import {
     Button,
     Col,
@@ -12,6 +11,8 @@ import {
 } from 'antd';
 import TextArea from "antd/es/input/TextArea";
 import React, { useState } from 'react';
+import { API_BASE_URL } from "../../../Config";
+import { UploadOutlined } from "@ant-design/icons";
 const { Option } = Select;
 const formItemLayout = {
     labelCol: {
@@ -45,55 +46,45 @@ const tailFormItemLayout = {
 };
 function AdminNoticeForm() {
     const [overview, setOverview] = useState('');
-    const [duties, setDuties] = useState('');
-    const [skills, setSkills] = useState('');
     const [form] = Form.useForm();
     const authToken = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjpbIkFETUlOIl0sInN1YiI6InN1cGVyLmFkbWluQGV4YW1wbGUuY29tIiwiaWF0IjoxNjg5NjUyNDg2LCJleHAiOjE2OTIyNDQ0ODZ9.Yx0wSSepGudpDPs5a0mCygANdowZ_U2xLB2nhV4RCMI";
+    const [attachmentId, setAttachmentId] = useState(null);
+    const headers = {
+        Authorization: authToken,
+    };
+    const handleAttachmentUploadchange = (info) => {
+        if (info.file.status === 'done') {
+            const response = info.file.response;
+            setAttachmentId(response.id);
+        }
+    };
+
     const onFinish = (values) => {
         const {
             title,
-            closingDate,
-            trainingType,
-            careerLevel,
-            requiredEducation,
-            hiringLocation,
-            salary,
-            currency,
-            vacancy,
-            minExp,
-            maxExp
+            details,
         } = values;
 
-        const circularData = {
+        const noticeData = {
             title,
-            closingDate,
-            overview,
-            trainingType,
-            vacancy,
-            careerLevel,
-            requiredEducation,
-            hiringLocation,
-            skills,
-            duties,
-            salary,
-            currency,
-            minExp,
-            maxExp
+            details,
+            attachmentId
         };
-        console.log(JSON.stringify(circularData));
-        fetch(API_BASE_URL + '/circulars', {
+        console.log(JSON.stringify(noticeData));
+        fetch(API_BASE_URL + '/v1/notices', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': authToken
             },
-            body: JSON.stringify(circularData)
+            body: JSON.stringify(noticeData)
         })
             .then((response) => response.json())
             .then((data) => {
-                console.log("Circular posted");
+                message.success("Notice Posted");
             })
             .catch((error) => {
+                message.error("Notice Posting failed!");
                 console.log(error);
             });
         console.log('Received values of form: ', values);
@@ -118,122 +109,25 @@ function AdminNoticeForm() {
                 >
                     <Form.Item
                         name="title"
-                        label="Training Title"
+                        label="Notice Title"
                         colon={false}
                         rules={[
                             {
                                 required: true,
-                                message: 'Please input your training title!',
+                                message: 'Please input notice title!',
                             },
                         ]}
                     >
                         <Input />
                     </Form.Item>
                     <Form.Item
-                        name="trainingType"
-                        label="Training Type"
+                        name="details"
+                        label="Description of the notice"
                         colon={false}
                         rules={[
                             {
                                 required: true,
-                                message: 'Please select training type!',
-                            },
-                        ]}
-                    >
-                        <Select placeholder="select training type">
-                            <Option value="FULLTIME">Full Time</Option>
-                            <Option value="PARTTIME">Part Time</Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item
-                        name="careerLevel"
-                        label="Career Level"
-                        colon={false}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please select career level!',
-                            },
-                        ]}
-                    >
-                        <Select placeholder="select career level">
-                            <Option value="SENIOR">SENIOR</Option>
-                            <Option value="MIDDLE">MIDDLE</Option>
-                            <Option value="ENTRY">ENTRY</Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item
-                        name="vacancy"
-                        label="Vacancy"
-                        colon={false}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input vacency!',
-                            },
-                        ]}
-                    >
-                        <InputNumber />
-                    </Form.Item>
-                    <Form.Item
-                        name="minExp"
-                        colon={false}
-                        label="Minumum Experience">
-                        <InputNumber />
-                    </Form.Item>
-                    <Form.Item
-                        name="salary"
-                        colon={false}
-                        label="Salary">
-                        <InputNumber />
-                    </Form.Item>
-                    <Form.Item
-                        name="currency"
-                        colon={false}
-                        label="Salary Currecny">
-                        <Input />
-                    </Form.Item>
-
-                    <Form.Item
-                        name="maxExp"
-                        colon={false}
-                        label="Maximum Experience">
-                        <InputNumber />
-                    </Form.Item>
-                    <Form.Item
-                        name="requiredEducation"
-                        label="Required Education"
-                        colon={false}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input required education!',
-                            },
-                        ]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        name="hiringLocation"
-                        label="Hiring Location"
-                        colon={false}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input hiring location!',
-                            },
-                        ]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        name="overview"
-                        label="Overview of the Training"
-                        colon={false}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input Intro',
+                                message: 'Please input description',
                             },
                         ]}
                     >
@@ -248,76 +142,19 @@ function AdminNoticeForm() {
                         />
                     </Form.Item>
                     <Form.Item
-                        name="duties"
-                        label="Duties of the Training"
+                        name="attachment"
+                        label="Attachment"
                         colon={false}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input duties',
-                            },
-                        ]}
                     >
-                        <TextArea
-                            value={duties}
-                            onChange={(e) => setDuties(e.target.value)}
-                            placeholder="Duties of the training"
-                            autoSize={{
-                                minRows: 5,
-                                maxRows: 10,
-                            }}
-                        />
-                    </Form.Item>
-                    <Form.Item
-                        name="skills"
-                        label="Required skills for the Training"
-                        colon={false}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input required skills',
-                            },
-                        ]}
-                    >
-                        <TextArea
-                            value={skills}
-                            onChange={(e) => setSkills(e.target.value)}
-                            placeholder="Skills required for the training"
-                            autoSize={{
-                                minRows: 5,
-                                maxRows: 10,
-                            }}
-                        />
-                    </Form.Item>
-                    <Form.Item
-                        name="gender"
-                        label="Trainee Gender"
-                        colon={false}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please select gender!',
-                            },
-                        ]}
-                    >
-                        <Select placeholder="select gender">
-                            <Option value="MALE">Male</Option>
-                            <Option value="FEMALE">Female</Option>
-                            <Option value="ANY">Any</Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item
-                        name="closingDate"
-                        label="Closing Date"
-                        colon={false}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please select closing date!',
-                            },
-                        ]}
-                    >
-                        <DatePicker />
+                        <Upload
+                            action={API_BASE_URL + "/resource/upload"}
+                            listType="picture"
+                            maxCount={1}
+                            headers={headers}
+                            onChange={handleAttachmentUploadchange}
+                        >
+                            <Button icon={<UploadOutlined />}>Attachment</Button>
+                        </Upload>
                     </Form.Item>
                     <Form.Item {...tailFormItemLayout} wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
                         <Button type="primary" htmlType="submit">

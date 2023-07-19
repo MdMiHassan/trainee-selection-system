@@ -31,10 +31,7 @@ public class ResourceServiceImpl implements ResourceService {
 
     @Override
     public ResponseEntity<?> getById(Principal principal,Long resourceId) {
-        String email = principal.getName();
-        System.out.println(email);
-        User user = userRepository.findByEmail(email).orElseThrow();
-        Resource fileResource = resourceRepository.findByIdAndOwnerId(resourceId,user.getId()).orElseThrow(() -> new ResourceNotFoundException(resourceId.toString()));
+        Resource fileResource = getResourceById(principal, resourceId);
         MediaType mediaType = MediaTypeFactory.getMediaType(fileResource.getFileName()).orElseThrow();
         return ResponseEntity.ok()
                 .contentType(mediaType)
@@ -86,6 +83,15 @@ public class ResourceServiceImpl implements ResourceService {
                     .message("File upload failed").build(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+    }
+
+    @Override
+    public Resource getResourceById(Principal principal, Long resourceId) {
+        String email = principal.getName();
+        System.out.println(email);
+        User user = userRepository.findByEmail(email).orElseThrow();
+        Resource fileResource = resourceRepository.findByIdAndOwnerId(resourceId,user.getId()).orElseThrow(() -> new ResourceNotFoundException(resourceId.toString()));
+        return fileResource;
     }
 
     private Resource storeFile(User user,MultipartFile multipartFile) throws IOException {

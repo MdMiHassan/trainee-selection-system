@@ -24,9 +24,10 @@ function App() {
             </Routes>
             <Routes path="/admin/*" element={<PrivateRoute allowedRole={"ADMIN"} children={<AdminPanel ><Outlet /></AdminPanel>} />} /> */}
 
-            {/* <Routes>
+            <Routes>
             <Route path='/applicant' element={<ApplicantPanel />} />
-            </Routes> */}
+            {/* <Routes path='/admin' element={<AdminPanel />} /> */}
+            </Routes>
             <AdminPanel />
             {/* <ApplicantPanel /> */}
         </>

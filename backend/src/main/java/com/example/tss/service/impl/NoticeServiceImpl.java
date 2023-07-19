@@ -1,9 +1,16 @@
 package com.example.tss.service.impl;
 
+import com.example.tss.constants.Role;
 import com.example.tss.dto.NoticeDto;
+import com.example.tss.entity.Notice;
+import com.example.tss.entity.Resource;
+import com.example.tss.entity.User;
 import com.example.tss.mapper.NoticeMapper;
 import com.example.tss.repository.NoticeRepository;
 import com.example.tss.service.NoticeService;
+import com.example.tss.service.ResourceService;
+import com.example.tss.service.UserService;
+import com.example.tss.util.SystemUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +23,8 @@ import java.security.Principal;
 @RequiredArgsConstructor
 public class NoticeServiceImpl implements NoticeService {
     private final NoticeRepository noticeRepository;
+    private final UserService userService;
+    private final ResourceService resourceService;
 
     @Override
     public ResponseEntity<?> getAllNotices(Pageable page) {
@@ -25,7 +34,21 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Override
     public ResponseEntity<?> postNotice(Principal principal, NoticeDto noticeDto) {
-        return null;
+        String email=principal.getName();
+        User user=userService.getByEmail(email).orElseThrow();
+        if(!user.getRole().equals(Role.ADMIN)){
+            return ResponseEntity.badRequest().build();
+        }
+        Resource attachment=resourceService.getResourceById(principal,noticeDto.getAttachmentId());
+        Notice notice = Notice.builder()
+                .title(noticeDto.getTitle())
+                .details(noticeDto.getDetails())
+                .attachment(attachment)
+                .postedBy(user)
+                .postedAt(SystemUtils.getCurrentTimeStamp())
+                .build();
+        Notice saved = noticeRepository.save(notice);
+        return ResponseEntity.ok(NoticeMapper.mapToNoticeDto(saved));
     }
 
     @Override
