@@ -91,7 +91,7 @@ function AdminNoticeForm() {
     };
 
     return (<Card title="New Circular">
-        <Row >
+        <Row justify={'center'}>
             <Col xs={16} sm={16} md={16} lg={16} xl={16} xxl={16}>
                 <Form
                     {...formItemLayout}
@@ -164,14 +164,14 @@ function AdminNoticeForm() {
                 </Form>
 
             </Col>
-            <Col xs={22} sm={22} md={20} lg={8} xl={8} xxl={10}>
+            {/* <Col xs={22} sm={22} md={20} lg={8} xl={8} xxl={10}>
                 <Alert
                     message="Informational Notes"
                     description="You can insert new line to indicate bullet point in duities & skills"
                     type="info"
                     showIcon
                 />
-            </Col>
+            </Col> */}
         </Row>
     </Card>);
 }

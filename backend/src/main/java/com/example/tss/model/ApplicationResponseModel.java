@@ -1,5 +1,7 @@
-package com.example.tss.dto;
+package com.example.tss.model;
 
+import com.example.tss.dto.ApplicantProfileDto;
+import com.example.tss.dto.ScreeningRoundMarkDto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,16 +9,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ApplicantProfileDto {
+public class ApplicationResponseModel {
     private Long id;
-    private String firstName;
-    private String lastName;
+    private String name;
     private String gender;
     private Date dateOfBirth;
     private String degreeName;
@@ -28,6 +30,5 @@ public class ApplicantProfileDto {
     private String email;
     private Long profileImageId;
     private Long resumeId;
-    private String profileImagePath;
-    private String resumePath;
+    private List<ScreeningRoundMarkDto> roundMarks;
 }

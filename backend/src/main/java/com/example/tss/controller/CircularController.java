@@ -61,8 +61,8 @@ public class CircularController {
     }
 
     @GetMapping("/{circularId}/applications")
-    public ResponseEntity<?> getAllApplicationsUnderCircular(@PathVariable Long circularId) {
-        return circularService.getAllApplicationsUnderCircular(circularId);
+    public ResponseEntity<?> getAllApplicationsUnderCircular(@PathVariable Long circularId,Pageable pageable) {
+        return circularService.getAllApplicationsUnderCircular(circularId,pageable);
     }
 
     @GetMapping("/{circularId}/applications/{applicationId}")

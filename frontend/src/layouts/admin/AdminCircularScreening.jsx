@@ -1,29 +1,35 @@
-import { EditOutlined, EllipsisOutlined, PoweroffOutlined, SettingOutlined } from "@ant-design/icons";
-import { Avatar, Card, Col, Divider, Row, Select, Skeleton, Tabs, Typography } from "antd";
+import { EditOutlined, EllipsisOutlined, PoweroffOutlined, SettingOutlined, PlusOutlined } from "@ant-design/icons";
+import { Avatar, Button, Card, Col, Divider, Modal, Row, Select, Skeleton, Switch, Tabs, Typography } from "antd";
 import Meta from "antd/es/card/Meta";
 import { useState } from "react";
+import ApplicationScreening from "./screening/ApplicationScreening";
+import NewRoundForm from "../../components/forms/rounds/NewRoundForm";
 
 function AdminCircularScreening() {
     const options = [];
+    const {circularId,setCircularId}=useState(null);
     const handleChangeCircularSelect = (value) => {
         console.log(`selected ${value}`);
-      };
+    };
     for (let i = 10; i < 36; i++) {
         options.push({
             value: i.toString(36) + i,
             label: i.toString(36) + i,
         });
     }
-    const { loading, setLoading } = useState(true);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const showNewRoundModal = () => {
+        setIsModalOpen(true);
+      };
     return (<>
-        <Row justify={"space-between"} align={"middle"} style={{margin:"10px 0"}}>
+        <Row justify={"space-between"} align={"middle"} style={{ margin: "10px 0" }}>
             <Col span={6}>
-            <Typography.Title
-            level={3}
-            style={{margin:'0'}}
-            >
-                Screening Circular
-            </Typography.Title>
+                <Typography.Title
+                    level={3}
+                    style={{ margin: '0' }}
+                >
+                    Screening Circular
+                </Typography.Title>
             </Col>
             <Col span={18}>
                 <Select
@@ -41,9 +47,19 @@ function AdminCircularScreening() {
             Please Select a circular for screening
         </Typography.Paragraph>
         <Divider></Divider>
-        <Typography.Title level={5}>
-            Rounds
-        </Typography.Title>
+        <Row justify="space-between" style={{ marginBottom: "30px" }}>
+            <Col>
+                <Typography.Title level={5} style={{ margin: "0 15px 0 0" }}>
+                    Rounds
+                </Typography.Title>
+            </Col>
+            <Col>
+                <Button type="primary" icon={<PlusOutlined />} onClick={showNewRoundModal} >
+                    create
+                </Button>
+                <NewRoundForm modalTitle={"New Round"} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} circularId={circularId} />
+            </Col>
+        </Row>
         <Row>
             <Card
                 style={{
@@ -53,6 +69,7 @@ function AdminCircularScreening() {
                 actions={[
                     <PoweroffOutlined key="endround" />,
                     <EditOutlined key="editround" />,
+                    <Switch defaultChecked />
                 ]}
             >
                 <Row justify='center'>
@@ -75,7 +92,7 @@ function AdminCircularScreening() {
                     {
                         label: 'Application filtering',
                         key: '1',
-                        children: 'Application filtering',
+                        children: <ApplicationScreening circularId={1} roundId={1} />,
                     },
                     {
                         label: 'Written Test',

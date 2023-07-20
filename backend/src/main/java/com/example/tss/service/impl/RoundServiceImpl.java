@@ -1,10 +1,13 @@
 package com.example.tss.service.impl;
 
 import com.example.tss.dto.ApplicantProfileDto;
-import com.example.tss.dto.ApplicationDto;
 import com.example.tss.dto.ScreeningRoundDto;
 import com.example.tss.dto.ScreeningRoundMarkDto;
-import com.example.tss.entity.*;
+import com.example.tss.entity.Application;
+import com.example.tss.entity.Circular;
+import com.example.tss.entity.ScreeningRound;
+import com.example.tss.entity.ScreeningRoundMeta;
+import com.example.tss.model.ApplicationResponseModel;
 import com.example.tss.repository.*;
 import com.example.tss.service.EvaluatorService;
 import com.example.tss.service.RoundService;
@@ -95,11 +98,11 @@ public class RoundServiceImpl implements RoundService {
     public ResponseEntity<?> getAllCandidatesUnderRoundUnderCircular(Long circularId, Long roundId) {
         List<Application> applications = applicationRepository.findByCircularIdAndCurrentRoundId(circularId, roundId);
 
-        List<ApplicationDto> applicationDtos = applications.stream()
+        List<ApplicationResponseModel> applicationResponseModels = applications.stream()
                 .map(application -> {
-                    ApplicantProfileDto applicantProfileDto = modelMapper.map(application,ApplicantProfileDto.class);
+
                     List<ScreeningRoundMarkDto> screeningRoundMarkDto = screeningMarksRepository.findByApplicationId(application.getId()).stream()
-                            .map(screeningRoundMark->{
+                            .map(screeningRoundMark -> {
                                 return ScreeningRoundMarkDto.builder()
                                         .roundId(screeningRoundMark.getScreeningRound().getId())
                                         .title(screeningRoundMark.getScreeningRound().getTitle())
@@ -107,16 +110,27 @@ public class RoundServiceImpl implements RoundService {
                                         .build();
                             }).toList();
 
-                    return ApplicationDto.builder()
-                            .applicantProfile(applicantProfileDto)
+                    return ApplicationResponseModel.builder()
+                            .id(application.getId())
+                            .name(application.getFirstName()+ " "+application.getLastName())
+                            .cgpa(application.getCgpa())
+                            .dateOfBirth(application.getDateOfBirth())
+                            .gender(application.getGender())
+                            .degreeName(application.getDegreeName())
+                            .passingYear(application.getPassingYear())
+                            .institutionName(application.getInstitutionName())
+                            .resumeId(application.getResume().getId())
+                            .profileImageId(application.getProfileImage().getId())
+                            .phone(application.getPhone())
+                            .email(application.getEmail())
                             .roundMarks(screeningRoundMarkDto)
                             .build();
                 }).toList();
-        return ResponseEntity.ok(applicationDtos);
+        return ResponseEntity.ok(applicationResponseModels);
     }
 
     @Override
     public ResponseEntity<?> getAllEvaluatorsUnderRoundUnderCircular(Long circularId, Long roundId) {
-        return evaluatorService.getAllEvaluatorsUnderRoundUnderCircular(circularId,roundId);
+        return evaluatorService.getAllEvaluatorsUnderRoundUnderCircular(circularId, roundId);
     }
 }
