@@ -1,5 +1,10 @@
+import EmailSentBySystem from "../../components/email/EmailSentBySystem";
+
 function AdminEmailSentBySystem() {
-    return ( <h1>email sent by system</h1> );
+    return ( 
+
+        <EmailSentBySystem />
+     );
 }
 
 export default AdminEmailSentBySystem;

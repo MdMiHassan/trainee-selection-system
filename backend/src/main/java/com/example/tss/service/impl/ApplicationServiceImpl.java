@@ -1,14 +1,18 @@
 package com.example.tss.service.impl;
 
 import com.example.tss.dto.ApplicantProfileDto;
+import com.example.tss.dto.ScreeningRoundMarkDto;
 import com.example.tss.entity.Application;
 import com.example.tss.entity.Circular;
+import com.example.tss.model.ApplicationResponseModel;
 import com.example.tss.repository.ApplicationRepository;
 import com.example.tss.repository.CircularRepository;
 import com.example.tss.repository.ResourceRepository;
 import com.example.tss.service.ApplicantService;
 import com.example.tss.service.ApplicationService;
+import com.example.tss.service.ScreeningRoundMarkService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -20,16 +24,26 @@ import java.util.List;
 public class ApplicationServiceImpl implements ApplicationService {
     private final ApplicationRepository applicationRepository;
     private final CircularRepository circularRepository;
-    private final ApplicantService applicantService;
-    private final ResourceRepository resourceRepository;
-    public ResponseEntity<?> getAllApplicationsUnderCircular(Long circularId) {
-        List<Application> applications=applicationRepository.findByCircularId(circularId);
+    private final ScreeningRoundMarkService screeningRoundMarkService;
+    public ResponseEntity<?> getAllApplicationsUnderCircular(Long circularId, Pageable pageable) {
+        List<ApplicationResponseModel> applications=applicationRepository.findByCircularId(circularId).stream()
+                .map(application -> {
+
+                    ScreeningRoundMarkDto.builder()
+//                            .mark()
+                            .build();
+                    return ApplicationResponseModel.builder()
+                            .id(application.getId())
+                            .build();
+                }).toList();
+
         return ResponseEntity.ok(applications);
     }
 
     public ResponseEntity<?> getApplication(Long id) {
         return null;
     }
+
 
     public ResponseEntity<?> apply(Long circularId, ApplicantProfileDto applicantProfileDto) {
         Circular circular = circularRepository.findById(circularId).orElseThrow();
@@ -43,7 +57,7 @@ public class ApplicationServiceImpl implements ApplicationService {
                 .circular(circular)
                 .firstName(applicantProfileDto.getFirstName())
                 .lastName(applicantProfileDto.getLastName())
-//                .email(applicantProfileDto.getEmail())
+                .email(applicantProfileDto.getEmail())
                 .phone(applicantProfileDto.getPhone())
                 .cgpa(applicantProfileDto.getCgpa())
                 .gender(applicantProfileDto.getGender())

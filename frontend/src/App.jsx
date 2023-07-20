@@ -11,26 +11,19 @@ import RegisterPage from './pages/RegisterPage';
 
 function App() {
     return (
-        <>
-            {/* <Routes>
-                <Route index element={<IndexGuard children={<ApplicantPanel ><Outlet /></ApplicantPanel>} />} />
-                <Route path='/register' element={<RegisterPage />} />
-                <Route path="/login" element={<LoginGurd children={<LoginForm />} />} />
-                <Route path="/admin/*" element={<AdminPanel />} />
-                <Route path="/applicant/*" element={<PrivateRoute allowedRole={'APPLICANT'} children={<ApplicantPanel ><Outlet/></ApplicantPanel>} />} />
-                <Route path="/evaluator/*" element={<PrivateRoute allowedRole={'EVALUATOR'} children={<EvaluatorPanel ><Outlet /></EvaluatorPanel>} />} />
-                <Route path='/404' element={<NotFoundPage />} />
-                <Route path="*" element={<NotFoundPage />} />
-            </Routes>
-            <Routes path="/admin/*" element={<PrivateRoute allowedRole={"ADMIN"} children={<AdminPanel ><Outlet /></AdminPanel>} />} /> */}
-
-            <Routes>
-            <Route path='/applicant' element={<ApplicantPanel />} />
-            {/* <Routes path='/admin' element={<AdminPanel />} /> */}
-            </Routes>
-            <AdminPanel />
-            {/* <ApplicantPanel /> */}
-        </>
+        // <Routes>
+        //     <Route index element={<IndexGuard children={<ApplicantPanel ><Outlet /></ApplicantPanel>} />} />
+        //     <Route path='/register/*' element={<RegisterPage />} />
+        //     <Route path="/login/*" element={<LoginGurd children={<LoginForm />} />} />
+        //     <Route path="/admin/*" element={<PrivateRoute allowedRole={'ADMIN'} children={<AdminPanel ><Outlet /></AdminPanel>} />} />
+        //     <Route path="/applicant/*" element={<PrivateRoute allowedRole={'APPLICANT'} children={<ApplicantPanel ><Outlet /></ApplicantPanel>} />} />
+        //     <Route path="/evaluator/*" element={<PrivateRoute allowedRole={'EVALUATOR'} children={<EvaluatorPanel ><Outlet /></EvaluatorPanel>} />} />
+        //     <Route path='/404/*' element={<NotFoundPage />} />
+        //     <Route path="*" element={<NotFoundPage />} />
+        // </Routes>
+        <Routes>
+            <Route path='/' element={<EvaluatorPanel />} />
+        </Routes>
     );
 }
 

@@ -15,7 +15,7 @@ public interface CircularService {
 
     ResponseEntity<?> updateCircularById(Long id, CircularDto circularDto);
 
-    ResponseEntity<?> getAllApplicationsUnderCircular(Long id);
+    ResponseEntity<?> getAllApplicationsUnderCircular(Long id,Pageable pageable);
 
     ResponseEntity<?> delete(Long id);
 

@@ -74,8 +74,8 @@ public class CircularServiceImpl implements CircularService {
         return ResponseEntity.ok().body(modelMapper.map(savedCircular, CircularDto.class));
     }
 
-    public ResponseEntity<?> getAllApplicationsUnderCircular(Long circularId) {
-        return applicationService.getAllApplicationsUnderCircular(circularId);
+    public ResponseEntity<?> getAllApplicationsUnderCircular(Long circularId,Pageable pageable) {
+        return applicationService.getAllApplicationsUnderCircular(circularId, pageable);
     }
 
     public ResponseEntity<?> delete(Long id) {

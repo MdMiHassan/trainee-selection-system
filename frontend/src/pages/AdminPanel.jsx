@@ -67,22 +67,21 @@ function AdminPanel() {
                         }}
                     >
                         <Routes >
-                            {/* <Route exact path="/admin/*" element={<AdminNewCircular />} /> */}
-                            <Route path="/admin/stats/*" element={<AdminNewCircular />} />
-                            <Route path="/admin/circular/new/" element={<AdminNewCircular />} />
-                            <Route path="/admin/circular/screening/*" element={<AdminCircularScreening />} />
-                            <Route path="/admin/circular/update/*" element={<AdminCircularUpdate />} />
-                            <Route path="/admin/circular/all/*" element={<AdminAllCirculars />} />
-                            <Route path="/admin/notice/new/*" element={<AdminNewNotice />} />
-                            <Route path="/admin/notice/all/*" element={<AdminAllNotice />} />
-                            <Route path="/admin/notice/update/*" element={<AdminUpdateNotice />} />
-                            <Route path="/admin/email/sent/*" element={<AdminEmailSentBySystem />} />
-                            <Route path="/admin/email/*" element={<AdminConfigureEmail />} />
-                            <Route path="/admin/admit/configure/*" element={<AdminConfigureAdmit />} />
-                            <Route path="/admin/user/admins/*" element={<AdminAllAdminUsers />} />
-                            <Route path="/admin/user/new/*" element={<AdminNewAdmin />} />
-                            <Route path="/admin/user/applicants/*" element={<AdminAllApplicantUsers />} />
-                            <Route path="/admin/files/*" element={<AdminAllFiles />} />
+                            <Route path="/stats" element={<AdminNewCircular />} />
+                            <Route path="/circular/new" element={<AdminNewCircular />} />
+                            <Route path="/circular/screening" element={<AdminCircularScreening />} />
+                            <Route path="/circular/update" element={<AdminCircularUpdate />} />
+                            <Route path="/circular/all" element={<AdminAllCirculars />} />
+                            <Route path="/notice/new" element={<AdminNewNotice />} />
+                            <Route path="/notice/all" element={<AdminAllNotice />} />
+                            <Route path="/notice/update" element={<AdminUpdateNotice />} />
+                            <Route path="/email/sent" element={<AdminEmailSentBySystem />} />
+                            <Route path="/email" element={<AdminConfigureEmail />} />
+                            <Route path="/admit/configure" element={<AdminConfigureAdmit />} />
+                            <Route path="/user/admins" element={<AdminAllAdminUsers />} />
+                            <Route path="/user/new" element={<AdminNewAdmin />} />
+                            <Route path="/user/applicants" element={<AdminAllApplicantUsers />} />
+                            <Route path="/files" element={<AdminAllFiles />} />
                         </Routes>
                     </div>
                 </Content>

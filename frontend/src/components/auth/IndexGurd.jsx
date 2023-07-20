@@ -5,17 +5,20 @@ import { AuthContext } from "../../context/AuthContext";
 function IndexGuard({ children }) {
     const { role, token } = useContext(AuthContext);
     const isAuthenticated = () => {
+        console.log("Token before checking: "+token);
         return token? true : false;
     };
     const isApplicant = () => {
+        console.log("Role before checking: "+role);
         return role === "APPLICANT";
     }
-    
-    console.log("index gurd: "+isAuthenticated());
+    console.log("index gurd is authenticated: "+isAuthenticated());
+    console.log("index gurd is applicant: "+isApplicant());
     if (!isAuthenticated() || isApplicant()) {
-        console.log("index gurd: "+isApplicant());
+        console.log("Inside If!!")
         return children;
     }
+    console.log("Outeside IF!!")
     switch (role) {
         case "ADMIN":
             return <Navigate to="/admin" />;
