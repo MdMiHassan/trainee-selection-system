@@ -2,6 +2,7 @@ package com.example.tss.mapper;
 
 import com.example.tss.dto.NoticeDto;
 import com.example.tss.entity.Notice;
+import com.example.tss.entity.User;
 
 public class NoticeMapper {
     public static NoticeDto mapToNoticeDto(Notice notice){

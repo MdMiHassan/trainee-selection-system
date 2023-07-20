@@ -1,10 +1,8 @@
 package com.example.tss.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +10,7 @@ import java.sql.Timestamp;
 
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Notice {
@@ -20,7 +19,9 @@ public class Notice {
     private Long id;
     private String title;
     private String details;
+    @ManyToOne
     private User postedBy;
     private Timestamp postedAt;
+    @ManyToOne
     private Resource attachment;
 }
