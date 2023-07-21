@@ -3,8 +3,8 @@ package com.example.tss.service.impl;
 import com.example.tss.dto.ApplicantProfileDto;
 import com.example.tss.dto.CircularDto;
 import com.example.tss.entity.Circular;
-import com.example.tss.entity.ScreeningRoundMeta;
 import com.example.tss.entity.ScreeningRound;
+import com.example.tss.entity.ScreeningRoundMeta;
 import com.example.tss.repository.CircularRepository;
 import com.example.tss.repository.ScreeningRoundMetaRepository;
 import com.example.tss.repository.ScreeningRoundRepository;
@@ -12,6 +12,7 @@ import com.example.tss.service.ApplicationService;
 import com.example.tss.service.CircularService;
 import com.example.tss.service.RoundService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
@@ -37,15 +38,22 @@ public class CircularServiceImpl implements CircularService {
         return circularRepository.findAll(pageable);
     }
 
-
+    @Override
     public ResponseEntity<?> createCircular(CircularDto circularDto) {
         Circular savedCircular = circularRepository.save(modelMapper.map(circularDto, Circular.class));
-        ScreeningRound initialScreeningRound=ScreeningRound.builder()
-                .title("Apply")
+        ScreeningRound initialScreeningRound = ScreeningRound.builder()
+                .title("Application Filtering")
                 .circular(savedCircular)
-                .serialNo(1)
+                .serialNo(0)
                 .description("Applicant need to submit application first")
                 .build();
+        ScreeningRound endScreeningRound = ScreeningRound.builder()
+                .title("Selected Candidates")
+                .circular(savedCircular)
+                .serialNo(1)
+                .description("Final Select Candidates List Will Appear Here")
+                .build();
+        screeningRoundRepository.save(endScreeningRound);
         ScreeningRound savedScreeningRound = screeningRoundRepository.save(initialScreeningRound);
         ScreeningRoundMeta screeningRoundMeta = ScreeningRoundMeta.builder()
                 .circular(savedCircular)
@@ -64,6 +72,8 @@ public class CircularServiceImpl implements CircularService {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @Override
+    @Transactional
     public ResponseEntity<?> updateCircularById(Long id, CircularDto circularDto) {
         Circular existingCircular = circularRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Circular not found with id: " + id));
@@ -73,11 +83,12 @@ public class CircularServiceImpl implements CircularService {
         Circular savedCircular = circularRepository.save(existingCircular);
         return ResponseEntity.ok().body(modelMapper.map(savedCircular, CircularDto.class));
     }
-
-    public ResponseEntity<?> getAllApplicationsUnderCircular(Long circularId,Pageable pageable) {
+@Override
+    public ResponseEntity<?> getAllApplicationsUnderCircular(Long circularId, Pageable pageable) {
         return applicationService.getAllApplicationsUnderCircular(circularId, pageable);
     }
-
+@Override
+@Transactional
     public ResponseEntity<?> delete(Long id) {
         Circular circular = circularRepository.findById(id).orElseThrow();
         circularRepository.delete(circular);
@@ -85,6 +96,7 @@ public class CircularServiceImpl implements CircularService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> apply(Long circularId, ApplicantProfileDto applicantProfileDto) {
         return applicationService.apply(circularId, applicantProfileDto);
     }
@@ -97,13 +109,18 @@ public class CircularServiceImpl implements CircularService {
     @Override
     public ResponseEntity<?> approveApplicant(Long circularId, Long applicationId) {
         Circular circular = circularRepository.findById(circularId).orElseThrow();
-        return roundService.approveApplicant(circular,applicationId);
+        return roundService.approveApplicant(circular, applicationId);
     }
 
     @Override
     public ResponseEntity<?> getAllCircular() {
         List<Circular> circularList = circularRepository.findAll();
         return ResponseEntity.ok(circularList);
+    }
+
+    @Override
+    public Optional<Circular> getCircular(Long circularId) {
+        return circularRepository.findById(circularId);
     }
 
 }

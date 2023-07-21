@@ -11,6 +11,7 @@ import com.example.tss.service.NoticeService;
 import com.example.tss.service.ResourceService;
 import com.example.tss.service.UserService;
 import com.example.tss.util.SystemUtils;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +34,7 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> postNotice(Principal principal, NoticeDto noticeDto) {
         String email=principal.getName();
         User user=userService.getByEmail(email).orElseThrow();

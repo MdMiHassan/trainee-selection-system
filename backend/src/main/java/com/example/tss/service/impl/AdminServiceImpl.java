@@ -7,6 +7,7 @@ import com.example.tss.entity.User;
 import com.example.tss.repository.AdminProfileRepository;
 import com.example.tss.service.AdminService;
 import com.example.tss.service.UserService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ public class AdminServiceImpl implements AdminService {
     private final UserService userService;
     private final AdminProfileRepository adminProfileRepository;
     @Override
+    @Transactional
     public void createSuperAdmin() {
         User superAdmin = User.builder()
                 .email("super.admin@example.com")

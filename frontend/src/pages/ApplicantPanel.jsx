@@ -1,4 +1,4 @@
-import { Layout, Row, Col } from 'antd';
+import { Layout, Row, Col, Card } from 'antd';
 import AppFooter from "../layouts/AppFooter";
 import AppHeader from "../layouts/AppHeader";
 import ApplicantActivity from "../layouts/Applicant/ApplicantActivity";
@@ -16,7 +16,9 @@ function ApplicantPanel() {
             <ApplicantHero />
           </Col>
           <Col xs={24}>
+            <Card style={{minHeight:"300px"}}>
             <ApplicantActivity />
+            </Card>
           </Col>
         </Row>
       </Content>

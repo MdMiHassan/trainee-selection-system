@@ -4,6 +4,7 @@ import com.example.tss.dto.EvaluatorDto;
 import com.example.tss.dto.MarksDto;
 import org.springframework.http.ResponseEntity;
 
+import java.security.Principal;
 import java.util.List;
 
 public interface EvaluatorService {
@@ -16,4 +17,6 @@ public interface EvaluatorService {
     ResponseEntity<?> updateAssignedApplicantsMarks(Long aLong, List<MarksDto> marksDtos);
 
     ResponseEntity<?> getAllEvaluatorsUnderRoundUnderCircular(Long circularId, Long roundId);
+
+    ResponseEntity<?> getAllAssignedApplicants(Principal principal);
 }

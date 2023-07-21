@@ -2,9 +2,12 @@ package com.example.tss.service;
 
 import com.example.tss.dto.ApplicantProfileDto;
 import com.example.tss.dto.CircularDto;
+import com.example.tss.entity.Circular;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+
+import java.util.Optional;
 
 public interface CircularService {
     Page<?> getAllCircular(Pageable pageable);
@@ -26,4 +29,6 @@ public interface CircularService {
     ResponseEntity<?> approveApplicant(Long circularId, Long applicationId);
 
     ResponseEntity<?> getAllCircular();
+
+    Optional<Circular> getCircular(Long circularId);
 }

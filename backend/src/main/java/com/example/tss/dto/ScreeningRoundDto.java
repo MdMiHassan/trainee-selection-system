@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -19,4 +21,6 @@ public class ScreeningRoundDto {
     private Integer serialNo;
     private Double maxMark;
     private Double passMark;
+    private Timestamp examTime;
+    private String examLocation;
 }

@@ -11,6 +11,7 @@ import com.example.tss.util.CodeGenerator;
 import com.example.tss.util.SystemUtils;
 import com.google.zxing.WriterException;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -48,6 +49,7 @@ public class AdmitCardServiceImpl implements AdmitCardService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> downloadAdmit(Long circularId, Long roundId, Principal principal) {
         User user = userRepository.findByEmail(principal.getName())
                 .orElseThrow(() -> new AdmitCardGenerationFailedException("User Doesn't Exists"));

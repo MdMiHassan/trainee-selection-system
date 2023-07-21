@@ -97,7 +97,7 @@ public class CircularController {
 
     @PostMapping("/{circularId}/rounds")
     public ResponseEntity<?> createRoundUnderCircular(@PathVariable Long circularId, @RequestBody ScreeningRoundDto screeningRoundDto) {
-        return roundService.createRound(circularId, screeningRoundDto);
+        return roundService.storeRound(circularId, screeningRoundDto);
     }
 
     @PatchMapping("/{circularId}/rounds/{roundId}")

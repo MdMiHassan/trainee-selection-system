@@ -15,7 +15,7 @@ public class Evaluator {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
+    @ManyToOne
     private User user;
     @OneToOne
     private Circular circular;

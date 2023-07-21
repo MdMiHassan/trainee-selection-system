@@ -9,8 +9,6 @@ public interface RoundService {
 
     ResponseEntity<?> getRoundByIdUnderCircular(Long circularId, Long roundId);
 
-    ResponseEntity<?> createRound(Long circularId, ScreeningRoundDto screeningRoundDto);
-
     ResponseEntity<?> updateRound(Long circularId, Long roundId, ScreeningRoundDto screeningRoundDto);
 
     ResponseEntity<?> deleteRoundByIdUnderCircular(Long circularId, Long roundId);
@@ -22,4 +20,6 @@ public interface RoundService {
     ResponseEntity<?> getAllCandidatesUnderRoundUnderCircular(Long circularId, Long roundId);
 
     ResponseEntity<?> getAllEvaluatorsUnderRoundUnderCircular(Long circularId, Long roundId);
+
+    ResponseEntity<?> storeRound(Long circularId, ScreeningRoundDto screeningRoundDto);
 }

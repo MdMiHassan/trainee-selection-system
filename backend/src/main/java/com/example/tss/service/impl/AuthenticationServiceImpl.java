@@ -29,6 +29,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtService jwtService;
     private final EmailVerificationRepository emailVerificationRepository;
     private final UserRepository userRepository;
+    @Override
+    @Transactional
     public ResponseEntity<?> login(String email, String password){
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email,password));
         if (!authentication.isAuthenticated()) {

@@ -13,8 +13,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -133,5 +135,20 @@ public class EvaluatorServiceImpl implements EvaluatorService {
                                 .build()
                 ).toList();
         return ResponseEntity.ok(evaluatorDtos);
+    }
+
+    @Override
+    public ResponseEntity<?> getAllAssignedApplicants(Principal principal) {
+//        User user=userService.getUserByPrincipal(principal).orElseThrow();
+//        List<Evaluator> evaluators=evaluatorRepository.findByUserId(user.getId()).stream()
+//                .map(evaluator -> {
+//                    Circular circular = evaluator.getCircular();
+//                    List<Long> uids = evaluator.getApplications().stream()
+//                            .map(Application::getUniqueIdentifier).toList();
+//
+//                })
+//                .toList();
+
+        return ResponseEntity.ok("Ok");
     }
 }
