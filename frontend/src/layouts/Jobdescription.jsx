@@ -3,95 +3,93 @@ import { CalendarOutlined, EnvironmentOutlined, DollarOutlined, FlagOutlined, Us
 import '../styles/Jobdescription.css'
 const { Title, Paragraph } = Typography;
 
-const JobDescriptionCard = () => {
+const JobDescriptionCard = ({circular}) => {
   return (
-    <Card title="Training Description">
-
+    <Card>
       <Title level={3}>Software Engineer Trainee (J2EE)<Tag color="blue">Full Time</Tag></Title>
       <div>
         <Title level={4} style={{ marginBottom: 0 }}>Insights</Title>
         <Divider />
-
         <div className='insights-cards'>
-        <div className="job-insights-card">
-          <div className="job-insights-icon">
-            <CalendarOutlined />
+          <div className="job-insights-card">
+            <div className="job-insights-icon">
+              <CalendarOutlined />
+            </div>
+            <div className="job-insights-content">
+              <Title level={5} style={{ margin: 0 }}>Closing Date</Title>
+              <Paragraph>12 July 2023</Paragraph>
+            </div>
           </div>
-          <div className="job-insights-content">
-            <Title level={5} style={{ margin: 0 }}>Closing Date</Title>
-            <Paragraph>12 July 2023</Paragraph>
-          </div>
-        </div>
 
-        <div className="job-insights-card">
-          <div className="job-insights-icon">
-            <EnvironmentOutlined />
+          <div className="job-insights-card">
+            <div className="job-insights-icon">
+              <EnvironmentOutlined />
+            </div>
+            <div className="job-insights-content">
+              <Title level={5} style={{ margin: 0 }}>Hiring Location</Title>
+              <Paragraph>Baridhara, Dhaka</Paragraph>
+            </div>
           </div>
-          <div className="job-insights-content">
-            <Title level={5} style={{ margin: 0 }}>Hiring Location</Title>
-            <Paragraph>Baridhara, Dhaka</Paragraph>
-          </div>
-        </div>
 
-        <div className="job-insights-card">
-          <div className="job-insights-icon">
-            <DollarOutlined />
+          <div className="job-insights-card">
+            <div className="job-insights-icon">
+              <DollarOutlined />
+            </div>
+            <div className="job-insights-content">
+              <Title level={5} style={{ margin: 0 }}>Offered Salary</Title>
+              <Paragraph>$60,000 per annum</Paragraph>
+            </div>
           </div>
-          <div className="job-insights-content">
-            <Title level={5} style={{ margin: 0 }}>Offered Salary</Title>
-            <Paragraph>$60,000 per annum</Paragraph>
-          </div>
-        </div>
 
-        <div className="job-insights-card">
-          <div className="job-insights-icon">
-            <FlagOutlined />
+          <div className="job-insights-card">
+            <div className="job-insights-icon">
+              <FlagOutlined />
+            </div>
+            <div className="job-insights-content">
+              <Title level={5} style={{ margin: 0 }}>Career Level</Title>
+              <Paragraph>Entry Level</Paragraph>
+            </div>
           </div>
-          <div className="job-insights-content">
-            <Title level={5} style={{ margin: 0 }}>Career Level</Title>
-            <Paragraph>Entry Level</Paragraph>
-          </div>
-        </div>
 
-        <div className="job-insights-card">
-          <div className="job-insights-icon">
-            <UsergroupAddOutlined />
+          <div className="job-insights-card">
+            <div className="job-insights-icon">
+              <UsergroupAddOutlined />
+            </div>
+            <div className="job-insights-content">
+              <Title level={5} style={{ margin: 0 }}>Vacency</Title>
+              <Paragraph>5 positions</Paragraph>
+            </div>
           </div>
-          <div className="job-insights-content">
-            <Title level={5} style={{ margin: 0 }}>Vacency</Title>
-            <Paragraph>5 positions</Paragraph>
-          </div>
-        </div>
 
-        <div className="job-insights-card">
-          <div className="job-insights-icon">
-            <BookOutlined />
+          <div className="job-insights-card">
+            <div className="job-insights-icon">
+              <BookOutlined />
+            </div>
+            <div className="job-insights-content">
+              <Title level={5} style={{ margin: 0 }}>Qualification</Title>
+              <Paragraph>Bachelor's Degree</Paragraph>
+            </div>
           </div>
-          <div className="job-insights-content">
-            <Title level={5} style={{ margin: 0 }}>Qualification</Title>
-            <Paragraph>Bachelor's Degree</Paragraph>
-          </div>
-        </div>
 
-        <div className="job-insights-card">
-          <div className="job-insights-icon">
-            <FileSearchOutlined />
+          <div className="job-insights-card">
+            <div className="job-insights-icon">
+              <FileSearchOutlined />
+            </div>
+            <div className="job-insights-content">
+              <Title level={5} style={{ margin: 0 }}>Experience</Title>
+              <Paragraph>1-3 years</Paragraph>
+            </div>
           </div>
-          <div className="job-insights-content">
-            <Title level={5} style={{ margin: 0 }}>Experience</Title>
-            <Paragraph>1-3 years</Paragraph>
-          </div>
-        </div>
 
-        <div className="job-insights-card">
-          <div className="job-insights-icon">
-            <TeamOutlined />
+          <div className="job-insights-card">
+            <div className="job-insights-icon">
+              <TeamOutlined />
+            </div>
+            <div className="job-insights-content">
+              <Title level={5} style={{ margin: 0 }}>Gender</Title>
+              <Paragraph>Any</Paragraph>
+            </div>
           </div>
-          <div className="job-insights-content">
-            <Title level={5} style={{ margin: 0 }}>Gender</Title>
-            <Paragraph>Any</Paragraph>
-          </div>
-        </div>
         </div>
       </div>
 

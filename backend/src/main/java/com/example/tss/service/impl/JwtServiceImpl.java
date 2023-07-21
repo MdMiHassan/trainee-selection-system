@@ -20,6 +20,7 @@ public class JwtServiceImpl implements JwtService {
 
     private final Key SECRET_KEY;
 
+    @Override
     public Claims parseClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(SECRET_KEY).build()
@@ -27,11 +28,12 @@ public class JwtServiceImpl implements JwtService {
                 .getBody();
     }
 
+    @Override
     public String generateJwtToken(Authentication authentication) {
         final long issueTime = System.currentTimeMillis();
         return Jwts.builder()
                 .addClaims(Map.of("role", authentication.getAuthorities().stream()
-                                .map(GrantedAuthority::getAuthority).toList()))
+                        .map(GrantedAuthority::getAuthority).toList()))
                 .setSubject(((UserDetails) authentication.getPrincipal()).getUsername())
                 .setIssuedAt(new Date(issueTime))
                 .setExpiration(new Date(issueTime + 1000L * 60 * 60 * 24 * 30))

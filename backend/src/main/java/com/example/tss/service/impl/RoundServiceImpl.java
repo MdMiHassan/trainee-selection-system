@@ -7,27 +7,31 @@ import com.example.tss.entity.Application;
 import com.example.tss.entity.Circular;
 import com.example.tss.entity.ScreeningRound;
 import com.example.tss.entity.ScreeningRoundMeta;
+import com.example.tss.exception.RoundCreationException;
 import com.example.tss.model.ApplicationResponseModel;
 import com.example.tss.repository.*;
+import com.example.tss.service.CircularService;
 import com.example.tss.service.EvaluatorService;
 import com.example.tss.service.RoundService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class RoundServiceImpl implements RoundService {
     private final ScreeningRoundRepository screeningRoundRepository;
-    private final CircularRepository circularRepository;
     private final ApplicationRepository applicationRepository;
     private final ScreeningRoundMetaRepository screeningRoundMetaRepository;
     private final ScreeningMarksRepository screeningMarksRepository;
     private final EvaluatorService evaluatorService;
-    private final ModelMapper modelMapper;
+    private final CircularRepository circularRepository;
 
     @Override
     public ResponseEntity<?> getAllRoundsUnderCircular(Long circularId) {
@@ -48,27 +52,76 @@ public class RoundServiceImpl implements RoundService {
         return ResponseEntity.ok(screeningRoundDto);
     }
 
+
     @Override
-    public ResponseEntity<?> createRound(Long circularId, ScreeningRoundDto screeningRoundDto) {
-        ModelMapper modelMapper = new ModelMapper();
-        Circular circular = circularRepository.findById(circularId).orElseThrow();
-        ScreeningRound screeningRound = modelMapper.map(screeningRoundDto, ScreeningRound.class);
-        screeningRound.setCircular(circular);
-        ScreeningRound savedScreeningRound = screeningRoundRepository.save(screeningRound);
+    @Transactional
+    public ResponseEntity<?> storeRound(Long circularId, ScreeningRoundDto screeningRoundDto) {
+        Circular circular=circularRepository.findById(circularId)
+                .orElseThrow(()->new RoundCreationException("Circular doesn't exists"));
+        int roundPos=screeningRoundDto.getSerialNo();
+        int maxPos=0;
+        List<ScreeningRound> rounds = screeningRoundRepository.findByCircularId(circular.getId());
+        for(ScreeningRound round:rounds){
+            int curPos=round.getSerialNo();
+            if(curPos >= roundPos){
+                round.setSerialNo(curPos+1);
+            }
+            if(maxPos<curPos){
+                maxPos=curPos;
+            }
+        }
+        ScreeningRound newScreeningRound = ScreeningRound.builder()
+                .circular(circular)
+                .title(screeningRoundDto.getTitle())
+                .description(screeningRoundDto.getDescription())
+                .maxMark(screeningRoundDto.getMaxMark())
+                .serialNo(roundPos)
+                .passMark(screeningRoundDto.getPassMark())
+                .location(screeningRoundDto.getExamLocation())
+                .examTime(screeningRoundDto.getExamTime())
+                .build();
+        if((maxPos+1)==roundPos){
+            screeningRoundRepository.save(newScreeningRound);
+        }else{
+            rounds.add(newScreeningRound);
+            screeningRoundRepository.saveAll(rounds);
+        }
         return ResponseEntity.ok(screeningRoundDto);
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> updateRound(Long circularId, Long roundId, ScreeningRoundDto screeningRoundDto) {
-        ScreeningRound screeningRound = screeningRoundRepository.findByIdAndCircularId(roundId, circularId).orElseThrow();
-        ModelMapper modelMapper = new ModelMapper();
-        ScreeningRound newScreeningRound = modelMapper.map(screeningRoundDto, ScreeningRound.class);
-        modelMapper.map(newScreeningRound, screeningRound);
-        ScreeningRound updatedScreeningRound = screeningRoundRepository.save(screeningRound);
-        return ResponseEntity.ok(updatedScreeningRound);
+        Circular circular = circularRepository.findById(circularId)
+                .orElseThrow(() -> new RoundCreationException("Circular doesn't exists"));
+        ScreeningRound screeningRound = screeningRoundRepository.findById(roundId)
+                .orElseThrow(() -> new RoundCreationException("Round doesn't exists"));
+        int roundPos=screeningRoundDto.getSerialNo();
+
+        int maxPos=0;
+        List<ScreeningRound> rounds = screeningRoundRepository.findByCircularId(circular.getId());
+        for(ScreeningRound round:rounds){
+            int curPos=round.getSerialNo();
+            if(curPos >= roundPos){
+                round.setSerialNo(curPos+1);
+            }
+            if(maxPos<curPos){
+                maxPos=curPos;
+            }
+        }
+        screeningRound.setCircular(circular);
+        screeningRound.setTitle(screeningRoundDto.getTitle());
+        screeningRound.setDescription(screeningRoundDto.getDescription());
+        screeningRound.setSerialNo(maxPos+1);
+        screeningRound.setMaxMark(screeningRoundDto.getMaxMark());
+        screeningRound.setPassMark(screeningRoundDto.getPassMark());
+        screeningRound.setLocation(screeningRoundDto.getExamLocation());
+        screeningRound.setExamTime(screeningRoundDto.getExamTime());
+        return ResponseEntity.ok(screeningRoundDto);
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> deleteRoundByIdUnderCircular(Long circularId, Long roundId) {
         screeningRoundRepository.findByIdAndCircularId(roundId, circularId).orElseThrow();
         screeningRoundRepository.deleteByIdAndCircularId(roundId, circularId);
@@ -76,6 +129,7 @@ public class RoundServiceImpl implements RoundService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> approveApplicant(Circular circular, Long applicationId) {
         Application application = applicationRepository.findByIdAndCircularId(applicationId, circular.getId())
                 .orElseThrow();
@@ -87,6 +141,7 @@ public class RoundServiceImpl implements RoundService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> endRound(Long circularId) {
         ScreeningRoundMeta screeningRoundMeta = screeningRoundMetaRepository.findByCircularId(circularId).orElseThrow();
         screeningRoundMeta.setCurrentRoundEnd(true);
@@ -100,15 +155,12 @@ public class RoundServiceImpl implements RoundService {
 
         List<ApplicationResponseModel> applicationResponseModels = applications.stream()
                 .map(application -> {
-
                     List<ScreeningRoundMarkDto> screeningRoundMarkDto = screeningMarksRepository.findByApplicationId(application.getId()).stream()
-                            .map(screeningRoundMark -> {
-                                return ScreeningRoundMarkDto.builder()
+                            .map(screeningRoundMark -> ScreeningRoundMarkDto.builder()
                                         .roundId(screeningRoundMark.getScreeningRound().getId())
                                         .title(screeningRoundMark.getScreeningRound().getTitle())
                                         .mark(screeningRoundMark.getMark())
-                                        .build();
-                            }).toList();
+                                        .build()).toList();
 
                     return ApplicationResponseModel.builder()
                             .id(application.getId())

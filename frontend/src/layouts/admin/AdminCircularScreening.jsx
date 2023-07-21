@@ -1,26 +1,47 @@
 import { EditOutlined, EllipsisOutlined, PoweroffOutlined, SettingOutlined, PlusOutlined } from "@ant-design/icons";
 import { Avatar, Button, Card, Col, Divider, Modal, Row, Select, Skeleton, Switch, Tabs, Typography } from "antd";
 import Meta from "antd/es/card/Meta";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ApplicationScreening from "./screening/ApplicationScreening";
 import NewRoundForm from "../../components/forms/rounds/NewRoundForm";
+import { API_BASE_URL } from "../../Config";
+import CircularRounds from "../../components/round/CircularRounds";
 
 function AdminCircularScreening() {
-    const options = [];
-    const {circularId,setCircularId}=useState(null);
+    const [circularsOptions, setCircularsOptions] = useState([]);
+    const [circulars, setCirculars] = useState([]);
+    const [circularId, setCircularId] = useState(null);
+
     const handleChangeCircularSelect = (value) => {
-        console.log(`selected ${value}`);
+        setCircularId(value);
     };
-    for (let i = 10; i < 36; i++) {
-        options.push({
-            value: i.toString(36) + i,
-            label: i.toString(36) + i,
-        });
-    }
     const [isModalOpen, setIsModalOpen] = useState(false);
     const showNewRoundModal = () => {
         setIsModalOpen(true);
-      };
+    };
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(API_BASE_URL + '/circulars');
+                const data = await response.json();
+                const newData = data.content;
+                const sortedCircularData = newData
+                    ? [...newData].sort((a, b) => b.id - a.id)
+                    : [];
+
+                const options = sortedCircularData.map((circular) => ({
+                    value: circular.id,
+                    label: circular.title,
+                }));
+                setCircularsOptions(options);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
     return (<>
         <Row justify={"space-between"} align={"middle"} style={{ margin: "10px 0" }}>
             <Col span={6}>
@@ -39,7 +60,7 @@ function AdminCircularScreening() {
                     }}
                     placeholder="Select a circular"
                     onChange={handleChangeCircularSelect}
-                    options={options}
+                    options={circularsOptions}
                 />
             </Col>
         </Row>
@@ -57,28 +78,11 @@ function AdminCircularScreening() {
                 <Button type="primary" icon={<PlusOutlined />} onClick={showNewRoundModal} >
                     create
                 </Button>
-                <NewRoundForm modalTitle={"New Round"} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} circularId={circularId} />
+                <NewRoundForm modalTitle={"New Round"} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} circularId={1} />
             </Col>
         </Row>
         <Row>
-            <Card
-                style={{
-                    width: 300,
-                    marginTop: 16,
-                }}
-                actions={[
-                    <PoweroffOutlined key="endround" />,
-                    <EditOutlined key="editround" />,
-                    <Switch defaultChecked />
-                ]}
-            >
-                <Row justify='center'>
-                    <Typography.Title
-                        level={5}
-                    >Application Open
-                    </Typography.Title>
-                </Row>
-            </Card>
+            <CircularRounds circularId={circularId}/>
         </Row>
         <Divider></Divider>
         <Typography.Title level={5}>

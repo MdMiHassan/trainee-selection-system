@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
-import { Form, Input, Button, Typography, Row, Col, Card } from 'antd';
+import { Form, Input, Button, Typography, Row, Col, Card, Checkbox } from 'antd';
 import { API_BASE_URL } from '../Config';
 import { decodeToken } from '../utils/auth';
 import { AuthContext } from './AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
 
@@ -57,39 +58,62 @@ const LoginForm = () => {
         <Row justify="center" align="middle" style={{ height: '100vh' }}>
             <Col xs={22} sm={10} md={10} lg={6} xl={6} xxl={4}>
                 <Card type="inner" title={"Sign in"} >
-                    <Form onFinish={onFinish}>
+                    <Form
+                        name="normal_login"
+                        className="login-form"
+                        initialValues={{
+                            remember: true,
+                        }}
+                        onFinish={onFinish}
+                    >
                         <Form.Item
                             name="email"
-                            rules={[{ required: true, message: 'Please enter your email' }]}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Please input your email!',
+                                },
+                            ]}
                         >
-                            <Input placeholder='Email' />
+                            <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
                         </Form.Item>
-
                         <Form.Item
                             name="password"
-                            rules={[{ required: true, message: 'Please enter your password' }]}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Please input your Password!',
+                                },
+                            ]}
                         >
-                            <Input.Password placeholder='Password' />
+                            <Input
+                                prefix={<LockOutlined className="site-form-item-icon" />}
+                                type="password"
+                                placeholder="Password"
+                            />
+                        </Form.Item>
+                        <Form.Item>
+                            <Form.Item name="remember" valuePropName="checked" noStyle>
+                                <Checkbox>Remember me</Checkbox>
+                            </Form.Item>
+
+                            <a className="login-form-forgot" href="">
+                                Forgot password
+                            </a>
                         </Form.Item>
 
                         <Form.Item>
-                            <Row justify="end">
-                                <Col>
-                                    <Button type="link" onClick={handleForgot}>
-                                        Forgot Password?
-                                    </Button>
-                                </Col>
-                                <Col>
-                                    <Button type="primary" htmlType="submit">
-                                        Sign In
-                                    </Button>
-                                </Col>
-                            </Row>
+                            <Button wrapperCol={24} type="primary" htmlType="submit" className="login-form-button" style={{width:"100%"}}>
+                                Log in
+                            </Button>
+                            Or <a href="/register">register now!</a>
                         </Form.Item>
                     </Form>
                 </Card>
             </Col>
         </Row>
+
+
     );
 };
 

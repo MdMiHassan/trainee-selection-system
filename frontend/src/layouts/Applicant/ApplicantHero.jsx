@@ -1,4 +1,4 @@
-import { Input, Button, Typography, Row, Col } from 'antd';
+import { Input, Button, Typography, Row, Col, Space } from 'antd';
 import '../../styles/AppplicantHero.css';
 const { Title, Paragraph } = Typography;
 
@@ -22,12 +22,10 @@ const ApplicantHero = () => {
 
         <div className='news-letter'>
           <Row justify='center'>
-            <Col xs={18} sm={16} md={12} lg={8} xl={6} xxl={4}>
-              <Input type='email' name='newsletteremail' placeholder='Your email address' required />
-            </Col>
-            <Col>
-              <Button type='primary' shape='default' icon={<i className='fa-light fa-paper-plane'></i>} />
-            </Col>
+            <Space.Compact xs={18} sm={16} md={12} lg={8} xl={6} xxl={4}>
+                <Input type='email' name='newsletteremail' placeholder='Your email address' required />
+                <Button type='primary' shape='default' icon={<i className='fa-light fa-paper-plane'></i>} />
+            </Space.Compact>
           </Row>
         </div>
       </div>

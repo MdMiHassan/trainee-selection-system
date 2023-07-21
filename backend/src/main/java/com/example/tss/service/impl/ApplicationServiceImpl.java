@@ -7,10 +7,9 @@ import com.example.tss.entity.Circular;
 import com.example.tss.model.ApplicationResponseModel;
 import com.example.tss.repository.ApplicationRepository;
 import com.example.tss.repository.CircularRepository;
-import com.example.tss.repository.ResourceRepository;
-import com.example.tss.service.ApplicantService;
 import com.example.tss.service.ApplicationService;
 import com.example.tss.service.ScreeningRoundMarkService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -25,8 +24,11 @@ public class ApplicationServiceImpl implements ApplicationService {
     private final ApplicationRepository applicationRepository;
     private final CircularRepository circularRepository;
     private final ScreeningRoundMarkService screeningRoundMarkService;
+
+    @Override
+    @Transactional
     public ResponseEntity<?> getAllApplicationsUnderCircular(Long circularId, Pageable pageable) {
-        List<ApplicationResponseModel> applications=applicationRepository.findByCircularId(circularId).stream()
+        List<ApplicationResponseModel> applications = applicationRepository.findByCircularId(circularId).stream()
                 .map(application -> {
 
                     ScreeningRoundMarkDto.builder()
@@ -44,7 +46,8 @@ public class ApplicationServiceImpl implements ApplicationService {
         return null;
     }
 
-
+    @Override
+    @Transactional
     public ResponseEntity<?> apply(Long circularId, ApplicantProfileDto applicantProfileDto) {
         Circular circular = circularRepository.findById(circularId).orElseThrow();
 //        Authentication authentication,
@@ -72,7 +75,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     public ResponseEntity<?> getApplicationByIdUnderCircular(Long circularId, Long applicationId) {
-        Application application=applicationRepository.findByIdAndCircularId(applicationId,circularId).orElseThrow();
+        Application application = applicationRepository.findByIdAndCircularId(applicationId, circularId).orElseThrow();
         return ResponseEntity.ok(application);
     }
 }

@@ -27,6 +27,11 @@ public class EvaluatorController {
         return evaluatorService.getAllAssignedApplicants(evaluatorId);
     }
 
+    @GetMapping("/current/candidates")
+    public ResponseEntity<?> getAllAssignedApplicantsToCurrentEvaluator(Principal principal) {
+        return evaluatorService.getAllAssignedApplicants(principal);
+    }
+
     @PostMapping("/{evaluatorId}/candidates")
     public ResponseEntity<?> assignEvaluatorToApplicants(@PathVariable Long evaluatorId, @RequestBody List<Long> candidateIds) {
         return evaluatorService.assignEvaluatorToApplicants(evaluatorId, candidateIds);
