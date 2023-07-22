@@ -1,4 +1,4 @@
-package com.example.tss.admit;
+package com.example.tss.util.admit;
 
 import java.util.LinkedHashMap;
 import java.util.List;

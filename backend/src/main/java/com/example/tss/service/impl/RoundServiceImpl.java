@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,6 +78,7 @@ public class RoundServiceImpl implements RoundService {
                 .maxMark(screeningRoundDto.getMaxMark())
                 .serialNo(roundPos)
                 .passMark(screeningRoundDto.getPassMark())
+                .requiredAdmitCard(screeningRoundDto.getRequiredAdmitCard())
                 .location(screeningRoundDto.getExamLocation())
                 .examTime(screeningRoundDto.getExamTime())
                 .build();
@@ -133,9 +135,14 @@ public class RoundServiceImpl implements RoundService {
     public ResponseEntity<?> approveApplicant(Circular circular, Long applicationId) {
         Application application = applicationRepository.findByIdAndCircularId(applicationId, circular.getId())
                 .orElseThrow();
-        ScreeningRoundMeta screeningRoundMeta = screeningRoundMetaRepository.findByCircularIdAndCurrentRoundEnd(circular.getId(), true)
+        ScreeningRoundMeta screeningRoundMeta = screeningRoundMetaRepository.findByCircularId(circular.getId())
                 .orElseThrow();
-        application.setCurrentRound(screeningRoundMeta.getNextRound());
+        ScreeningRound currentRound = screeningRoundMeta.getCurrentRound();
+//        if(currentRound.getExamTime().before(new Date(System.currentTimeMillis()))){
+//            return ResponseEntity.badRequest().build();
+//        }
+        ScreeningRound screeningRound = screeningRoundRepository.findByCircularIdAndSerialNo(circular.getId(),currentRound.getSerialNo() + 1).orElseThrow();
+        application.setCurrentRound(screeningRound);
         Application savedApplication = applicationRepository.save(application);
         return ResponseEntity.ok(savedApplication);
     }
@@ -152,7 +159,6 @@ public class RoundServiceImpl implements RoundService {
     @Override
     public ResponseEntity<?> getAllCandidatesUnderRoundUnderCircular(Long circularId, Long roundId) {
         List<Application> applications = applicationRepository.findByCircularIdAndCurrentRoundId(circularId, roundId);
-
         List<ApplicationResponseModel> applicationResponseModels = applications.stream()
                 .map(application -> {
                     List<ScreeningRoundMarkDto> screeningRoundMarkDto = screeningMarksRepository.findByApplicationId(application.getId()).stream()
@@ -167,12 +173,12 @@ public class RoundServiceImpl implements RoundService {
                             .name(application.getFirstName()+ " "+application.getLastName())
                             .cgpa(application.getCgpa())
                             .dateOfBirth(application.getDateOfBirth())
-                            .gender(application.getGender())
+                            .gender(application.getGender().name())
                             .degreeName(application.getDegreeName())
                             .passingYear(application.getPassingYear())
                             .institutionName(application.getInstitutionName())
-                            .resumeId(application.getResume().getId())
-                            .profileImageId(application.getProfileImage().getId())
+//                            .resumeId(application.getResume().getId())
+//                            .profileImageId(application.getProfileImage().getId())
                             .phone(application.getPhone())
                             .email(application.getEmail())
                             .roundMarks(screeningRoundMarkDto)

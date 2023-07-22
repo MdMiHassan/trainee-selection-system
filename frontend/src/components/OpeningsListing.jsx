@@ -7,7 +7,6 @@ import { API_BASE_URL } from '../Config';
 
 function OpeningsListing() {
   const [circularData, setCircularData] = useState([]);
-  const [loading, setLoading] = useState(false);
 
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
@@ -16,13 +15,11 @@ function OpeningsListing() {
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
       try {
         const response = await fetch(API_BASE_URL + '/circulars');
         const data = await response.json();
         const tableRows = data.content;
         setCircularData(tableRows);
-        setLoading(false);
         console.log(tableRows);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -43,6 +40,7 @@ function OpeningsListing() {
                 type={circular.trainingType}
                 closing={formatDate(circular.closingDate)}
                 vacancy={circular.vacancy}
+                circularId={circular.id}
               />
             ))
           ) : (

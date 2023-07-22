@@ -1,6 +1,6 @@
 package com.example.tss.service.impl;
 
-import com.example.tss.admit.AdmitCardMoldFactory;
+import com.example.tss.util.admit.AdmitCardMoldFactory;
 import com.example.tss.constants.ResourceType;
 import com.example.tss.entity.*;
 import com.example.tss.exception.AdmitCardGenerationFailedException;

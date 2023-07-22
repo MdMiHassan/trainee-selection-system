@@ -3,10 +3,8 @@ package com.example.tss.service.impl;
 import com.example.tss.constants.ResourceType;
 import com.example.tss.constants.Role;
 import com.example.tss.dto.ApplicantProfileDto;
-import com.example.tss.entity.ApplicantProfile;
-import com.example.tss.entity.EmailVerification;
-import com.example.tss.entity.Resource;
-import com.example.tss.entity.User;
+import com.example.tss.dto.ApplicationDto;
+import com.example.tss.entity.*;
 import com.example.tss.exception.UserWithTheEmailAlreadyExistsException;
 import com.example.tss.model.ApplicantRegistrationRequest;
 import com.example.tss.model.ApplicantRegistrationResponse;
@@ -15,6 +13,7 @@ import com.example.tss.repository.EmailVerificationRepository;
 import com.example.tss.repository.ResourceRepository;
 import com.example.tss.repository.UserRepository;
 import com.example.tss.service.ApplicantService;
+import com.example.tss.service.ApplicationService;
 import com.example.tss.service.EmailService;
 import com.example.tss.service.UserService;
 import jakarta.mail.MessagingException;
@@ -30,6 +29,7 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +40,7 @@ public class ApplicantServiceImpl implements ApplicantService {
     private final EmailVerificationRepository emailVerificationRepository;
     private final EmailService emailService;
     private final ResourceRepository resourceRepository;
+    private final ApplicationService applicationService;
 
     @Override
     @Transactional
@@ -82,6 +83,21 @@ public class ApplicantServiceImpl implements ApplicantService {
         profileDto.setProfileImagePath("/resource/" + profile.getProfileImage().getId());
         profileDto.setResumePath("/resource/" + profile.getResume().getId());
         return ResponseEntity.ok(profileDto);
+    }
+
+    @Override
+    public ResponseEntity<?> getAllApplications(Principal principal) {
+        User user = userService.getUserByPrincipal(principal).orElseThrow();
+        ApplicantProfile applicantProfile=applicantProfileRepository.getByUserId(user.getId()).orElseThrow();
+        List<Long> applications=applicationService.getAllApplicationsOfApplicant(applicantProfile.getId()).stream()
+                .map(application ->
+                    application.getCircular().getId()
+                ).toList();
+
+        return ResponseEntity.ok(ApplicationDto.builder()
+                        .count(applications.size())
+                        .message("Application Found")
+                        .circularIds(applications).build());
     }
 
     public ResponseEntity<?> getApplicant(Long id) {
@@ -137,33 +153,47 @@ public class ApplicantServiceImpl implements ApplicantService {
     @Override
     @Transactional
     public ResponseEntity<?> updateApplicantProfile(Principal principal, ApplicantProfileDto applicantProfileDto) {
-        String email = principal.getName();
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException(email));
-        ApplicantProfile applicantProfile = applicantProfileRepository.findByUserId(user.getId())
-                .orElseThrow(() -> new UsernameNotFoundException(email));
-
+        System.out.println(applicantProfileDto);
+        System.out.println(principal.getName());
+        User user = userService.getUserByPrincipal(principal).orElseThrow();
+        System.out.println("hello");
+        Optional<ApplicantProfile> applicantProfileOptional = applicantProfileRepository.findByUserId(user.getId());
         Long profileImageId = applicantProfileDto.getProfileImageId();
         Long resumeId = applicantProfileDto.getResumeId();
-        applicantProfileDto.setProfileImageId(null);
-        applicantProfileDto.setResumeId(null);
-
-        ModelMapper modelMapper = new ModelMapper();
-        modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
-        modelMapper.map(applicantProfileDto,applicantProfile);
-
         Optional<Resource> profileImage = resourceRepository.findByIdAndResourceTypeAndOwnerId(
                 profileImageId,
                 ResourceType.PROFILEPICTURE,
                 user.getId());
-        profileImage.ifPresent(applicantProfile::setProfileImage);
         Optional<Resource> resume = resourceRepository.findByIdAndResourceTypeAndOwnerId(
                 resumeId,
                 ResourceType.RESUME,
                 user.getId());
-        resume.ifPresent(applicantProfile::setResume);
-        ApplicantProfile saved = applicantProfileRepository.save(applicantProfile);
-        return ResponseEntity.ok(modelMapper.map(saved, ApplicantProfileDto.class));
+        if(resume.isEmpty()||profileImage.isEmpty()){
+            return ResponseEntity.badRequest().build();
+        }
+        ModelMapper modelMapper = new ModelMapper();
+        if(applicantProfileOptional.isEmpty()){
+            ApplicantProfile applicantProfile = modelMapper.map(applicantProfileDto, ApplicantProfile.class);
+            profileImage.ifPresent(applicantProfile::setProfileImage);
+            applicantProfile.setUser(user);
+            System.out.println(applicantProfileDto);
+            resume.ifPresent(applicantProfile::setResume);
+            ApplicantProfile saved = applicantProfileRepository.save(applicantProfile);
+            return ResponseEntity.ok(modelMapper.map(saved, ApplicantProfileDto.class));
+        }else{
+            ApplicantProfile applicantProfile=applicantProfileOptional.get();
+            applicantProfileDto.setProfileImageId(null);
+            applicantProfileDto.setResumeId(null);
+            //have to fix foreign key constrain failed
+            modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
+            modelMapper.map(applicantProfileDto,applicantProfile);
+            applicantProfile.setUser(user);
+            profileImage.ifPresent(applicantProfile::setProfileImage);
+            resume.ifPresent(applicantProfile::setResume);
+            ApplicantProfile saved = applicantProfileRepository.save(applicantProfile);
+            return ResponseEntity.ok(modelMapper.map(saved, ApplicantProfileDto.class));
+        }
+
     }
 
     private ApplicantProfile getApplicantProfile(Principal principal) {

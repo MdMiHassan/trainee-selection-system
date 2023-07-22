@@ -1,5 +1,6 @@
 package com.example.tss.entity;
 
+import com.example.tss.constants.Gender;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,7 +29,7 @@ public class Application {
     private Long uniqueIdentifier;
     private String firstName;
     private String lastName;
-    private String gender;
+    private Gender gender;
     private Date dateOfBirth;
     private String degreeName;
     private String institutionName;

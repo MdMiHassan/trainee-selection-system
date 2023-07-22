@@ -1,4 +1,4 @@
-package com.example.tss.admit;
+package com.example.tss.util.admit;
 
 import com.example.tss.constants.molds.HTMLMold;
 import com.example.tss.util.ImageUtils;

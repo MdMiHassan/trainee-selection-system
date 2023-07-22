@@ -19,56 +19,59 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class WebSecurityConfig {
+public class WebSecurityConfig{
     private final AuthenticationProvider authenticationProvider;
     private final JwtFilter jwtFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.csrf(AbstractHttpConfigurer::disable)
+        return http.cors(c -> {
+                    CorsConfigurationSource source = request -> {
+                        CorsConfiguration config = new CorsConfiguration();
+                        config.setAllowedOrigins(
+                                List.of("http://localhost:5173"));
+                        config.setAllowedMethods(
+                                List.of("GET", "POST", "PUT", "DELETE","PATCH"));
+                        config.applyPermitDefaultValues();
+                        return config;
+                    };
+                    c.configurationSource(source);})
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                                .anyRequest().permitAll()
-//                        .requestMatchers("/applicants/register","/applicants/register/email/verify", "/auth/login", "/admits/verify/{admitCardId}")
-//                        .permitAll()
-//                        .requestMatchers("/applicants", "/applicants/{applicantId}", "/applicants/{applicantId}/actions/lock"
-//                                , "/circulars/{circularId}/applications", "/circulars/{circularId}/rounds/next/applications/{applicationId}/actions/approve"
-//                                , "/circulars/{circularId}/rounds/current/actions/end", "/circulars/{circularId}/rounds"
-//                                , "/circulars/{circularId}/rounds/{roundId}", "/circulars/{circularId}/rounds/{roundId}/candidates"
-//                                , "/circulars/{circularId}/rounds/{roundId}/candidates/{candidateId}", "/evaluators")
-//                        .hasAuthority(Role.ADMIN.name())
-//                        .requestMatchers("/circulars/{circularId}/apply")
-//                        .hasAuthority(Role.APPLICANT.name())
-//                        .requestMatchers("/resource/upload", "/resource/{resourceId}")
-//                        .hasAnyAuthority(Role.ADMIN.name(), Role.APPLICANT.name())
-//                        .requestMatchers(HttpMethod.GET,"/circulars", "/circulars/{circularId}")
-//                        .hasAnyAuthority(Role.ADMIN.name(), Role.APPLICANT.name())
-//                        .requestMatchers(HttpMethod.POST,"/circulars", "/circulars/{circularId}")
-//                        .hasAnyAuthority(Role.ADMIN.name())
-//                        .requestMatchers(HttpMethod.POST,"/evaluators/{evaluatorId}/candidates")
-//                        .hasAuthority(Role.ADMIN.name())
-//                        .requestMatchers(HttpMethod.GET,"/evaluators/{evaluatorId}/candidates")
-//                        .hasAuthority(Role.EVALUATOR.name())
-//                        .anyRequest()
-//                        .authenticated()
+                        .requestMatchers("v1/notices","/applicants/register","/applicants/register/email/verify",
+                                "/auth/login")
+                        .permitAll()
+                        .requestMatchers(HttpMethod.GET,"/circulars","/admits/verify/{admitCardId}")
+                        .permitAll()
+                        .requestMatchers("/applicants/current/applications")
+                        .hasAuthority(Role.APPLICANT.name())
+                        .requestMatchers(HttpMethod.POST,"/circulars/{circularId}/apply","/applicants/profile")
+                        .hasAuthority(Role.APPLICANT.name())
+                        .requestMatchers("/applicants", "/applicants/{applicantId}", "/applicants/{applicantId}/actions/lock"
+                                , "/circulars/{circularId}/applications", "/circulars/{circularId}/rounds/next/applications/{applicationId}/actions/approve"
+                                , "/circulars/{circularId}/rounds/current/actions/end", "/circulars/{circularId}/rounds"
+                                , "/circulars/{circularId}/rounds/{roundId}", "/circulars/{circularId}/rounds/{roundId}/candidates"
+                                , "/circulars/{circularId}/rounds/{roundId}/candidates/{candidateId}", "/evaluators")
+                        .hasAuthority(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.POST, "/circulars","/circulars/{circularId}","/evaluators/{evaluatorId}/candidates")
+                        .hasAnyAuthority(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.GET,"/evaluators/{evaluatorId}/candidates")
+                        .hasAuthority(Role.EVALUATOR.name())
+                        .requestMatchers("/resource/upload", "/resource/{resourceId}")
+                        .hasAnyAuthority(Role.ADMIN.name(), Role.APPLICANT.name())
+                        .requestMatchers(HttpMethod.GET, "/circulars/{circularId}","/circulars/{circularId}/meta")
+                        .hasAnyAuthority(Role.ADMIN.name(),Role.APPLICANT.name())
+                        .anyRequest()
+                        .authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
-    }
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setAllowCredentials(true);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
     }
 }

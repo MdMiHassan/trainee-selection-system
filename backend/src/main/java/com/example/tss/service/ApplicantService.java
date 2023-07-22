@@ -25,4 +25,5 @@ public interface ApplicantService {
 
     ResponseEntity<?> getProfile(Principal principal);
 
+    ResponseEntity<?> getAllApplications(Principal principal);
 }

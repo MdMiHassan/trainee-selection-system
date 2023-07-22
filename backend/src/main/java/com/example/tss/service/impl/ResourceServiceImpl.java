@@ -70,7 +70,7 @@ public class ResourceServiceImpl implements ResourceService {
         }
         User user = useByEmail.get();
         try {
-            Resource storedResource = storeFile(user,multipartFile);
+            Resource storedResource = storeFile(user,multipartFile,true);
             return new ResponseEntity<>(ResourceUploadResponse.builder()
                     .success(true)
                     .message("File upload successful")
@@ -94,13 +94,13 @@ public class ResourceServiceImpl implements ResourceService {
         return fileResource;
     }
 
-    private Resource storeFile(User user,MultipartFile multipartFile) throws IOException {
+    private Resource storeFile(User user,MultipartFile multipartFile,boolean upload) throws IOException {
         String fileName = multipartFile.getOriginalFilename();
         String fileExtension = FileUtils.extractFileExtension(fileName).toLowerCase();
         if(!FileUtils.isValidFileType(fileExtension)){
             throw new IOException();
         }
-        ResourceType type = fileExtension.equals("pdf") ? ResourceType.ADMITCARD : ResourceType.PROFILEPICTURE;
+        ResourceType type = fileExtension.equals("pdf") ? (upload?ResourceType.RESUME:ResourceType.ADMITCARD) : ResourceType.PROFILEPICTURE;
         byte[] fileByte = multipartFile.getBytes();
 
         Resource resource = Resource.builder()

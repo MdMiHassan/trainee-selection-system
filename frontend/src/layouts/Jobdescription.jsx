@@ -4,9 +4,10 @@ import '../styles/Jobdescription.css'
 const { Title, Paragraph } = Typography;
 
 const JobDescriptionCard = ({circular}) => {
+
   return (
     <Card>
-      <Title level={3}>Software Engineer Trainee (J2EE)<Tag color="blue">Full Time</Tag></Title>
+      <Title level={3}>{circular.title}<Tag color="blue">{circular.trainingType}</Tag></Title>
       <div>
         <Title level={4} style={{ marginBottom: 0 }}>Insights</Title>
         <Divider />
@@ -27,7 +28,7 @@ const JobDescriptionCard = ({circular}) => {
             </div>
             <div className="job-insights-content">
               <Title level={5} style={{ margin: 0 }}>Hiring Location</Title>
-              <Paragraph>Baridhara, Dhaka</Paragraph>
+              <Paragraph>{circular.hiringLocation}</Paragraph>
             </div>
           </div>
 
@@ -37,7 +38,7 @@ const JobDescriptionCard = ({circular}) => {
             </div>
             <div className="job-insights-content">
               <Title level={5} style={{ margin: 0 }}>Offered Salary</Title>
-              <Paragraph>$60,000 per annum</Paragraph>
+              <Paragraph>{circular.salary}</Paragraph>
             </div>
           </div>
 
@@ -47,7 +48,7 @@ const JobDescriptionCard = ({circular}) => {
             </div>
             <div className="job-insights-content">
               <Title level={5} style={{ margin: 0 }}>Career Level</Title>
-              <Paragraph>Entry Level</Paragraph>
+              <Paragraph>{circular.careerLevel}</Paragraph>
             </div>
           </div>
 
@@ -57,7 +58,7 @@ const JobDescriptionCard = ({circular}) => {
             </div>
             <div className="job-insights-content">
               <Title level={5} style={{ margin: 0 }}>Vacency</Title>
-              <Paragraph>5 positions</Paragraph>
+              <Paragraph>{circular.vacancy}</Paragraph>
             </div>
           </div>
 
@@ -67,7 +68,7 @@ const JobDescriptionCard = ({circular}) => {
             </div>
             <div className="job-insights-content">
               <Title level={5} style={{ margin: 0 }}>Qualification</Title>
-              <Paragraph>Bachelor's Degree</Paragraph>
+              <Paragraph>{circular.requiredEducation}</Paragraph>
             </div>
           </div>
 
@@ -77,7 +78,7 @@ const JobDescriptionCard = ({circular}) => {
             </div>
             <div className="job-insights-content">
               <Title level={5} style={{ margin: 0 }}>Experience</Title>
-              <Paragraph>1-3 years</Paragraph>
+              <Paragraph>{circular.minExp}-{circular.maxExp} years</Paragraph>
             </div>
           </div>
 
@@ -100,29 +101,21 @@ const JobDescriptionCard = ({circular}) => {
         <div>
           <Title level={5}>Overview</Title>
           <Paragraph>
-            We are seeking a talented and motivated individual to join our team as a Software Engineer. In this role, you will be responsible for developing and maintaining high-quality software solutions using J2EE technologies.
+            {circular.overview}
           </Paragraph>
         </div>
 
         <div>
-          <Title level={5}>Requirements</Title>
+          <Title level={5}>Duties</Title>
           <ul className='requirments-skill-list'>
-            <li>Bachelor's degree in Computer Science or a related field</li>
-            <li>Strong knowledge of J2EE technologies and frameworks</li>
-            <li>Experience with database management systems</li>
-            <li>Excellent problem-solving and analytical skills</li>
-            <li>Good communication and teamwork abilities</li>
+            {circular.duties}
           </ul>
         </div>
 
         <div>
           <Title level={5}>Skills & Experience</Title>
           <ul className='requirments-skill-list'>
-            <li>Proficiency in Java and J2EE</li>
-            <li>Experience with Spring Framework</li>
-            <li>Knowledge of SQL and database design</li>
-            <li>Familiarity with front-end technologies such as HTML, CSS, and JavaScript</li>
-            <li>Experience working in an Agile development environment</li>
+            <li>{circular.skills}</li>
           </ul>
         </div>
       </div>

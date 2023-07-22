@@ -15,7 +15,7 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/applicants")
 @RequiredArgsConstructor
-//@CrossOrigin
+@CrossOrigin
 public class ApplicantController {
     private final ApplicantService applicantService;
 private final AuthenticationService authenticationService;
@@ -30,7 +30,7 @@ private final AuthenticationService authenticationService;
     }
 
     @PostMapping("/profile")
-    public ResponseEntity<?> updateProfile(Principal principal, ApplicantProfileDto applicantProfileDto) {
+    public ResponseEntity<?> updateProfile(Principal principal, @RequestBody ApplicantProfileDto applicantProfileDto) {
         return applicantService.updateApplicantProfile(principal, applicantProfileDto);
     }
 
@@ -38,7 +38,11 @@ private final AuthenticationService authenticationService;
     public ResponseEntity<?> getProfile(Principal principal) {
         return applicantService.getProfile(principal);
     }
-
+    @GetMapping("/current/applications")
+    public ResponseEntity<?> getAllApplications(Principal principal) {
+        System.out.println(principal.getName());
+        return applicantService.getAllApplications(principal);
+    }
     @PostMapping("/register")
     public ResponseEntity<?> registerApplicant(@Valid @RequestBody ApplicantRegistrationRequest applicantRegistrationRequest) {
         ResponseEntity<?> registrationResponseEntity = applicantService.registerApplicant(applicantRegistrationRequest);

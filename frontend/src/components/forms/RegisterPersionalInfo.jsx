@@ -4,10 +4,12 @@ import { UploadOutlined } from '@ant-design/icons';
 import '../../styles/RegisterForm.css'
 import { AuthContext } from '../../context/AuthContext';
 import { API_BASE_URL } from '../../Config';
+import { useNavigate } from 'react-router-dom';
 function RegisterPersonalInfo() {
     const [resumeId, setResumeId] = useState(null);
     const [profileImageId, setProfileImageId] = useState(null);
     const { token } = useContext(AuthContext);
+    const navigateTo=useNavigate();
     const headers = {
         Authorization: `Bearer ${token}`,
     };
@@ -44,26 +46,19 @@ function RegisterPersonalInfo() {
             profileImageId,
             resumeId,
         };
+        console.log(`Authorization: Bearer ${token}`)
         console.log(JSON.stringify(requestData));
         fetch(API_BASE_URL + '/applicants/profile', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization':`Bearer ${token}`
             },
             body: JSON.stringify(requestData),
         })
             .then((response) => response.json())
             .then((data) => {
-                if (data.success) {
-                    const user = {
-                        email,
-                        password,
-                    }
-                    setUser(user);
-                    setStep(2);
-                } else {
-                    console.error('Login response:', data);
-                }
+                navigateTo("/")
             })
             .catch((error) => {
                 message.error("Registration failed!")

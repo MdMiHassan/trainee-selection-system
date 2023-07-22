@@ -18,37 +18,29 @@ import java.sql.Date;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class CircularDto {
-
     @NotBlank(message = "Title is required")
     private String title;
     private Date closingDate;
     @NotBlank(message = "Overview is required")
     private String overview;
-
-//    @NotBlank(message = "training type is required")
     private TrainingType trainingType;
-//    @NotBlank(message = "training type is required")
     private CareerLevel careerLevel;
+    @NotNull(message = "Vacancy is required")
     private Integer vacancy;
     private String requiredEducation;
     private String hiringLocation;
     @NotBlank(message = "Skills are required")
     private String skills;
-
     @NotBlank(message = "Duties are required")
     private String duties;
-
     @NotNull(message = "Salary is required")
     @DecimalMin(value = "0.0", inclusive = false, message = "Salary must be greater than 0")
     private Float salary;
-
     @NotBlank(message = "Currency is required")
     private String currency;
-
     @NotNull(message = "Minimum experience is required")
     @DecimalMin(value = "0.0", inclusive = false, message = "Minimum experience must be greater than 0")
     private Double minExp;
-
     @NotNull(message = "Maximum experience is required")
     @DecimalMin(value = "0.0", inclusive = false, message = "Maximum experience must be greater than 0")
     private Double maxExp;
