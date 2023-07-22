@@ -1,18 +1,21 @@
 import { EditOutlined, EllipsisOutlined, PoweroffOutlined, SettingOutlined, PlusOutlined } from "@ant-design/icons";
 import { Avatar, Button, Card, Col, Divider, Modal, Row, Select, Skeleton, Switch, Tabs, Typography } from "antd";
 import Meta from "antd/es/card/Meta";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ApplicationScreening from "./screening/ApplicationScreening";
 import NewRoundForm from "../../components/forms/rounds/NewRoundForm";
 import { API_BASE_URL } from "../../Config";
 import CircularRounds from "../../components/round/CircularRounds";
+import EvaluationRound from "../../components/screening/EvaluationRound";
+import { AuthContext } from "../../context/AuthContext";
 
 function AdminCircularScreening() {
     const [circularsOptions, setCircularsOptions] = useState([]);
-    const [circulars, setCirculars] = useState([]);
     const [circularId, setCircularId] = useState(null);
-
+    const [rounds, setRounds] = useState([]);
+    const {token}=useContext(AuthContext);
     const handleChangeCircularSelect = (value) => {
+        console.log(value);
         setCircularId(value);
     };
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,10 +23,14 @@ function AdminCircularScreening() {
         setIsModalOpen(true);
     };
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(API_BASE_URL + '/circulars');
-                const data = await response.json();
+        fetch(API_BASE_URL + '/circulars', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
                 const newData = data.content;
                 const sortedCircularData = newData
                     ? [...newData].sort((a, b) => b.id - a.id)
@@ -33,14 +40,36 @@ function AdminCircularScreening() {
                     value: circular.id,
                     label: circular.title,
                 }));
+                console.log(options);
                 setCircularsOptions(options);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        };
+            })
+            .catch((error) => {
+                message.error("Circular fetching failed")
+            });
 
-        fetchData();
-    }, []);
+    }, [circularId, isModalOpen]);
+
+    useEffect(() => {
+        if (circularId) {
+            fetch(API_BASE_URL + '/circulars/' + circularId + '/rounds', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization':`Bearer ${token}`
+                }
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    const fetchedRounds = data;
+                    const sortedRounds = fetchedRounds ? fetchedRounds.sort((a, b) => a.serialNo - b.serialNo) : [];
+                    setRounds(sortedRounds);
+                    message.success("Your Application received")
+                })
+                .catch((error) => {
+                    message.error("Application failed!")
+                });
+        }
+    }, [circularId]);
 
     return (<>
         <Row justify={"space-between"} align={"middle"} style={{ margin: "10px 0" }}>
@@ -78,54 +107,40 @@ function AdminCircularScreening() {
                 <Button type="primary" icon={<PlusOutlined />} onClick={showNewRoundModal} >
                     create
                 </Button>
-                <NewRoundForm modalTitle={"New Round"} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} circularId={1} />
+                <NewRoundForm modalTitle={"New Round"} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} circularId={circularId} />
             </Col>
         </Row>
         <Row>
-            <CircularRounds circularId={circularId}/>
+            <CircularRounds circularId={circularId} />
         </Row>
         <Divider></Divider>
         <Typography.Title level={5}>
             Round Wise Screening
         </Typography.Title>
         <Row>
-            <Tabs
-                type="card"
-                defaultActiveKey="1"
-                items={[
-                    {
-                        label: 'Application filtering',
-                        key: '1',
-                        children: <ApplicationScreening circularId={1} roundId={1} />,
-                    },
-                    {
-                        label: 'Written Test',
-                        key: '2',
-                        children: 'Written Test',
-                        disabled: true,
-                    },
-                    {
-                        label: 'Apptitude Test',
-                        key: '3',
-                        children: 'Apptitude Test',
-                    },
-                    {
-                        label: 'Technical Viva',
-                        key: '4',
-                        children: 'Technical Viva',
-                    },
-                    {
-                        label: 'CEO Office Viva',
-                        key: '5',
-                        children: 'CEO Office Viva',
-                    },
-                    {
-                        label: 'Selected Trainee',
-                        key: '6',
-                        children: 'Selected Trainees',
-                    }
-                ]}
-            />
+            <Col span={24}>
+                <Tabs
+                    type="card"
+                    defaultActiveKey={rounds.length > 0 ? rounds[0].roundId.toString() : "default"}
+                    items={rounds.length > 0 ? (
+                        rounds.map((round) => ({
+                            label: round.title,
+                            key: round.roundId.toString(),
+                            children: round.serialNo < 1 ? (
+                                <ApplicationScreening circularId={circularId} roundId={round.roundId} />
+                            ) : (
+                                <EvaluationRound circularId={circularId} roundId={round.roundId} />
+                            ),
+                        }))
+                    ) : (
+                        [{
+                            label: "No rounds available",
+                            key: "default",
+                            children: "No rounds available for the selected circular.",
+                        }]
+                    )}
+                />
+            </Col>
         </Row>
     </>);
 }

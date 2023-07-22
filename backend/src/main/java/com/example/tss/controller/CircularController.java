@@ -19,7 +19,7 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/circulars")
 @RequiredArgsConstructor
-//@CrossOrigin
+@CrossOrigin
 public class CircularController {
     private final CircularService circularService;
     private final ApplicationService applicationService;
@@ -41,7 +41,6 @@ public class CircularController {
 
     @PostMapping
     public ResponseEntity<?> createCircular(@Valid @RequestBody CircularDto requestDto) {
-        System.out.println("here");
         return circularService.createCircular(requestDto);
     }
 
@@ -54,12 +53,18 @@ public class CircularController {
     public ResponseEntity<?> deleteCircular(@PathVariable Long circularId) {
         return circularService.delete(circularId);
     }
-
-    @PostMapping("/{circularId}/apply")
-    public ResponseEntity<?> apply(@Valid @RequestBody ApplicantProfileDto applicantProfileDto, @PathVariable Long circularId) {
-        return circularService.apply(circularId, applicantProfileDto);
+    @GetMapping("/{circularId}/meta")
+    public ResponseEntity<?> getCircularMeta(@PathVariable Long circularId) {
+        return circularService.getCircularMeta(circularId);
     }
-
+    @PostMapping("/{circularId}/apply")
+    public ResponseEntity<?> apply(@Valid @RequestBody ApplicantProfileDto applicantProfileDto, @PathVariable Long circularId,Principal principal) {
+        return circularService.apply(circularId, applicantProfileDto,principal);
+    }
+    @PostMapping("/{circularId}/bookmark/toggle")
+    public ResponseEntity<?> bookmarkCircular(Principal principal,@PathVariable Long circularId) {
+        return circularService.bookmarkCircular(principal,circularId);
+    }
     @GetMapping("/{circularId}/applications")
     public ResponseEntity<?> getAllApplicationsUnderCircular(@PathVariable Long circularId,Pageable pageable) {
         return circularService.getAllApplicationsUnderCircular(circularId,pageable);
@@ -70,7 +75,7 @@ public class CircularController {
         return circularService.getApplicationByIdUnderCircular(circularId, applicationId);
     }
 
-    @PostMapping("/{circularId}/applications/{applicationId}/actions/approve")
+    @PostMapping("/{circularId}/rounds/next/applications/{applicationId}/actions/invite")
     public ResponseEntity<?> approveApplicant(@PathVariable Long circularId, @PathVariable Long applicationId) {
         return circularService.approveApplicant(circularId, applicationId);
     }

@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +20,9 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 public class NoticeDto {
     private Long id;
+    @NotBlank(message = "Title is required")
     private String title;
+    @NotBlank(message = "Details is required")
     private String details;
     private String postedBy;
     private Timestamp postedAt;

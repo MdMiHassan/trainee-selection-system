@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
+import java.security.Principal;
 import java.util.Optional;
 
 public interface CircularService {
@@ -22,8 +23,6 @@ public interface CircularService {
 
     ResponseEntity<?> delete(Long id);
 
-    ResponseEntity<?> apply(Long circularId, ApplicantProfileDto applicantProfileDto);
-
     ResponseEntity<?> getApplicationByIdUnderCircular(Long circularId, Long applicationId);
 
     ResponseEntity<?> approveApplicant(Long circularId, Long applicationId);
@@ -31,4 +30,10 @@ public interface CircularService {
     ResponseEntity<?> getAllCircular();
 
     Optional<Circular> getCircular(Long circularId);
+
+    ResponseEntity<?> bookmarkCircular(Principal principal, Long circularId);
+
+    ResponseEntity<?> getCircularMeta(Long circularId);
+
+    ResponseEntity<?> apply(Long circularId, ApplicantProfileDto applicantProfileDto, Principal principal);
 }

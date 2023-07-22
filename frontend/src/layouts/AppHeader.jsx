@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import "../styles/AppHeader.css";
 import Title from "antd/es/skeleton/Title";
+import applogo from '../assets/applogo.svg'
 function AppHeader() {
     const { token } = useContext(AuthContext);
     const [headerStyle, setHeaderStyle] = useState({
@@ -48,7 +49,7 @@ function AppHeader() {
                 <div className="header-left">
                     <div className="header-logo">
                         <a className="flex-row flex-center" href="/">
-                            <Typography.Title
+                            {/* <Typography.Title
                                 editable
                                 level={3}
                                 style={{
@@ -56,7 +57,9 @@ function AppHeader() {
                                 }}
                             >
                                 TSS
-                            </Typography.Title>
+                            </Typography.Title> */}
+                            <img src={applogo} alt="" style={{width:"150px"}}></img>
+                            {/* <Logo /> */}
                         </a>
                     </div>
                 </div>

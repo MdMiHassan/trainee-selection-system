@@ -1,26 +1,34 @@
 import { EditFilled } from "@ant-design/icons";
-import { Card, Row, Switch, Typography } from "antd";
-import { useEffect, useState } from "react";
+import { Card, Row, Switch, Typography, message } from "antd";
+import { useContext, useEffect, useState } from "react";
 import { API_BASE_URL } from "../../Config";
+import { AuthContext } from "../../context/AuthContext";
 
 function CircularRounds({ circularId }) {
     const [roundData, setRoundData] = useState([]);
+    const {token}=useContext(AuthContext);
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(API_BASE_URL + '/circulars/' + circularId + '/rounds');
-                const data = await response.json();
-                const fetchedContent=data.content;
+        if (circularId) {
+            fetch(API_BASE_URL + '/circulars/' + circularId + '/rounds',{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization':`Bearer ${token}`
+            }}
+            )
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                    const fetchedContent = data;
                     const sortedRoundData = fetchedContent ? [...fetchedContent].sort((a, b) => a.serialNo - b.serialNo) : null;
                     setRoundData(sortedRoundData);
-                
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        };
-
-        fetchData();
-    }, []);
+                    console.log(sortedRoundData);
+                })
+                .catch((error) => {
+                    message.error("Application failed!")
+                });
+        }
+    }, [circularId]);
     return (
         <>
             {roundData ? (

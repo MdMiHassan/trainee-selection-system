@@ -1,143 +1,121 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Table } from 'antd';
 import { API_BASE_URL } from '../../../Config';
+import { AuthContext } from '../../../context/AuthContext';
 
-const columns = [
-    {
-        title: 'Application Id',
-        dataIndex: 'id',
-    },
-    {
-        title: 'Applicant Name',
-        dataIndex: 'name',
-    },
-    {
-        title: 'Gender',
-        dataIndex: 'gender',
-        filters: [
-            {
-                text: 'Joe',
-                value: 'Joe',
-            },
-            {
-                text: 'Category 1',
-                value: 'Category 1',
-                children: [
-                    {
-                        text: 'Yellow',
-                        value: 'Yellow',
-                    },
-                    {
-                        text: 'Pink',
-                        value: 'Pink',
-                    },
-                ],
-            },
-            {
-                text: 'Category 2',
-                value: 'Category 2',
-                children: [
-                    {
-                        text: 'Green',
-                        value: 'Green',
-                    },
-                    {
-                        text: 'Black',
-                        value: 'Black',
-                    },
-                ],
-            },
-        ],
-        filterMode: 'tree',
-        filterSearch: true,
-        onFilter: (value, record) => record.name.includes(value),
-        width: '30%',
-    },
-    {
-        title: 'Degreename',
-        dataIndex: 'degreeName',
-        sorter: (a, b) => a.age - b.age,
-    },
-    {
-        title: 'CGPA',
-        dataIndex: 'cgpa',
-        filters: [
-            {
-                text: 'London',
-                value: 'London',
-            },
-            {
-                text: 'New York',
-                value: 'New York',
-            },
 
-        ],
-        onFilter: (value, record) => record.address.startsWith(value),
-        filterSearch: true,
-        width: '40%',
-    },
-    {
-        title: 'Passing Year',
-        dataIndex: 'passingYear',
-        filters: [
-            {
-                text: 'London',
-                value: 'London',
+function ApplicationScreening({ circularId, roundId }) {
+    const {token}=useContext(AuthContext);
+    const columns = [
+        {
+            title: 'Application Id',
+            dataIndex: 'id',
+        },
+        {
+            title: 'Applicant Name',
+            dataIndex: 'name',
+        },
+        {
+            title: 'Gender',
+            dataIndex: 'gender',
+            filters: [
+                {
+                    text: 'Male',
+                    value: 'MALE',
+                },
+                {
+                    text: 'Female',
+                    value: 'FEMALE',
+                },
+                {
+                    text: 'Any',
+                    value: 'ANY',
+                },
+            ],
+            filterMode: 'tree',
+            filterSearch: true,
+            onFilter: (value, record) => record.gender.includes(value),
+        },
+        {
+            title: 'Degreename',
+            dataIndex: 'degreeName',
+        },
+        {
+            title: 'CGPA',
+            dataIndex: 'cgpa',
+            sorter: (a, b) => a.cgpa - b.cgpa,
+        },
+        {
+            title: 'Passing Year',
+            dataIndex: 'passingYear',
+            sorter: (a, b) => a.passingYear - b.passingYear,
+        },
+        {
+            title: 'Resume',
+            dataIndex: '',
+            key: 'x',
+            render: () => <a>View</a>,
+        },
+        {
+            title: 'Action',
+            dataIndex: '',
+            key: 'x',
+            render: (text, record) => (
+                <a onClick={() => handleInvite(record.id)}>Invite</a>
+              ),
+        }
+    ];
+    const handleInvite = (applicationId) => {
+        fetch(
+          API_BASE_URL +
+            `/circulars/${circularId}/rounds/next/applications/${applicationId}/actions/invite`,
+          {
+            method: 'POST', 
+            headers: {
+                'Authorization':`Bearer ${token}`,
+              'Content-Type': 'application/json',
             },
-            {
-                text: 'New York',
-                value: 'New York',
-            },
-        ],
-        onFilter: (value, record) => record.address.startsWith(value),
-        filterSearch: true,
-        width: '40%',
-    },
-    {
-        title: 'Resume',
-        dataIndex: '',
-        key: 'x',
-        render: () => <a>View</a>,
-      },
-    {
-        title: 'Action',
-        dataIndex: '',
-        key: 'x',
-        render: () => <a>Invite</a>,
-      }
-];
-const onChange = (pagination, filters, sorter, extra) => {
-    console.log('params', pagination, filters, sorter, extra);
-};
-function ApplicationScreening({circularId,roundId}) {
+          }
+        )
+          .then((response) => {
+            if (response.ok) {
+              message.success('Invitation sent successfully.');
+            } else {
+              message.error('Failed to send invitation.');
+            }
+          })
+          .catch((error) => {
+            console.error('Error sending invitation:', error);
+            message.error('An error occurred while sending the invitation.');
+          });
+      };
+    const onChange = (pagination, filters, sorter, extra) => {
+        console.log('params', pagination, filters, sorter, extra);
+    };
     const [tableData, setTableData] = useState([]);
     const [loading, setLoading] = useState(false);
     useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            try {
-                // fetch(API_BASE_URL + "/circulars/"+circularId+"/rounds/"+roundId+"/candidates")
-                //     .then((response) => response.json())
-                //     .then((data) => {
-                //         const tableRows = data;
-                //         console.log(tableRows)
-                //         setTableData(tableRows);
-                //         setLoading(false);
-                        
-                //     })
-                //     .catch((error) => {
-                //         console.log(error);
-                //     });
-            } catch (error) {
-                setLoading(false);
-                console.error("Error fetching data:", error);
-            }
-        };
+        if (circularId && roundId) {
+            fetch(API_BASE_URL + "/circulars/" + circularId + "/rounds/" + roundId + "/candidates",{
+                headers:{'Authorization':`Bearer ${token}`}
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    const tableRows = data;
+                    console.log(circularId + " " + roundId);
+                    console.log("Table rows round application filtering" + tableRows)
+                    console.log(data)
+                    setTableData(tableRows);
+                    setLoading(false);
 
-        fetchData();
-    }, []);
-    return (<Table loading={loading} columns={columns} dataSource={tableData} onChange={onChange} bordered/>);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    }, [circularId, roundId]);
+    return (<Table loading={loading} columns={columns} dataSource={tableData} onChange={onChange} bordered />);
 }
 
 export default ApplicationScreening;

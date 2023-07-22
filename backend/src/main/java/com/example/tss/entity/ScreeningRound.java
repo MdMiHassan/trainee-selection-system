@@ -26,5 +26,6 @@ public class ScreeningRound {
     private Double passMark;
     private Timestamp examTime;
     private Timestamp reportingTime;
+    private Boolean requiredAdmitCard;
     private String location;
 }

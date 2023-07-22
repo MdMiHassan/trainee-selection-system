@@ -14,4 +14,6 @@ public interface ScreeningRoundRepository extends JpaRepository<ScreeningRound, 
     Optional<ScreeningRound> findByIdAndCircularId(Long roundId, Long circularId);
 
     void deleteByIdAndCircularId(Long roundId, Long circularId);
+
+    Optional<ScreeningRound> findByCircularIdAndSerialNo(Long CircularId, int SerialNo);
 }
