@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Breadcrumb, Layout, Menu, theme } from 'antd';
+import { Breadcrumb, Layout, Menu, Row, Typography, theme } from 'antd';
 import { Route, Router, Routes } from 'react-router-dom';
 import AdminPanelMenuItem from '../components/AdminPanelMenuItem';
 import AdminNewCircular from '../layouts/admin/AdminNewCircular';
@@ -17,6 +17,7 @@ import AdminAllAdminUsers from '../layouts/admin/AdminAllAdmins';
 import AdminNewAdmin from '../layouts/admin/AdminNewAdmin';
 import AdminAllApplicantUsers from '../layouts/admin/AdminAllApplicantUsers';
 import AdminAllFiles from '../layouts/admin/AdminAllFiles';
+import applogo from'../assets/applogo.svg'
 const { Content, Footer, Sider } = Layout;
 
 function AdminPanel() {
@@ -31,7 +32,12 @@ function AdminPanel() {
             }}
         >
             <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-                <div className="demo-logo-vertical" />
+                {/* <Row justify={"center"} style={{margin:"30px auto"}}> */}
+                <Row justify={"center"} style={{margin:"30px auto"}}>
+                <Typography.Title level={3}>
+                    TSS
+                </Typography.Title>
+                </Row>
                 <AdminPanelMenuItem />
             </Sider>
             <Layout>
@@ -67,7 +73,6 @@ function AdminPanel() {
                         }}
                     >
                         <Routes >
-                            <Route path="/stats" element={<AdminNewCircular />} />
                             <Route path="/circular/new" element={<AdminNewCircular />} />
                             <Route path="/circular/screening" element={<AdminCircularScreening />} />
                             <Route path="/circular/update" element={<AdminCircularUpdate />} />
@@ -86,7 +91,7 @@ function AdminPanel() {
                     </div>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>
-                    BJIT Academy ©2023 Created by Mehedi #30069
+                    BJIT Academy ©2023
                 </Footer>
             </Layout>
         </Layout>

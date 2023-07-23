@@ -200,14 +200,14 @@ public interface HTMLMold {
             <body>
                 <div class="heading">
                     <div class="company-logo-left">
-                        <img id="companyLogoLeft" alt="logo" />
+                        <img id="companyLogoLeft" alt="logo" ></img>
                     </div>
                     <div class="companyIntro">
                         <h1 id="companyName"></h1>
                         <p id="companyAddress"></p>
                     </div>
                     <div class="company-logo-right">
-                        <img id="companyLogoRight" alt="logo" />
+                        <img id="companyLogoRight" alt="logo" ></img>
                     </div>
                 </div>
                 <div class="agenda">
@@ -220,13 +220,13 @@ public interface HTMLMold {
                             <div id="basicInformation"></div>
                         </td>
                         <td class="security-data">
-                            <img id="barCode" alt="barcode" class="bar-code" />
-                            <img id="applicantPhoto" alt="applicants" class="applicants-photo" />
+                            <img id="barCode" alt="barcode" class="bar-code" style="margin-bottom:10px;"></img>
+                            <img id="applicantPhoto" alt="applicants" class="applicants-photo" ></img>
                             <div class="applicants-sig">
-                                <img id="applicantSignature" alt="applicants signature" />
-                                <h4>Signature</h4>
+                                
+                                <h4 style="margin-top:50px;">Signature</h4>
                             </div>
-                            <img id="qrCode" alt="qrcode" class="qr-code" />
+                            <img id="qrCode" alt="qrcode" class="qr-code" ></img>
                         </td>
                     </tr>
                 </table>
@@ -236,7 +236,7 @@ public interface HTMLMold {
                 </div>
                 <table class="auth-inv-signature">
                     <tr>
-                        <td class="auth-sig"><img id="authoritySignature" alt="authority signature" /></td>
+                        <td class="auth-sig"><img id="authoritySignature" alt="authority signature" ></img></td>
                         <td></td>
                     </tr>
                     <tr>
@@ -316,23 +316,16 @@ public interface HTMLMold {
             <span>The details of the next round are as follows:</span><br>
             <strong>Round: </strong> <span id="round-name">[Round Name]</span><br>
             <strong>Date: </strong> <span id="round-date">[Round Date]</span><br>
-            <strong>Time: </strong> <span id="round-time">[Round Time]</span><br>
             <strong>Location: </strong> <span id="round-location">[Round Location/Online]</span><br>
-            <p>
-                Please be prepared to showcase your abilities and demonstrate why you are the ideal candidate for this position.
-                We are excited to learn more about your expertise and how you can contribute to our organization's success.
-                To confirm your participation and reserve your spot, please click to this button or contact our recruitment team
-                at<span id="contact-details">[Recruitment Team Contact Details]</span> by <span
-                    id="confirm-deadline">[Confirmation Deadline]</span>.
-            </p>
+            
             <p id="admit-instructions"></p>
             <p>Once again, congratulations on your achievement! We wish you all the best in this stage of the recruitment
                 process.</p>
             <span>Best regards,</span><br>
-            <span id="regards-name">[Your Name]</span><br>
-            <span id="regards-position">[Your Position]</span><br>
-            <span id="regards-company">[Company Name]</span><br>
-            <span id="regards-information">[Contact Information]</span><br>
+            <span id="regards-name">From TSS</span><br>
+            <span id="regards-position"></span><br>
+            <span id="regards-company"></span><br>
+            <span id="regards-information"></span><br>
             </body>
                         
             </html>

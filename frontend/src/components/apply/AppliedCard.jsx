@@ -70,6 +70,27 @@ function AppliedCard({ circularId }) {
         }
 
     }, [circularId]);
+    useEffect(() => {
+        if (circularId) {
+            console.log(`Authorization Bearer ${token}`);
+            fetch(API_BASE_URL + '/admits/current/' + circularId, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    setDownloadLink(`${API_BASE_URL}/admits/verify/${data.currentRoundAdmitId}`);
+                    // setStatus(userRound<=data.currentRoundSerialNo)
+                })
+                .catch((error) => {
+                    message.error("Circular fetching failed")
+                });
+        }
+
+    }, [circularId]);
     const handleDownloadAdmit = () => {
         window.open(downloadLink, "_blank");
     };

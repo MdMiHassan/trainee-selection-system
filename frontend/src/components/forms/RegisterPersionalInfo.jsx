@@ -127,14 +127,6 @@ function RegisterPersonalInfo() {
             <Input.TextArea />
         </Form.Item>
         <Form.Item
-            label="Upload Resume"
-            name="resume"
-            valuePropName="fileList"
-            getValueFromEvent={(e) => e.fileList}
-            rules={[{ required: true, message: 'Please upload your resume' }]}
-        >
-        </Form.Item>
-        <Form.Item
             label="Upload Your Profile Picture"
             name="profilePicture"
             valuePropName="fileList"

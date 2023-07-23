@@ -5,6 +5,7 @@ import com.example.tss.util.ImageUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.parser.Parser;
 import org.jsoup.parser.Tag;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +14,10 @@ import java.util.*;
 @Component
 public class AdmitCardMoldFactory {
     public AdmitCardMold getAdmitCardMold() {
-        return new SimpleAdmitCardMold(Jsoup.parse(HTMLMold.ADMIT_CARD));
+        Document document = Jsoup.parse(HTMLMold.ADMIT_CARD);
+        document.outputSettings().syntax( Document.OutputSettings.Syntax.xml);
+//        doc.select("a").unwrap();
+        return new SimpleAdmitCardMold(document);
     }
 
     private static class SimpleAdmitCardMold implements AdmitCardMold {
@@ -23,6 +27,7 @@ public class AdmitCardMoldFactory {
         private String examName;
         private String authorityName;
         private String authorityDesignation;
+        private String examLocation;
         private byte[] barCode;
         private byte[] qrCode;
         private byte[] applicantPhoto;
@@ -118,7 +123,7 @@ public class AdmitCardMoldFactory {
                 admit.getElementById("companyName").text(companyName);
             }
             if (companyAddress != null) {
-                Objects.requireNonNull(admit.getElementById("companyAddress")).text(companyName);
+                Objects.requireNonNull(admit.getElementById("companyAddress")).text(companyAddress);
             }
             if (basicInfo != null) {
                 Element basicInformation = admit.getElementById("basicInformation");
@@ -129,8 +134,13 @@ public class AdmitCardMoldFactory {
                     h4Element.text(infoTitle);
                     divElement.appendChild(h4Element);
                     Element pElement = new Element(Tag.valueOf("p"), "");
-                    pElement.text(basicInfo.get(infoTitle));
-                    divElement.appendChild(pElement);
+                    System.out.println(basicInfo.get(infoTitle));
+                    String s = basicInfo.get(infoTitle);
+                    if(s!=null){
+                        pElement.text(basicInfo.get(infoTitle));
+                        System.out.println("After p");
+                        divElement.appendChild(pElement);
+                    }
                 }
             }
             if (instructions != null) {
@@ -175,6 +185,11 @@ public class AdmitCardMoldFactory {
                 admit.getElementById("applicantPhoto").attr("src", ImageUtils.encodeImageToBase64(applicantPhoto));
             }
             System.out.println("time to replace: " + (System.currentTimeMillis() - start));
+            return this;
+        }
+
+        public SimpleAdmitCardMold setExamLocation(String examLocation) {
+            this.examLocation = examLocation;
             return this;
         }
     }

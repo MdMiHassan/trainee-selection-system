@@ -1,7 +1,11 @@
 package com.example.tss.service.impl;
 
+import com.example.tss.entity.ApplicantProfile;
+import com.example.tss.entity.Application;
 import com.example.tss.entity.User;
 import com.example.tss.exception.UserWithTheEmailAlreadyExistsException;
+import com.example.tss.repository.ApplicantProfileRepository;
+import com.example.tss.repository.ApplicationRepository;
 import com.example.tss.repository.UserRepository;
 import com.example.tss.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +21,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
+    private final ApplicantProfileRepository applicantProfileRepository;
     @Override
     public User save(User newUser) {
         String email = newUser.getEmail();
@@ -52,5 +56,12 @@ public class UserServiceImpl implements UserService {
     public Optional<User> getUserByPrincipal(Principal principal) {
         String userEmail=principal.getName();
         return userRepository.findByEmail(userEmail);
+    }
+
+    @Override
+    public Optional<User> getUserByApllication(Application application) {
+        ApplicantProfile applicant= applicantProfileRepository.findById(application.getId()).orElseThrow();
+        User user = applicant.getUser();
+        return userRepository.findById(user.getId());
     }
 }

@@ -22,4 +22,6 @@ public interface RoundService {
     ResponseEntity<?> getAllEvaluatorsUnderRoundUnderCircular(Long circularId, Long roundId);
 
     ResponseEntity<?> storeRound(Long circularId, ScreeningRoundDto screeningRoundDto);
+
+    ResponseEntity<?> saveCandidateMark(Long circularId, Long roundId, Long candidateId, Float mark);
 }

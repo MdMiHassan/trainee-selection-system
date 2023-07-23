@@ -1,5 +1,7 @@
+import AdmitCardForm from "../../components/admitcard/AdmitCardForm";
+
 function AdminConfigureAdmit() {
-    return ( <h1>configure admit</h1> );
+    return ( <AdmitCardForm circularId={1}/> );
 }
 
 export default AdminConfigureAdmit;

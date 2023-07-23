@@ -30,6 +30,7 @@ public class CircularController {
     public Page<?> getAllCirculars(Pageable pageable) {
         return circularService.getAllCircular(pageable);
     }
+
     public ResponseEntity<?> getAllCirculars() {
         return circularService.getAllCircular();
     }
@@ -53,21 +54,25 @@ public class CircularController {
     public ResponseEntity<?> deleteCircular(@PathVariable Long circularId) {
         return circularService.delete(circularId);
     }
+
     @GetMapping("/{circularId}/meta")
     public ResponseEntity<?> getCircularMeta(@PathVariable Long circularId) {
         return circularService.getCircularMeta(circularId);
     }
+
     @PostMapping("/{circularId}/apply")
-    public ResponseEntity<?> apply(@Valid @RequestBody ApplicantProfileDto applicantProfileDto, @PathVariable Long circularId,Principal principal) {
-        return circularService.apply(circularId, applicantProfileDto,principal);
+    public ResponseEntity<?> apply(@Valid @RequestBody ApplicantProfileDto applicantProfileDto, @PathVariable Long circularId, Principal principal) {
+        return circularService.apply(circularId, applicantProfileDto, principal);
     }
+
     @PostMapping("/{circularId}/bookmark/toggle")
-    public ResponseEntity<?> bookmarkCircular(Principal principal,@PathVariable Long circularId) {
-        return circularService.bookmarkCircular(principal,circularId);
+    public ResponseEntity<?> bookmarkCircular(Principal principal, @PathVariable Long circularId) {
+        return circularService.bookmarkCircular(principal, circularId);
     }
+
     @GetMapping("/{circularId}/applications")
-    public ResponseEntity<?> getAllApplicationsUnderCircular(@PathVariable Long circularId,Pageable pageable) {
-        return circularService.getAllApplicationsUnderCircular(circularId,pageable);
+    public ResponseEntity<?> getAllApplicationsUnderCircular(@PathVariable Long circularId, Pageable pageable) {
+        return circularService.getAllApplicationsUnderCircular(circularId, pageable);
     }
 
     @GetMapping("/{circularId}/applications/{applicationId}")
@@ -105,6 +110,15 @@ public class CircularController {
         return roundService.storeRound(circularId, screeningRoundDto);
     }
 
+    @PostMapping("/{circularId}/rounds/{roundId}/candidates/{candidateId}")
+    public ResponseEntity<?> saveCandidateMark(@PathVariable Long circularId,
+                                               @PathVariable Long roundId,
+                                               @PathVariable Long candidateId,
+                                               @RequestParam Float mark) {
+        System.out.println("mark "+mark);
+        return roundService.saveCandidateMark(circularId,roundId,candidateId,mark );
+    }
+
     @PatchMapping("/{circularId}/rounds/{roundId}")
     public ResponseEntity<?> updateRoundByIdUnderCircular(@PathVariable Long circularId, @PathVariable Long roundId, @RequestBody ScreeningRoundDto screeningRoundDto) {
         return roundService.updateRound(circularId, roundId, screeningRoundDto);
@@ -113,11 +127,6 @@ public class CircularController {
     @DeleteMapping("/{circularId}/rounds/{roundId}")
     public ResponseEntity<?> deleteRoundByIdUnderCircular(@PathVariable Long circularId, @PathVariable Long roundId) {
         return roundService.deleteRoundByIdUnderCircular(circularId, roundId);
-    }
-
-    @GetMapping("/{circularId}/rounds/{roundId}/download")
-    public ResponseEntity<?> downloadAdmit(@PathVariable Long circularId, @PathVariable Long roundId, Principal principal) {
-        return admitCardService.downloadAdmit(circularId, roundId, principal);
     }
 
     @DeleteMapping("/{circularId}/rounds/{roundId}/evaluators")

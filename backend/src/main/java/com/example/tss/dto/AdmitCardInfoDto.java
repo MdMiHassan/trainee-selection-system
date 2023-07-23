@@ -1,6 +1,6 @@
-package com.example.tss.entity;
+package com.example.tss.dto;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,28 +9,20 @@ import lombok.NoArgsConstructor;
 import java.sql.Date;
 
 @Data
-@Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdmitCardInformation {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @ManyToOne
-    private Circular circular;
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class AdmitCardInfoDto {
     private String companyName;
     private String companyAddress;
     private String instructions;
     private String authorityName;
     private String division;
+    private Long companyLogoLeftId;
+    private Long companyLogoRightId;
+    private Long authoritySignatureImageId;
     private String location;
     private Date examDate;
     private String time;
-    @ManyToOne
-    private Resource companyLogoLeft;
-    @ManyToOne
-    private Resource companyLogoRight;
-    @ManyToOne
-    private Resource authoritySignatureImage;
 }

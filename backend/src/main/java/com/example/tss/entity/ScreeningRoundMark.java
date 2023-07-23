@@ -18,7 +18,7 @@ public class ScreeningRoundMark {
     @ManyToOne
     private Application application;
     @ManyToOne
-    private ScreeningRound screeningRound;
+    private ScreeningRound round;
     private Double mark;
 
 }

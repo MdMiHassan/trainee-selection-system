@@ -50,7 +50,8 @@ public class EvaluatorServiceImpl implements EvaluatorService {
         evaluator.setUser(savedEvaluatorUser);
         evaluator.setCircular(circularById);
         evaluator.setAssignedRound(screeningRound);
-        List<Application> applicationList = applicationRepository.findAllById(evaluatorDto.getApplications());
+        List<Long> evaluatorDtoApplications = evaluatorDto.getApplications();
+        List<Application> applicationList = applicationRepository.findAllById(evaluatorDtoApplications);
         evaluator.setApplications(applicationList);
         Evaluator savedEvaluator = evaluatorRepository.save(evaluator);
         return ResponseEntity.ok(savedEvaluator);
@@ -110,7 +111,7 @@ public class EvaluatorServiceImpl implements EvaluatorService {
                 Double totalMarks = marksDto.getTotalMarks();
                 Application application = applicationRepository.findAllByUniqueIdentifier(candidateUid).orElseThrow();
                 ScreeningRoundMark screeningRoundMark = ScreeningRoundMark.builder()
-                        .screeningRound(assignedRound)
+                        .round(assignedRound)
                         .application(application)
                         .mark(totalMarks)
                         .build();
