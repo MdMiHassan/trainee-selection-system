@@ -7,11 +7,11 @@ import { AuthProvider } from './context/AuthContext.jsx';
 import { ConfigProvider, theme } from 'antd';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-    // <ConfigProvider theme={{ algorithm: theme.darkAlgorithm }}>
+    <ConfigProvider theme={{ algorithm: theme.darkAlgorithm }}>
     <BrowserRouter>
         <AuthProvider>
             <App />
         </AuthProvider>
     </BrowserRouter>
-    //  </ConfigProvider>
+     </ConfigProvider>
 )

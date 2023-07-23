@@ -1,5 +1,5 @@
 import { EditOutlined, EllipsisOutlined, PoweroffOutlined, SettingOutlined, PlusOutlined } from "@ant-design/icons";
-import { Avatar, Button, Card, Col, Divider, Modal, Row, Select, Skeleton, Switch, Tabs, Typography } from "antd";
+import { Avatar, Button, Card, Col, Divider, Modal, Row, Select, Skeleton, Switch, Tabs, Typography, message } from "antd";
 import Meta from "antd/es/card/Meta";
 import { useContext, useEffect, useState } from "react";
 import ApplicationScreening from "./screening/ApplicationScreening";
@@ -13,7 +13,7 @@ function AdminCircularScreening() {
     const [circularsOptions, setCircularsOptions] = useState([]);
     const [circularId, setCircularId] = useState(null);
     const [rounds, setRounds] = useState([]);
-    const {token}=useContext(AuthContext);
+    const { token } = useContext(AuthContext);
     const handleChangeCircularSelect = (value) => {
         console.log(value);
         setCircularId(value);
@@ -31,6 +31,7 @@ function AdminCircularScreening() {
         })
             .then((response) => response.json())
             .then((data) => {
+
                 const newData = data.content;
                 const sortedCircularData = newData
                     ? [...newData].sort((a, b) => b.id - a.id)
@@ -55,12 +56,12 @@ function AdminCircularScreening() {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization':`Bearer ${token}`
+                    'Authorization': `Bearer ${token}`
                 }
             })
                 .then((response) => response.json())
                 .then((data) => {
-                    const fetchedRounds = data;
+                    const fetchedRounds = data.rounds;
                     const sortedRounds = fetchedRounds ? fetchedRounds.sort((a, b) => a.serialNo - b.serialNo) : [];
                     setRounds(sortedRounds);
                     message.success("Your Application received")
@@ -70,7 +71,22 @@ function AdminCircularScreening() {
                 });
         }
     }, [circularId]);
-
+    const handleEndCurrentRound = (event) => {
+        fetch(API_BASE_URL + `/circulars/${circularId}/rounds/current/actions/end`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                message.success("Successfully current round closed")
+            })
+            .catch((error) => {
+                message.error("Something went wrong!")
+            });
+    }
     return (<>
         <Row justify={"space-between"} align={"middle"} style={{ margin: "10px 0" }}>
             <Col span={6}>
@@ -104,6 +120,9 @@ function AdminCircularScreening() {
                 </Typography.Title>
             </Col>
             <Col>
+                <Button type="danger" style={{ marginRight: "20px", backgroundColor: "#ff304f" }} onClick={handleEndCurrentRound}>
+                    End Current Round
+                </Button>
                 <Button type="primary" icon={<PlusOutlined />} onClick={showNewRoundModal} >
                     create
                 </Button>

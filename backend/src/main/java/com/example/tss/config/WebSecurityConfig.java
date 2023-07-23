@@ -50,17 +50,24 @@ public class WebSecurityConfig{
                         .permitAll()
                         .requestMatchers("/applicants/current/applications")
                         .hasAuthority(Role.APPLICANT.name())
-                        .requestMatchers(HttpMethod.POST,"/circulars/{circularId}/apply","/applicants/profile")
+                        .requestMatchers(HttpMethod.POST,"/circulars/{circularId}/apply","/applicants/profile",
+                                "/{circularId}/rounds/{roundId}/admits/generate")
+                        .hasAuthority(Role.APPLICANT.name())
+                        .requestMatchers(HttpMethod.GET,"/applicants/profile","/admits/current/{circularId}")
                         .hasAuthority(Role.APPLICANT.name())
                         .requestMatchers("/applicants", "/applicants/{applicantId}", "/applicants/{applicantId}/actions/lock"
                                 , "/circulars/{circularId}/applications", "/circulars/{circularId}/rounds/next/applications/{applicationId}/actions/approve"
                                 , "/circulars/{circularId}/rounds/current/actions/end", "/circulars/{circularId}/rounds"
                                 , "/circulars/{circularId}/rounds/{roundId}", "/circulars/{circularId}/rounds/{roundId}/candidates"
-                                , "/circulars/{circularId}/rounds/{roundId}/candidates/{candidateId}", "/evaluators")
+                                , "/circulars/{circularId}/rounds/{roundId}/candidates/{candidateId}"
+                                , "/evaluators")
                         .hasAuthority(Role.ADMIN.name())
-                        .requestMatchers(HttpMethod.POST, "/circulars","/circulars/{circularId}","/evaluators/{evaluatorId}/candidates")
+                        .requestMatchers(HttpMethod.POST, "/info/{circularId}","/circulars","/circulars/{circularId}",
+                                "/evaluators/{evaluatorId}/candidates")
                         .hasAnyAuthority(Role.ADMIN.name())
                         .requestMatchers(HttpMethod.GET,"/evaluators/{evaluatorId}/candidates")
+                        .hasAuthority(Role.EVALUATOR.name())
+                        .requestMatchers(HttpMethod.POST,"/evaluators/current/candidates/marks")
                         .hasAuthority(Role.EVALUATOR.name())
                         .requestMatchers("/resource/upload", "/resource/{resourceId}")
                         .hasAnyAuthority(Role.ADMIN.name(), Role.APPLICANT.name())

@@ -10,7 +10,8 @@ import {
     Select,
 } from 'antd';
 import TextArea from "antd/es/input/TextArea";
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { AuthContext } from "../../context/AuthContext";
 const { Option } = Select;
 const formItemLayout = {
     labelCol: {
@@ -47,7 +48,7 @@ function AdminNewCircular() {
     const [duties, setDuties] = useState('');
     const [skills, setSkills] = useState('');
     const [form] = Form.useForm();
-    const authToken = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjpbIkFETUlOIl0sInN1YiI6InN1cGVyLmFkbWluQGV4YW1wbGUuY29tIiwiaWF0IjoxNjg5NjUyNDg2LCJleHAiOjE2OTIyNDQ0ODZ9.Yx0wSSepGudpDPs5a0mCygANdowZ_U2xLB2nhV4RCMI";
+    const {token}=useContext(AuthContext);
     const onFinish = (values) => {
         const {
             title,
@@ -84,7 +85,7 @@ function AdminNewCircular() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': authToken
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(circularData)
         })

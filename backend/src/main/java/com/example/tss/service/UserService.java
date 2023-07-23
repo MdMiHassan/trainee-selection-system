@@ -1,5 +1,6 @@
 package com.example.tss.service;
 
+import com.example.tss.entity.Application;
 import com.example.tss.entity.User;
 
 import java.security.Principal;
@@ -11,4 +12,6 @@ public interface UserService {
     Optional<User> getByEmail(String email);
 
     Optional<User> getUserByPrincipal(Principal principal);
+
+    Optional<User> getUserByApllication(Application application);
 }

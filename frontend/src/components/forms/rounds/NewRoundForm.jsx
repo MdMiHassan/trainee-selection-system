@@ -13,6 +13,7 @@ import {
     Space,
     Switch,
     TreeSelect,
+    message,
 } from 'antd';
 import { AuthContext } from '../../../context/AuthContext';
 import { API_BASE_URL } from '../../../Config';
@@ -50,10 +51,11 @@ function NewRoundForm({ modalTitle, isModalOpen, setIsModalOpen, circularId }) {
             })
                 .then((response) => response.json())
                 .then((data) => {
+                    message.success("Round Added");
                     setIsModalOpen(false);
                 })
                 .catch((error) => {
-                    message.error("Registration failed!")
+                    message.error("Round Creation failed!")
                 });
 
         });
@@ -63,10 +65,15 @@ function NewRoundForm({ modalTitle, isModalOpen, setIsModalOpen, circularId }) {
     };
     const { loading, setLoading } = useState(true);
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(API_BASE_URL + '/circulars/' + circularId + '/rounds');
-                const data = await response.json();
+
+        fetch(API_BASE_URL + '/circulars/' + circularId + '/rounds', {
+            method: 'GET',
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        })
+            .then((response) => response.json())
+            .then((data) => {
                 if (Array.isArray(data)) {
                     const sortedRoundData = data ? [...data].sort((a, b) => a.serialNo - b.serialNo) : null;
                     const optionData = sortedRoundData.slice(0, data.length - 1);
@@ -74,12 +81,10 @@ function NewRoundForm({ modalTitle, isModalOpen, setIsModalOpen, circularId }) {
                 } else {
                     console.error('Fetched data is not an array:', data);
                 }
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        };
-
-        fetchData();
+            })
+            .catch((error) => {
+                message.error("Round Creation failed!")
+            });
     }, [circularId]);
 
     return (

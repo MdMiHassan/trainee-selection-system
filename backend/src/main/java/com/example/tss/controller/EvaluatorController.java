@@ -37,7 +37,7 @@ public class EvaluatorController {
         return evaluatorService.assignEvaluatorToApplicants(evaluatorId, candidateIds);
     }
 
-    @PostMapping("/candidates/marks")
+    @PostMapping("/current/candidates/marks")
     public ResponseEntity<?> updateAssignedApplicantsMarks(Principal principal, List<MarksDto> marksDtos) {
         return evaluatorService.updateAssignedApplicantsMarks(Long.valueOf(principal.getName()), marksDtos);
     }

@@ -47,5 +47,4 @@ public class Application {
     @OneToOne
     private Resource admit;
     private Timestamp appliedAt;
-
 }

@@ -1,136 +1,212 @@
 
 
-import React, { useEffect, useState } from 'react';
-import { Switch, Table } from 'antd';
+import React, { useContext, useEffect, useState } from 'react';
+import { Input, Modal, Switch, Table, message } from 'antd';
 import { API_BASE_URL } from "../../Config";
-const columns = [
-    
-    {
-        title: 'Uniqe Id',
-        width: 100,
-        dataIndex: 'uid',
-        key: 'uid',
-        fixed: 'left',
-    },
-    {
-        title: 'Full Name',
-        width: 100,
-        dataIndex: 'name',
-        key: 'name',
-        fixed: 'left',
-    },
-    {
-        title: 'Column 1',
-        dataIndex: 'address',
-        key: '1',
-        width: 150,
-    },
-    {
-        title: 'Column 2',
-        dataIndex: 'address',
-        key: '2',
-        width: 150,
-    },
-    {
-        title: 'Column 3',
-        dataIndex: 'address',
-        key: '3',
-        width: 150,
-    },
-    {
-        title: 'Column 4',
-        dataIndex: 'address',
-        key: '4',
-        width: 150,
-    },
-    {
-        title: 'Column 5',
-        dataIndex: 'address',
-        key: '5',
-        width: 150,
-    },
-    {
-        title: 'Column 6',
-        dataIndex: 'address',
-        key: '6',
-        width: 150,
-    },
-    {
-        title: 'Column 7',
-        dataIndex: 'address',
-        key: '7',
-        width: 150,
-    },
-    {
-        title: 'Column 8',
-        dataIndex: 'address',
-        key: '8',
-    },
-    {
-        title: 'Action',
-        key: 'operation',
-        fixed: 'right',
-        width: 100,
-        render: () => <a>Invite</a>,
-    },
-];
-const data = [];
-for (let i = 0; i < 100; i++) {
-    data.push({
-        key: i,
-        name: `Edward ${i}`,
-        age: 32,
-        address: `London Park no. ${i}`,
-    });
-}
+import { AuthContext } from '../../context/AuthContext';
+
+
 const EvaluationRound = ({ circularId, roundId }) => {
-    const [fixedTop, setFixedTop] = useState(false);
-    //   /{circularId}/rounds/{roundId}/candidates
-    const [tableData,setTableData]=useState([]);
+    const [rowId, setRowId] = useState(0);
+    const [tableData, setTableData] = useState([]);
+    const [selectedRowData, setSelectedRowData] = useState([]);
+    const { token } = useContext(AuthContext);
+    const [modalVisible, setModalVisible] = useState(false);
     useEffect(() => {
         const fetchData = async () => {
-          try {
-            const response = await fetch(API_BASE_URL + '/' + circularId + '/rounds/' + roundId + '/candidates');
-            const applications = await response.json();
-            const rows = applications.map((application) => {
-              const { id, firstName, lastName, gender, roundMarks } = application;
-      
-              // Create an object with the application data and include round_id properties with corresponding marks
-              const rowData = roundMarks.reduce((acc, round, index) => {
-                acc[`round${index + 1}_id`] = round.roundId;
-                acc[`round${index + 1}_mark`] = round.mark;
-                return acc;
-              }, {
-                applicationId: id,
-                fullName: firstName + " " + lastName,
-                gender: gender,
-              });
-      
-              return rowData;
-            });
-            console.log(rows);
-            setTableData(rows);
-          } catch (error) {
-            console.error("Error fetching data:", error);
-          }
+            fetch(API_BASE_URL + '/circulars/' + circularId + '/rounds/' + roundId + '/candidates', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                    const rows = data.map((application) => {
+                        const { id, name, gender, roundMarks } = application;
+                        let totalMark = 0;
+                        const rowMarkData = roundMarks.reduce((acc, marks) => {
+                            totalMark += marks.mark;
+                            acc[`id_${marks.roundId}`] = marks.mark;
+                            return acc;
+                        }, {});
+
+                        const rowData = {
+                            ...rowMarkData,
+                            key: id,
+                            totalMark,
+                            uid: id,
+                            fullName: name,
+                            gender: gender,
+                        };
+                        console.log(rowData);
+                        return rowData;
+                    });
+                    console.log(rows);
+                    setTableData(rows);
+                })
+                .catch((error) => {
+                    message.error("Round Data Fetching Fialed!")
+                });
+
         };
         fetchData();
-      }, []);
+    }, []);
+    const additionalColumns = Object.keys(tableData[0] || {}).filter(key => key !== 'uid' && key !== 'fullName' && key !== 'currentRoundMark' && key !== 'totalMark' && key !== 'key' && key !== 'gender').map(key => ({
+        title: key,
+        dataIndex: key,
+        key: key,
+        width: 20,
+    }));
+    const columns = [
+        {
+            title: 'Uniqe Id',
+            width: 100,
+            dataIndex: 'uid',
+            key: 'uid',
+            fixed: 'left',
+        },
+        {
+            title: 'Full Name',
+            width: 100,
+            dataIndex: 'fullName',
+            key: 'name',
+            fixed: 'left',
+        },
+        ...additionalColumns,
+        {
+            title: 'Current Round Mark',
+            key: 'currentRoundMark',
+            fixed: 'right',
+            dataIndex: 'currentRoundMark',
+            width: 20,
+        },
+        {
+            title: 'Total Mark',
+            key: 'totalMark',
+            fixed: 'right',
+            dataIndex: 'totalMark',
+            width: 20
+        },
+        {
+            title: 'Action',
+            key: 'enterMark',
+            fixed: 'right',
+            dataIndex: 'enterMark',
+            width: 20,
+            render: (_, rowData) => (
+                <a onClick={() => showModal(rowData)}>Enter Mark</a>
+            ),
+        },
+        {
+            title: 'Action',
+            key: 'operation',
+            fixed: 'right',
+            width: 20,
+            render: (text, record) => (
+                <a onClick={() => handleInvite(record.uid)}>Invite</a>
+            ),
+        },
+    ];
+    const showModal = (rowData) => {
+        setSelectedRowData(rowData);
+        setModalVisible(true);
+    };
+    const handleInvite = (applicationId) => {
+        fetch(
+            API_BASE_URL +
+            `/circulars/${circularId}/rounds/next/applications/${applicationId}/actions/invite`,
+            {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            }
+        )
+            .then((response) => {
+                if (response.ok) {
+                    message.success('Invitation sent successfully.');
+                } else {
+                    message.error('Failed to send invitation.');
+                }
+            })
+            .catch((error) => {
+                console.error('Error sending invitation:', error);
+                message.error('An error occurred while sending the invitation.');
+            });
+    };
+    const handleModalSave = () => {
+        if (selectedRowData) {
+            const enteredMark = parseFloat(selectedRowData.currentRoundMark);
+            fetch(API_BASE_URL + `/circulars/${circularId}/rounds/${roundId}/candidates/${selectedRowData.uid}?mark=${enteredMark}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+                .then((response) => {
+                    if(response.ok){
+                        setTableData(prevData => {
+                            return prevData.map(row => {
+                                if (row.key === selectedRowData.key) {
+                                    return { ...row, currentRoundMark: enteredMark };
+                                }
+                                return row;
+                            });
+                        });
+                        setModalVisible(false);
+                        setSelectedRowData(null);
+                        message.success("Mark Updated successfully");
+                    }else{
+                        message.error("Failed to save mark");
+                    }
+                    
+                })
+                .catch((error) => {
+                    console.log(error);
+                    message.error("Failed to save mark");
+                });
+
+        }
+    };
+
+    const handleModalCancel = () => {
+        setModalVisible(false);
+        setSelectedRowData(null);
+    };
 
     return (
-        <Table
-            columns={columns}
-            dataSource={tableData}
-            scroll={{
-                x: 1500,
-            }}
-            summary={() => (
-                <Table.Summary fixed={fixedTop ? 'top' : 'bottom'}>
-                   
-                </Table.Summary>
-            )}
-            sticky
-        />
+        <>
+            <Table
+                columns={columns}
+                dataSource={tableData}
+                scroll={{ x: 1500 }}
+                sticky
+            />
+            <Modal
+                title="Enter Current Round Mark"
+                visible={modalVisible}
+                onOk={handleModalSave}
+                onCancel={handleModalCancel}
+                okText={"Save"}
+            >
+                <Input
+                    type="number"
+                    value={selectedRowData ? selectedRowData.currentRoundMark : ''}
+                    onChange={(e) =>
+                        setSelectedRowData((prevData) => ({
+                            ...prevData,
+                            currentRoundMark: e.target.value,
+                        }))
+                    }
+                />
+            </Modal>
+        </>
     );
 };
+
 export default EvaluationRound;

@@ -28,12 +28,6 @@ const items = [
     path: '/admin',
   },
   {
-    label: 'Stats',
-    key: '2',
-    icon: <DesktopOutlined />,
-    path: '/admin/stats',
-  },
-  {
     label: 'Circular',
     key: 'sub1',
     icon: <FileTextOutlined />,
@@ -145,12 +139,6 @@ const items = [
         path: '/admin/user/applicants',
       },
     ],
-  },
-  {
-    label: 'Files',
-    key: '16',
-    icon: <FileOutlined />,
-    path: '/admin/files',
   },
 ];
 
