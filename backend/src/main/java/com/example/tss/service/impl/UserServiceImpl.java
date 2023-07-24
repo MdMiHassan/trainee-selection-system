@@ -1,5 +1,6 @@
 package com.example.tss.service.impl;
 
+import com.example.tss.constants.Role;
 import com.example.tss.entity.ApplicantProfile;
 import com.example.tss.entity.Application;
 import com.example.tss.entity.User;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.sql.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -63,5 +65,15 @@ public class UserServiceImpl implements UserService {
         ApplicantProfile applicant= applicantProfileRepository.findById(application.getId()).orElseThrow();
         User user = applicant.getUser();
         return userRepository.findById(user.getId());
+    }
+
+    @Override
+    public Optional<User> getById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    @Override
+    public List<User> getAllEvaluators() {
+        return userRepository.findByRole(Role.EVALUATOR);
     }
 }

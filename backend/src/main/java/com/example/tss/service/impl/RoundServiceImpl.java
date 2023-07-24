@@ -3,6 +3,7 @@ package com.example.tss.service.impl;
 import com.example.tss.dto.ScreeningRoundDto;
 import com.example.tss.dto.ScreeningRoundMarkDto;
 import com.example.tss.entity.*;
+import com.example.tss.exception.AdmitCardGenerationException;
 import com.example.tss.exception.RoundCreationException;
 import com.example.tss.model.ApplicationResponseModel;
 import com.example.tss.model.ScreeningRoundResponseModel;
@@ -100,7 +101,7 @@ public class RoundServiceImpl implements RoundService {
         ScreeningRound lastScreeningRound = screeningRoundRepository.findByCircularIdAndSerialNo(circularId, round.getSerialNo() + 1).orElseThrow();
         Long applicationId = application.getId();
         Optional<ScreeningRoundMark> screeningRoundMarkOp = screeningMarksRepository.findByApplicationIdAndRoundId(applicationId, roundId);
-        if (screeningRoundMarkOp.isEmpty()) {
+        if(screeningRoundMarkOp.isEmpty()) {
             ScreeningRoundMark screeningRoundMark = ScreeningRoundMark.builder()
                     .application(application)
                     .round(round)
@@ -158,11 +159,12 @@ public class RoundServiceImpl implements RoundService {
     @Transactional
     public ResponseEntity<?> approveApplicant(Circular circular, Long applicationId) {
         Application application = applicationRepository.findByIdAndCircularId(applicationId, circular.getId())
-                .orElseThrow();
+                .orElseThrow(AdmitCardGenerationException::new);
         User user=userService.getUserByApllication(application).orElseThrow();
         ScreeningRoundMeta screeningRoundMeta = screeningRoundMetaRepository.findByCircularId(circular.getId())
-                .orElseThrow();
+                .orElseThrow(AdmitCardGenerationException::new);
         ScreeningRound currentRound = screeningRoundMeta.getCurrentRound();
+        screeningRoundMetaRepository.findByCircularId(circular.getId()).orElseThrow(AdmitCardGenerationException::new);
 //        if(currentRound.getExamTime().before(new Date(System.currentTimeMillis()))){
 //            return ResponseEntity.badRequest().build();
 //        }
@@ -220,8 +222,8 @@ public class RoundServiceImpl implements RoundService {
                             .degreeName(application.getDegreeName())
                             .passingYear(application.getPassingYear())
                             .institutionName(application.getInstitutionName())
-//                            .resumeId(application.getResume().getId())
-//                            .profileImageId(application.getProfileImage().getId())
+                            .resumeId(application.getResume().getId())
+                            .profileImageId(application.getProfileImage().getId())
                             .phone(application.getPhone())
                             .email(application.getEmail())
                             .roundMarks(screeningRoundMarkDto)
@@ -230,8 +232,4 @@ public class RoundServiceImpl implements RoundService {
         return ResponseEntity.ok(applicationResponseModels);
     }
 
-    @Override
-    public ResponseEntity<?> getAllEvaluatorsUnderRoundUnderCircular(Long circularId, Long roundId) {
-        return evaluatorService.getAllEvaluatorsUnderRoundUnderCircular(circularId, roundId);
-    }
 }

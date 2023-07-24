@@ -44,7 +44,7 @@ public class WebSecurityConfig{
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("v1/notices","/applicants/register","/applicants/register/email/verify",
-                                "/auth/login")
+                                "/auth/login","/resource/{resourceId}")
                         .permitAll()
                         .requestMatchers(HttpMethod.GET,"/circulars","/admits/verify/{admitCardId}")
                         .permitAll()
@@ -60,7 +60,7 @@ public class WebSecurityConfig{
                                 , "/circulars/{circularId}/rounds/current/actions/end", "/circulars/{circularId}/rounds"
                                 , "/circulars/{circularId}/rounds/{roundId}", "/circulars/{circularId}/rounds/{roundId}/candidates"
                                 , "/circulars/{circularId}/rounds/{roundId}/candidates/{candidateId}"
-                                , "/evaluators")
+                                , "/evaluators","/evaluators/{evaluatorId}/assign/candidates/{candidateId}")
                         .hasAuthority(Role.ADMIN.name())
                         .requestMatchers(HttpMethod.POST, "/info/{circularId}","/circulars","/circulars/{circularId}",
                                 "/evaluators/{evaluatorId}/candidates")
@@ -69,7 +69,7 @@ public class WebSecurityConfig{
                         .hasAuthority(Role.EVALUATOR.name())
                         .requestMatchers(HttpMethod.POST,"/evaluators/current/candidates/marks")
                         .hasAuthority(Role.EVALUATOR.name())
-                        .requestMatchers("/resource/upload", "/resource/{resourceId}")
+                        .requestMatchers("/resource/upload")
                         .hasAnyAuthority(Role.ADMIN.name(), Role.APPLICANT.name())
                         .requestMatchers(HttpMethod.GET, "/circulars/{circularId}","/circulars/{circularId}/meta")
                         .hasAnyAuthority(Role.ADMIN.name(),Role.APPLICANT.name())

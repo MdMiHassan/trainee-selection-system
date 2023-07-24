@@ -18,6 +18,7 @@ import AdminNewAdmin from '../layouts/admin/AdminNewAdmin';
 import AdminAllApplicantUsers from '../layouts/admin/AdminAllApplicantUsers';
 import AdminAllFiles from '../layouts/admin/AdminAllFiles';
 import applogo from'../assets/applogo.svg'
+import NewEvaluator from '../components/evaluator/NewEvaluator';
 const { Content, Footer, Sider } = Layout;
 
 function AdminPanel() {
@@ -80,13 +81,9 @@ function AdminPanel() {
                             <Route path="/notice/new" element={<AdminNewNotice />} />
                             <Route path="/notice/all" element={<AdminAllNotice />} />
                             <Route path="/notice/update" element={<AdminUpdateNotice />} />
-                            <Route path="/email/sent" element={<AdminEmailSentBySystem />} />
-                            <Route path="/email" element={<AdminConfigureEmail />} />
                             <Route path="/admit/configure" element={<AdminConfigureAdmit />} />
-                            <Route path="/user/admins" element={<AdminAllAdminUsers />} />
-                            <Route path="/user/new" element={<AdminNewAdmin />} />
-                            <Route path="/user/applicants" element={<AdminAllApplicantUsers />} />
-                            <Route path="/files" element={<AdminAllFiles />} />
+                            <Route path="/evaluators" element={<AdminAllAdminUsers />} />
+                            <Route path="/evaluators/new" element={<NewEvaluator />} />
                         </Routes>
                     </div>
                 </Content>

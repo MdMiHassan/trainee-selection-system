@@ -1,6 +1,7 @@
 package com.example.tss.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,7 @@ import java.util.List;
 
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Evaluator {
@@ -17,17 +19,10 @@ public class Evaluator {
     private Long id;
     @ManyToOne
     private User user;
-    @OneToOne
+    @ManyToOne
     private Circular circular;
-    @OneToOne
+    @ManyToOne
     private ScreeningRound assignedRound;
-    @ElementCollection
-    private List<Application> applications;
-    private String gender;
-    private String division;
-    private String designation;
-    private String empId;
-    private String phone;
-    private String firstName;
-    private String lastName;
+    @ManyToOne
+    private Application application;
 }

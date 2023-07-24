@@ -3,6 +3,7 @@ package com.example.tss.service.impl;
 import com.example.tss.dto.AdmitCardInfoDto;
 import com.example.tss.dto.ApplicationDto;
 import com.example.tss.dto.ApplicationInfoDto;
+import com.example.tss.exception.AdmitCardGenerationException;
 import com.example.tss.service.UserService;
 import com.example.tss.util.admit.AdmitCardMoldFactory;
 import com.example.tss.constants.ResourceType;
@@ -57,7 +58,7 @@ public class AdmitCardServiceImpl implements AdmitCardService {
     public boolean generateAdmitCard(Application application, ScreeningRound screeningRound, Circular circular) {
         try {
             Resource admit = resourceRepository.save(Resource.builder().build());
-            AdmitCardInformation admitCardInformation = admitCardInformationRepository.findByCircularId(circular.getId()).orElseThrow();
+            AdmitCardInformation admitCardInformation = admitCardInformationRepository.findByCircularId(circular.getId()).orElseThrow(AdmitCardGenerationException::new);
             byte[] companyLogoLeft = admitCardInformation.getCompanyLogoLeft().getFileData();
             byte[] companyLogoRight = admitCardInformation.getCompanyLogoRight().getFileData();
             byte[] applicantPhoto = application.getProfileImage().getFileData();
@@ -101,14 +102,6 @@ public class AdmitCardServiceImpl implements AdmitCardService {
                     .authoritySignature(authoritySignature)
                     .authorityName(authorityName)
                     .forgeAdmitCard().getAdmitHTML();
-            try (FileWriter fileWriter = new FileWriter(new File("output.html"))) {
-                fileWriter.write(admitCardHtml);
-                fileWriter.close();
-                System.out.println("String saved to file successfully.");
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.out.println("Error occurred while saving the string to file.");
-            }
             byte[] admitCardData = convertHtmlToPdf(admitCardHtml);
             admit.setFileData(admitCardData);
             admit.setFileFormat("pdf");
@@ -124,8 +117,7 @@ public class AdmitCardServiceImpl implements AdmitCardService {
             applicationRepository.save(application);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+            throw new AdmitCardGenerationException();
         }
     }
 

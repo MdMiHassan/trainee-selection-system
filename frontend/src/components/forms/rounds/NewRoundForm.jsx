@@ -74,13 +74,10 @@ function NewRoundForm({ modalTitle, isModalOpen, setIsModalOpen, circularId }) {
         })
             .then((response) => response.json())
             .then((data) => {
-                if (Array.isArray(data)) {
-                    const sortedRoundData = data ? [...data].sort((a, b) => a.serialNo - b.serialNo) : null;
-                    const optionData = sortedRoundData.slice(0, data.length - 1);
-                    setRoundData(optionData);
-                } else {
-                    console.error('Fetched data is not an array:', data);
-                }
+                const rounds = data.rounds;
+                const sortedRoundData = rounds ? [...rounds].sort((a, b) => a.serialNo - b.serialNo) : null;
+                const optionData = sortedRoundData.slice(0, rounds.length - 1);
+                setRoundData(optionData);
             })
             .catch((error) => {
                 message.error("Round Creation failed!")

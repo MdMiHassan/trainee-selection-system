@@ -122,10 +122,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        if (role.equals(Role.ADMIN) || role.equals(Role.APPLICANT)) {
-            return true;
-        }
-        return expiredAt.after(new Date(System.currentTimeMillis()));
+        return true;
     }
 
     @Override

@@ -129,8 +129,4 @@ public class CircularController {
         return roundService.deleteRoundByIdUnderCircular(circularId, roundId);
     }
 
-    @DeleteMapping("/{circularId}/rounds/{roundId}/evaluators")
-    public ResponseEntity<?> getAllEvaluatorsUnderRoundUnderCircular(@PathVariable Long circularId, @PathVariable Long roundId) {
-        return roundService.getAllEvaluatorsUnderRoundUnderCircular(circularId, roundId);
-    }
 }
