@@ -124,7 +124,7 @@ function AdminCircularScreening() {
                     End Current Round
                 </Button>
                 <Button type="primary" icon={<PlusOutlined />} onClick={showNewRoundModal} >
-                    create
+                    Create Round
                 </Button>
                 <NewRoundForm modalTitle={"New Round"} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} circularId={circularId} />
             </Col>

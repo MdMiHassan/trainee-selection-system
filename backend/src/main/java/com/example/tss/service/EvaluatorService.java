@@ -4,6 +4,7 @@ import com.example.tss.dto.EvaluatorDto;
 import com.example.tss.dto.MarksDto;
 import org.springframework.http.ResponseEntity;
 
+import java.awt.print.Pageable;
 import java.security.Principal;
 import java.util.List;
 
@@ -12,11 +13,13 @@ public interface EvaluatorService {
 
     ResponseEntity<?> getAllAssignedApplicants(Long evaluatorId);
 
-    ResponseEntity<?> assignEvaluatorToApplicants(Long evaluatorId, List<Long> candidateIds);
+    ResponseEntity<?> assignEvaluatorToApplicants(Long evaluatorId, Long candidateId);
 
-    ResponseEntity<?> updateAssignedApplicantsMarks(Long aLong, List<MarksDto> marksDtos);
+    ResponseEntity<?> updateAssignedApplicantsMarks(Principal principal, MarksDto marksDto);
 
     ResponseEntity<?> getAllEvaluatorsUnderRoundUnderCircular(Long circularId, Long roundId);
 
     ResponseEntity<?> getAllAssignedApplicants(Principal principal);
+
+    ResponseEntity<?> getEvaluators();
 }

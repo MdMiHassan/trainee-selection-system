@@ -84,25 +84,6 @@ const items = [
     ],
   },
   {
-    label: 'Email',
-    key: 'sub3',
-    icon: <MailOutlined />,
-    children: [
-      {
-        label: 'Sent on Behalf',
-        key: '10',
-        icon: <CarryOutOutlined />,
-        path: '/admin/email/sent',
-      },
-      {
-        label: 'Configure',
-        key: '11',
-        icon: <ExperimentOutlined />,
-        path: '/admin/email/configure',
-      },
-    ],
-  },
-  {
     label: 'Admit',
     key: 'sub4',
     icon: <IdcardOutlined />,
@@ -116,27 +97,15 @@ const items = [
     ],
   },
   {
-    label: 'User',
+    label: 'Evaluator',
     key: 'sub5',
     icon: <TeamOutlined />,
     children: [
       {
-        label: 'Admins',
+        label: 'New Evaluator',
         key: '13',
         icon: <SafetyCertificateOutlined />,
-        path: '/admin/user/admins',
-      },
-      {
-        label: 'New Admin',
-        key: '14',
-        icon: <SubnodeOutlined />,
-        path: '/admin/user/new',
-      },
-      {
-        label: 'Applicants',
-        key: '15',
-        icon: <UserOutlined />,
-        path: '/admin/user/applicants',
+        path: '/admin/evaluators/new',
       },
     ],
   },

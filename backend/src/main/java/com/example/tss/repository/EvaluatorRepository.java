@@ -12,4 +12,6 @@ public interface EvaluatorRepository extends JpaRepository<Evaluator,Long> {
     List<Evaluator> findByCircularIdAndAssignedRoundId(Long circularId, Long roundId);
 
     List<Evaluator> findByUserId(Long id);
+
+    Optional<Evaluator> findByUserIdAndApplicationId(Long id, long applicationId);
 }

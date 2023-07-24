@@ -1,5 +1,6 @@
 package com.example.tss.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,8 +11,9 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AssignedApplicantDto {
     private ScreeningRoundDto screeningRound;
     private boolean markUpdatable;
-    private List<Long> candidatesUid;
+    private Long candidatesUid;
 }

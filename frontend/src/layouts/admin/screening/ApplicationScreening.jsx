@@ -29,8 +29,8 @@ function ApplicationScreening({ circularId, roundId }) {
                     value: 'FEMALE',
                 },
                 {
-                    text: 'Any',
-                    value: 'ANY',
+                    text: 'Other',
+                    value: 'OTHER',
                 },
             ],
             filterMode: 'tree',
@@ -40,6 +40,11 @@ function ApplicationScreening({ circularId, roundId }) {
         {
             title: 'Degreename',
             dataIndex: 'degreeName',
+        },
+        {
+            title: 'Institution',
+            dataIndex: 'institutionName',
+            sorter: (a, b) => a.institutionName.localeCompare(b.institutionName)
         },
         {
             title: 'CGPA',
@@ -55,7 +60,7 @@ function ApplicationScreening({ circularId, roundId }) {
             title: 'Resume',
             dataIndex: '',
             key: 'x',
-            render: () => <a>View</a>,
+            render: (text, record) => <a onClick={() => handleViewResume(record.resumeId)}>View</a>,
         },
         {
             title: 'Action',
@@ -66,6 +71,9 @@ function ApplicationScreening({ circularId, roundId }) {
               ),
         }
     ];
+    const handleViewResume=(resumeId)=>{
+        window.open("http://localhost:8080/resource/"+resumeId, "_blank");
+    }
     const handleInvite = (applicationId) => {
         fetch(
           API_BASE_URL +

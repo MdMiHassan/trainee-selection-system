@@ -39,6 +39,15 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
+    public ResponseEntity<?> getById(Long id) {
+        Resource fileResource = resourceRepository.findById(id).orElseThrow();
+        MediaType mediaType = MediaTypeFactory.getMediaType(fileResource.getFileName()).orElseThrow();
+        return ResponseEntity.ok()
+                .contentType(mediaType)
+                .body(fileResource.getFileData());
+    }
+
+    @Override
     public ResponseEntity<?> getByIdAndResourceType(Long resourceId, ResourceType resourceType) {
         Resource fileResource = resourceRepository.findByIdAndResourceType(resourceId, resourceType)
                 .orElseThrow(() -> new ResourceNotFoundException(resourceId.toString()));

@@ -9,6 +9,7 @@ import java.security.Principal;
 
 public interface ResourceService {
     ResponseEntity<?> getById(Principal principal,Long id);
+    ResponseEntity<?> getById(Long id);
 
     ResponseEntity<?> getByIdAndResourceType(Long resourceId, ResourceType resourceType);
 

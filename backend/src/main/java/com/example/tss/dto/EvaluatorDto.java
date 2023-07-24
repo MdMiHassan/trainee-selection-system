@@ -17,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class EvaluatorDto {
+    private Long id;
     @NotBlank(message = "Email is required")
     private String email;
     @NotBlank(message = "Password is required")

@@ -20,7 +20,7 @@ public class ResourceController {
         return resourceService.uploadResource(principal,multipartFile);
     }
     @GetMapping("/{resourceId}")
-    public ResponseEntity<?> downloadFile(Principal principal,@PathVariable Long resourceId){
-        return resourceService.getById(principal,resourceId);
+    public ResponseEntity<?> downloadFile(@PathVariable Long resourceId){
+        return resourceService.getById(resourceId);
     }
 }

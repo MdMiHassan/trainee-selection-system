@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Form, Input, Button, Typography, Row, Col, Card, Checkbox } from 'antd';
+import { Form, Input, Button, Typography, Row, Col, Card, Checkbox, message } from 'antd';
 import { API_BASE_URL } from '../Config';
 import { decodeToken } from '../utils/auth';
 import { AuthContext } from './AuthContext';
@@ -51,7 +51,7 @@ const LoginForm = () => {
 
 
     const handleForgot = () => {
-
+        message.error("feature not implemented yet");
     };
 
     return (
@@ -97,13 +97,13 @@ const LoginForm = () => {
                                 <Checkbox>Remember me</Checkbox>
                             </Form.Item>
 
-                            <a className="login-form-forgot" href="">
+                            <a className="login-form-forgot" href="" onClick={handleForgot}>
                                 Forgot password
                             </a>
                         </Form.Item>
 
                         <Form.Item>
-                            <Button wrapperCol={24} type="primary" htmlType="submit" className="login-form-button" style={{width:"100%"}}>
+                            <Button wrapperCol={24} type="primary" htmlType="submit" className="login-form-button" style={{ width: "100%" }}>
                                 Log in
                             </Button>
                             Or <a href="/register">register now!</a>

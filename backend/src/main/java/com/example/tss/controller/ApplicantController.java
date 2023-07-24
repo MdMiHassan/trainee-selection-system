@@ -18,7 +18,8 @@ import java.security.Principal;
 @CrossOrigin
 public class ApplicantController {
     private final ApplicantService applicantService;
-private final AuthenticationService authenticationService;
+    private final AuthenticationService authenticationService;
+
     @GetMapping
     public ResponseEntity<?> getAllApplicants() {
         return applicantService.getAllApplicants();
@@ -38,11 +39,13 @@ private final AuthenticationService authenticationService;
     public ResponseEntity<?> getProfile(Principal principal) {
         return applicantService.getProfile(principal);
     }
+
     @GetMapping("/current/applications")
     public ResponseEntity<?> getAllApplications(Principal principal) {
         System.out.println(principal.getName());
         return applicantService.getAllApplications(principal);
     }
+
     @PostMapping("/register")
     public ResponseEntity<?> registerApplicant(@Valid @RequestBody ApplicantRegistrationRequest applicantRegistrationRequest) {
         ResponseEntity<?> registrationResponseEntity = applicantService.registerApplicant(applicantRegistrationRequest);
