@@ -6,7 +6,7 @@ function LoginGuard({ children }) {
   const { role} = useContext(AuthContext);
   switch (role) {
     case "ADMIN":
-      return <Navigate to="/admin" />;
+      return <Navigate to="/admin/dashboard" />;
     case "APPLICANT":
         return <Navigate to="/applicant" />;
     case "EVALUATOR":

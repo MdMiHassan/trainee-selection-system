@@ -10,14 +10,8 @@ import AdminAllCirculars from '../layouts/admin/AdminAllCirculars';
 import AdminNewNotice from '../layouts/admin/AdminNewNotice';
 import AdminAllNotice from '../layouts/admin/AdminAllNotices';
 import AdminUpdateNotice from '../layouts/admin/AdminUpdateNotice';
-import AdminEmailSentBySystem from '../layouts/admin/AdminEmailSentBySystem';
-import AdminConfigureEmail from '../layouts/admin/AdminConfigureEmail';
 import AdminConfigureAdmit from '../layouts/admin/AdminConfigureAdmit';
-import AdminAllAdminUsers from '../layouts/admin/AdminAllAdmins';
-import AdminNewAdmin from '../layouts/admin/AdminNewAdmin';
-import AdminAllApplicantUsers from '../layouts/admin/AdminAllApplicantUsers';
-import AdminAllFiles from '../layouts/admin/AdminAllFiles';
-import applogo from'../assets/applogo.svg'
+import AdminAllEvaluator from '../layouts/admin/AdminAllEvaluator';
 import NewEvaluator from '../components/evaluator/NewEvaluator';
 const { Content, Footer, Sider } = Layout;
 
@@ -82,7 +76,7 @@ function AdminPanel() {
                             <Route path="/notice/all" element={<AdminAllNotice />} />
                             <Route path="/notice/update" element={<AdminUpdateNotice />} />
                             <Route path="/admit/configure" element={<AdminConfigureAdmit />} />
-                            <Route path="/evaluators" element={<AdminAllAdminUsers />} />
+                            <Route path="/evaluators" element={<AdminAllEvaluator />} />
                             <Route path="/evaluators/new" element={<NewEvaluator />} />
                         </Routes>
                     </div>

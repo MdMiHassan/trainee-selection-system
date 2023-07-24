@@ -94,7 +94,7 @@ function AdminCircularScreening() {
                     level={3}
                     style={{ margin: '0' }}
                 >
-                    Screening Circular
+                    Screening Application
                 </Typography.Title>
             </Col>
             <Col span={18}>

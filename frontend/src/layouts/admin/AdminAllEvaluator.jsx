@@ -1,6 +1,6 @@
 import { Card } from "antd";
 
-function AdminAllAdminUsers() {
+function AdminAllEvaluator() {
 
     return ( <Card title="Card title">
     <Card type="inner" title="Inner Card title" extra={<a href="#">More</a>}>
@@ -19,4 +19,4 @@ function AdminAllAdminUsers() {
   </Card> );
 }
 
-export default AdminAllAdminUsers;
+export default AdminAllEvaluator;

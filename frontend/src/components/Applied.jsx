@@ -31,13 +31,18 @@ function Applied() {
         }
 
     }, []);
-    
+
     return (
         <Row justify='center' style={{ marginBottom: '25px' }}>
             <Col xs={22} sm={20} md={20} lg={20} xl={18} xxl={16}>
-                {appliedCircularsId.map((circularId) => (
+                {appliedCircularsId ? appliedCircularsId.map((circularId) => (
                     <AppliedCard key={circularId} circularId={circularId} />
-                ))}
+                )) :
+                    <Row justify={"center"}>
+                        <Typography.Text>
+                            Nothing To Show for Now!
+                        </Typography.Text>
+                    </Row>}
             </Col>
         </Row>
     );

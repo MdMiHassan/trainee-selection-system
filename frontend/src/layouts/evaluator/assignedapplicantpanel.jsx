@@ -1,89 +1,12 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { Button, Form, Input, Popconfirm, Table } from 'antd';
-const EditableContext = React.createContext(null);
-const EditableRow = ({ index, ...props }) => {
-    const [form] = Form.useForm();
-    return (
-        <Form form={form} component={false}>
-            <EditableContext.Provider value={form}>
-                <tr {...props} />
-            </EditableContext.Provider>
-        </Form>
-    );
-};
-const EditableCell = ({
-    title,
-    editable,
-    children,
-    dataIndex,
-    record,
-    handleSave,
-    ...restProps
-}) => {
-    const [editing, setEditing] = useState(false);
-    const inputRef = useRef(null);
-    const form = useContext(EditableContext);
-    useEffect(() => {
-        if (editing) {
-            inputRef.current.focus();
-        }
-    }, [editing]);
-    const toggleEdit = () => {
-        setEditing(!editing);
-        form.setFieldsValue({
-            [dataIndex]: record[dataIndex],
-        });
-    };
-    const save = async () => {
-        try {
-            const values = await form.validateFields();
-            toggleEdit();
-            handleSave({
-                ...record,
-                ...values,
-            });
-        } catch (errInfo) {
-            console.log('Save failed:', errInfo);
-        }
-    };
-    let childNode = children;
-    if (editable) {
-        childNode = editing ? (
-            <Form.Item
-                style={{
-                    margin: 0,
-                }}
-                name={dataIndex}
-                rules={[
-                    {
-                        required: true,
-                        message: `${title} is required.`,
-                    },
-                ]}
-            >
-                <Input ref={inputRef} onPressEnter={save} onBlur={save} />
-            </Form.Item>
-        ) : (
-            <div
-                className="editable-cell-value-wrap"
-                style={{
-                    paddingRight: 24,
-                }}
-                onClick={toggleEdit}
-            >
-                {children}
-            </div>
-        );
-    }
-    return <td {...restProps}>{childNode}</td>;
-};
+import MarkModal from './MarkModal';
+
 const AssignedApplicantPanel = () => {
-    const [dataSource, setDataSource] = useState([]);
-    
-    const handleSaveMark = (key) => {
-        const newData = dataSource.filter((item) => item.key !== key);
-        setDataSource(newData);
-    };
+    const [editingKey, setEditingKey] = useState('');
+    const [markModalVisible, setMarkModalVisible] = useState(false);
+    const [selectedRow, setSelectedRow] = useState(null);
+    const [dataSource, setDataSource] = useState(null);
     const defaultColumns = [
         {
             title: '#UniqueId',
@@ -112,7 +35,7 @@ const AssignedApplicantPanel = () => {
                 ) : null,
         },
     ];
-    
+
     const handleSave = (row) => {
         const newData = [...dataSource];
         const index = newData.findIndex((item) => row.key === item.key);
@@ -122,13 +45,47 @@ const AssignedApplicantPanel = () => {
             ...row,
         });
         setDataSource(newData);
+        setEditingKey('');
     };
-    const components = {
-        body: {
-            row: EditableRow,
-            cell: EditableCell,
-        },
+
+    const handleSaveMark = async (key) => {
+        const newData = dataSource.filter((item) => item.key !== key);
+        setDataSource(newData);
+        useEffect(() => {
+            if (circularId) {
+                fetch(API_BASE_URL + '/circulars/' + circularId + '/rounds', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                }
+                )
+                    .then((response) => response.json())
+                    .then((data) => {
+                        console.log(data);
+                        const fetchedContent = data;
+                        const sortedRoundData = fetchedContent ? [...fetchedContent].sort((a, b) => a.serialNo - b.serialNo) : null;
+                        setRoundData(sortedRoundData);
+                        console.log(sortedRoundData);
+                    })
+                    .catch((error) => {
+                        message.error("Application failed!")
+                    });
+            }
+        }, [circularId]);
     };
+
+    const handleEdit = (record) => {
+        setSelectedRow(record);
+        setMarkModalVisible(true);
+    };
+
+    const handleCancelMarkModal = () => {
+        setMarkModalVisible(false);
+        setSelectedRow(null);
+    };
+
     const columns = defaultColumns.map((col) => {
         if (!col.editable) {
             return col;
@@ -142,18 +99,46 @@ const AssignedApplicantPanel = () => {
                 title: col.title,
                 handleSave,
             }),
+            render: (text, record) => {
+                const editable = isEditing(record);
+                return editable ? (
+                    <span>
+                        <a href="#" onClick={() => handleSaveMark(record.key)}>
+                            Save
+                        </a>
+                    </span>
+                ) : (
+                    <div
+                        className="editable-cell-value-wrap"
+                        style={{ paddingRight: 24 }}
+                        onClick={() => handleEdit(record)}
+                    >
+                        {text}
+                    </div>
+                );
+            },
         };
     });
+
     return (
         <div>
             <Table
-                components={components}
-                rowClassName={() => 'editable-row'}
                 bordered
                 dataSource={dataSource}
                 columns={columns}
             />
+            {selectedRow && (
+                <MarkModal
+                    visible={markModalVisible}
+                    onCancel={handleCancelMarkModal}
+                    onSave={(marks) => {
+                        setSelectedRow({ ...selectedRow, marks });
+                        setMarkModalVisible(false);
+                    }}
+                />
+            )}
         </div>
     );
 };
+
 export default AssignedApplicantPanel;

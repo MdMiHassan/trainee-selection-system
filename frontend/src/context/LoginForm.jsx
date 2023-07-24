@@ -1,12 +1,10 @@
 import React, { useContext } from 'react';
-import { Form, Input, Button, Typography, Row, Col, Card, Checkbox, message } from 'antd';
+import { Form, Input, Button, Row, Col, Card } from 'antd';
 import { API_BASE_URL } from '../Config';
-import { decodeToken } from '../utils/auth';
+import { decodeToken, removeSortedToken } from '../utils/auth';
 import { AuthContext } from './AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-
-const { Title } = Typography;
 
 const LoginForm = () => {
     const navigateTo = useNavigate();
@@ -34,6 +32,7 @@ const LoginForm = () => {
             .then((response) => response.json())
             .then((data) => {
                 if (data.success) {
+                    removeSortedToken();
                     const role = decodeToken(data.token).role[0];
                     console.log(role);
                     updateRole(role);
@@ -47,11 +46,6 @@ const LoginForm = () => {
             .catch((error) => {
                 console.log(error);
             });
-    };
-
-
-    const handleForgot = () => {
-        message.error("feature not implemented yet");
     };
 
     return (
@@ -93,16 +87,6 @@ const LoginForm = () => {
                             />
                         </Form.Item>
                         <Form.Item>
-                            <Form.Item name="remember" valuePropName="checked" noStyle>
-                                <Checkbox>Remember me</Checkbox>
-                            </Form.Item>
-
-                            <a className="login-form-forgot" href="" onClick={handleForgot}>
-                                Forgot password
-                            </a>
-                        </Form.Item>
-
-                        <Form.Item>
                             <Button wrapperCol={24} type="primary" htmlType="submit" className="login-form-button" style={{ width: "100%" }}>
                                 Log in
                             </Button>
@@ -112,8 +96,6 @@ const LoginForm = () => {
                 </Card>
             </Col>
         </Row>
-
-
     );
 };
 

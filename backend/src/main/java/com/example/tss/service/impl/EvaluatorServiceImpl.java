@@ -106,7 +106,7 @@ public class EvaluatorServiceImpl implements EvaluatorService {
         ScreeningRound circularCurrentRound = screeningRoundMeta.getCurrentRound();
         System.out.println("After 2");
         if (circularCurrentRound.getSerialNo().intValue() != applicationCurrentRound.getSerialNo().intValue()) {
-            System.out.println("Current round "+circularCurrentRound.getSerialNo().intValue()+" app round"+ applicationCurrentRound.getSerialNo().intValue());
+            System.out.println("Current round "+ circularCurrentRound.getSerialNo() +" app round"+ applicationCurrentRound.getSerialNo());
             return ResponseEntity.badRequest().build();
         }
         System.out.println("After 3");
