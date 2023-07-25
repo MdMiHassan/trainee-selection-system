@@ -42,14 +42,12 @@ public class ApplicantController {
 
     @GetMapping("/current/applications")
     public ResponseEntity<?> getAllApplications(Principal principal) {
-        System.out.println(principal.getName());
         return applicantService.getAllApplications(principal);
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerApplicant(@Valid @RequestBody ApplicantRegistrationRequest applicantRegistrationRequest) {
-        ResponseEntity<?> registrationResponseEntity = applicantService.registerApplicant(applicantRegistrationRequest);
-        return registrationResponseEntity;
+        return applicantService.registerApplicant(applicantRegistrationRequest);
     }
 
     @PostMapping("/register/email/verify")

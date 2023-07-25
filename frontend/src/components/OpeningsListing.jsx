@@ -35,7 +35,7 @@ function OpeningsListing() {
                 {circularData.length ? (
                     circularData.map((circular) => (
                         <Openings
-                            key={circular.id} // Make sure to add a unique key for each element in the map function
+                            key={circular.id} 
                             title={circular.title}
                             type={circular.trainingType}
                             closing={formatDate(circular.closingDate)}

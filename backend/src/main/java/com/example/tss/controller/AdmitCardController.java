@@ -18,10 +18,6 @@ public class AdmitCardController {
     public ResponseEntity<?> verify(@PathVariable Long admitCardId) {
         return admitCardService.retrieveAdmit(admitCardId);
     }
-    @GetMapping("/current/{circularId}")
-    public ResponseEntity<?> getAdmitId(Principal principal, @PathVariable Long circularId) {
-        return admitCardService.getAdmitId(principal,circularId);
-    }
     @PostMapping("/info/{circularId}")
     public ResponseEntity<?> saveInfo(@PathVariable Long circularId, @RequestBody AdmitCardInfoDto admitCardInfoDto) {
         return admitCardService.saveAdmitInfo(circularId,admitCardInfoDto);

@@ -8,7 +8,7 @@ const application = null;
 
 function Applied() {
     const { token } = useContext(AuthContext);
-    const [appliedCircularsId, setAppliedCircularsId] = useState([]);
+    const [applications, setApplications] = useState([]);
     useEffect(() => {
         if (token) {
             console.log(`Athorization Bearer ${token}`)
@@ -21,7 +21,7 @@ function Applied() {
             })
                 .then((response) => response.json())
                 .then((data) => {
-                    setAppliedCircularsId(data.circularIds);
+                    setApplications(data);
                 })
                 .catch((error) => {
                     message.error("Circular fetching failed")
@@ -33,8 +33,8 @@ function Applied() {
     return (
         <Row justify='center' style={{ marginBottom: '25px' }}>
             <Col xs={22} sm={20} md={20} lg={20} xl={18} xxl={16}>
-                {appliedCircularsId ? appliedCircularsId.map((circularId) => (
-                    <AppliedCard key={circularId} circularId={circularId} />
+                {applications ? applications.map((application) => (
+                    <AppliedCard key={application.circularId} application={application} />
                 )) :
                     <Row justify={"center"}>
                         <Typography.Text>

@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Card, Typography, Tag, Button, Col, Row, } from 'antd';
 import { FileTextOutlined } from '@ant-design/icons';
-import '../styles/openingcard.css'
-import BookmarkButton from './BookmarkButton';
+import '../styles/openingcard.css';
 import ApplyModal from './apply/ApplyModal';
 import CircularViewModal from './circular/CircularVIewModal';
 
@@ -28,9 +27,6 @@ const Openings = ({ title, type, closing, vacancy, circularId }) => {
                         <Typography.Title level={3} style={{ marginTop: 0, padding: 0 }} onClick={onclickCircularView}>
                             {title} <Tag color="blue">{type}</Tag>
                         </Typography.Title>
-                        <div style={{ paddingTop: "5px" }}>
-                            <BookmarkButton circularId={circularId} />
-                        </div>
                     </Row>
                     <Typography.Text>
                         Closing - <span>{closing}</span> | Vacancy - {vacancy}
