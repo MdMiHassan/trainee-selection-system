@@ -13,7 +13,7 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/evaluators")
+@RequestMapping("/api/v1/evaluators")
 @RequiredArgsConstructor
 public class EvaluatorController {
     private final EvaluatorService evaluatorService;

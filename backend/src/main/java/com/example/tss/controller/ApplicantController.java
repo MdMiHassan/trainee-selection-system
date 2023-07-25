@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/applicants")
+@RequestMapping("/api/v1/applicants")
 @RequiredArgsConstructor
 @CrossOrigin
 public class ApplicantController {

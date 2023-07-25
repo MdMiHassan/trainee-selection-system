@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/admits")
+@RequestMapping("/api/v1/admits")
 @RequiredArgsConstructor
 public class AdmitCardController {
     private final AdmitCardService admitCardService;
