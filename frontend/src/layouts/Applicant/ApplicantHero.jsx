@@ -10,7 +10,7 @@ const ApplicantHero = () => {
           <Row justify='center'>
             <Col xs={20} sm={20} md={16} lg={12} xl={10} xxl={8}>
               <Title level={1} style={{ textAlign: 'center' }}>
-                Gain Insights from Industry Experts: Elevate Your Learning Experience
+                Gain Insights from Industry Experts: Elevate Your Career
               </Title>
               <Paragraph style={{ textAlign: 'center' }}>
                 We offer globally recognized training programs adhering to the highest industry standards.

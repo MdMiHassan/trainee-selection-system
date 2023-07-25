@@ -1,7 +1,8 @@
 import { Button, Modal } from "antd";
 import JobDescriptionCard from "../../layouts/Jobdescription";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { API_BASE_URL } from "../../Config";
+import { AuthContext } from "../../context/AuthContext";
 
 function CircularViewModal({ isCircularModalOpen, setIsCircularModalOpen, circularId }) {
     const handleNewRoundCancel = (event) => {
@@ -9,17 +10,24 @@ function CircularViewModal({ isCircularModalOpen, setIsCircularModalOpen, circul
         setIsCircularModalOpen(false);
     };
     const [circular,setCircular]=useState(null);
+    const {token}=useContext(AuthContext);
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(API_BASE_URL + '/circulars/' + circularId);
-                const data = await response.json();
+        if (circularId) {
+            fetch(API_BASE_URL + '/circulars/' + circularId,{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization':`Bearer ${token}`
+            }}
+            )
+                .then((response) => response.json())
+                .then((data) => {
                     setCircular(data);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        };
-        fetchData();
+                })
+                .catch((error) => {
+                    message.error("Application failed!")
+                });
+        }
     }, [isCircularModalOpen, circularId]);
     return (
         <Modal title={"Training Description"}
@@ -30,6 +38,7 @@ function CircularViewModal({ isCircularModalOpen, setIsCircularModalOpen, circul
                     close
                 </Button>
             ]}
+            width={1000}
         >
             <JobDescriptionCard circular={circular} />
         </Modal>

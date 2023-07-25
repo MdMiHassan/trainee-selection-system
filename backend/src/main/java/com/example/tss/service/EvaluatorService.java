@@ -13,11 +13,9 @@ public interface EvaluatorService {
 
     ResponseEntity<?> getAllAssignedApplicants(Long evaluatorId);
 
-    ResponseEntity<?> assignEvaluatorToApplicants(Long evaluatorId, Long candidateId);
+    ResponseEntity<?> assignEvaluatorToApplicants(Long evaluatorId, Long candidateId,Long roundId);
 
     ResponseEntity<?> updateAssignedApplicantsMarks(Principal principal, MarksDto marksDto);
-
-    ResponseEntity<?> getAllEvaluatorsUnderRoundUnderCircular(Long circularId, Long roundId);
 
     ResponseEntity<?> getAllAssignedApplicants(Principal principal);
 

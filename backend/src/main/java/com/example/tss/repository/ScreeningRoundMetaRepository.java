@@ -6,7 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface ScreeningRoundMetaRepository extends JpaRepository<ScreeningRoundMeta, Long> {
-    Optional<ScreeningRoundMeta> findByCircularIdAndCurrentRoundEnd(Long id, boolean currentRoundEnd);
-
     Optional<ScreeningRoundMeta> findByCircularId(Long circularId);
 }

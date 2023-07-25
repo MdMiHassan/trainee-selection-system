@@ -1,12 +1,12 @@
 
 import React, { useContext, useEffect, useState } from 'react';
-import { Table } from 'antd';
+import { Table, message } from 'antd';
 import { API_BASE_URL } from '../../../Config';
 import { AuthContext } from '../../../context/AuthContext';
 
 
 function ApplicationScreening({ circularId, roundId }) {
-    const {token}=useContext(AuthContext);
+    const { token } = useContext(AuthContext);
     const columns = [
         {
             title: 'Application Id',
@@ -68,36 +68,36 @@ function ApplicationScreening({ circularId, roundId }) {
             key: 'x',
             render: (text, record) => (
                 <a onClick={() => handleInvite(record.id)}>Invite</a>
-              ),
+            ),
         }
     ];
-    const handleViewResume=(resumeId)=>{
-        window.open("http://localhost:8080/resource/"+resumeId, "_blank");
+    const handleViewResume = (resumeId) => {
+        window.open("http://localhost:8080/resource/" + resumeId, "_blank");
     }
     const handleInvite = (applicationId) => {
         fetch(
-          API_BASE_URL +
+            API_BASE_URL +
             `/circulars/${circularId}/rounds/next/applications/${applicationId}/actions/invite`,
-          {
-            method: 'POST', 
-            headers: {
-                'Authorization':`Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
-          }
-        )
-          .then((response) => {
-            if (response.ok) {
-              message.success('Invitation sent successfully.');
-            } else {
-              message.error('Failed to send invitation.');
+            {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
             }
-          })
-          .catch((error) => {
-            console.error('Error sending invitation:', error);
-            message.error('An error occurred while sending the invitation.');
-          });
-      };
+        )
+            .then((response) => {
+                if (response.ok) {
+                    message.success('Invitation sent successfully.');
+                } else {
+                    message.error('Failed to send invitation.');
+                }
+            })
+            .catch((error) => {
+                console.error('Error sending invitation:', error);
+                message.error('An error occurred while sending the invitation.');
+            });
+    };
     const onChange = (pagination, filters, sorter, extra) => {
         console.log('params', pagination, filters, sorter, extra);
     };
@@ -105,8 +105,8 @@ function ApplicationScreening({ circularId, roundId }) {
     const [loading, setLoading] = useState(false);
     useEffect(() => {
         if (circularId && roundId) {
-            fetch(API_BASE_URL + "/circulars/" + circularId + "/rounds/" + roundId + "/candidates",{
-                headers:{'Authorization':`Bearer ${token}`}
+            fetch(API_BASE_URL + "/circulars/" + circularId + "/rounds/" + roundId + "/candidates", {
+                headers: { 'Authorization': `Bearer ${token}` }
             })
                 .then((response) => response.json())
                 .then((data) => {

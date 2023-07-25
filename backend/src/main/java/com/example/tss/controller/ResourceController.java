@@ -11,7 +11,6 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/resource")
 @RequiredArgsConstructor
-//@CrossOrigin
 public class ResourceController {
     private final ResourceService resourceService;
     @PostMapping("/upload")

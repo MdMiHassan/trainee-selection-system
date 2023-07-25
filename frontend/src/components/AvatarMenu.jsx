@@ -11,18 +11,6 @@ const AvatarDropdown = () => {
 
     const menu = (
         <Menu onClick={handleMenuClick}>
-            <Menu.Item key="profile">
-                <span style={{ paddingRight: '4px' }}>
-                    <UserOutlined />
-                </span>
-                Update Profile
-            </Menu.Item>
-            <Menu.Item key="resume">
-                <span style={{ paddingRight: '4px' }}>
-                    <UploadOutlined />
-                </span>
-                Upload Resume
-            </Menu.Item>
             <Logout />
         </Menu>
     );

@@ -4,8 +4,6 @@ import AvatarDropdown from "../components/AvatarMenu";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import "../styles/AppHeader.css";
-import Title from "antd/es/skeleton/Title";
-import applogo from '../assets/applogo.svg'
 function AppHeader() {
     const { token } = useContext(AuthContext);
     const [headerStyle, setHeaderStyle] = useState({
@@ -21,8 +19,8 @@ function AppHeader() {
                 window.scrollY || document.documentElement.scrollTop;
             if (scrollPosition > 0) {
                 setHeaderStyle({
-                    backgroundColor: "#ffffff",
-                    boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px"
+                    background: "rgba(255, 255, 255, 0.05)",
+                    backdropFilter: "blur(1px)",
                 });
             } else {
                 setHeaderStyle({
@@ -49,17 +47,14 @@ function AppHeader() {
                 <div className="header-left">
                     <div className="header-logo">
                         <a className="flex-row flex-center" href="/">
-                            {/* <Typography.Title
-                                editable
-                                level={3}
-                                style={{
-                                    margin: 0,
-                                }}
-                            >
-                                TSS
-                            </Typography.Title> */}
-                            <img src={applogo} alt="" style={{width:"150px"}}></img>
-                            {/* <Logo /> */}
+                            {/* <img src="/icon.svg" alt="" style={{ width: "150px" }}></img> */}
+                            <Row style={{border:"3px solid #fff",padding:"4px"}}>
+                                <Col style={{textAlign:"center"}}>
+                                    <Typography.Title level={4} style={{margin:"0"}}>
+                                        TSS
+                                    </Typography.Title>
+                                </Col>
+                            </Row>
                         </a>
                     </div>
                 </div>

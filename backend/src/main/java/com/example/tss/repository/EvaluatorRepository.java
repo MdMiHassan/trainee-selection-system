@@ -9,9 +9,11 @@ import java.util.Optional;
 
 @Repository
 public interface EvaluatorRepository extends JpaRepository<Evaluator,Long> {
-    List<Evaluator> findByCircularIdAndAssignedRoundId(Long circularId, Long roundId);
-
     List<Evaluator> findByUserId(Long id);
 
     Optional<Evaluator> findByUserIdAndApplicationId(Long id, long applicationId);
+
+    boolean existsByUserIdAndApplicationIdAndAssignedRoundId(Long userId, Long applicationId, Long assignedRoundId);
+
+    boolean existsByApplicationIdAndAssignedRoundId(Long applicationId, Long assignedRoundId);
 }

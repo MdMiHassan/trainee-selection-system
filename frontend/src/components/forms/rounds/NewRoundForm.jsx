@@ -55,7 +55,7 @@ function NewRoundForm({ modalTitle, isModalOpen, setIsModalOpen, circularId }) {
                     setIsModalOpen(false);
                 })
                 .catch((error) => {
-                    message.error("Round Creation failed!")
+                    message.error("Something Went Wrong!")
                 });
 
         });
@@ -65,23 +65,24 @@ function NewRoundForm({ modalTitle, isModalOpen, setIsModalOpen, circularId }) {
     };
     const { loading, setLoading } = useState(true);
     useEffect(() => {
-
-        fetch(API_BASE_URL + '/circulars/' + circularId + '/rounds', {
-            method: 'GET',
-            headers: {
-                "Authorization": "Bearer " + token
-            }
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                const rounds = data.rounds;
-                const sortedRoundData = rounds ? [...rounds].sort((a, b) => a.serialNo - b.serialNo) : null;
-                const optionData = sortedRoundData.slice(0, rounds.length - 1);
-                setRoundData(optionData);
+        if (circularId) {
+            fetch(API_BASE_URL + '/circulars/' + circularId + '/rounds', {
+                method: 'GET',
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
             })
-            .catch((error) => {
-                message.error("Round Creation failed!")
-            });
+                .then((response) => response.json())
+                .then((data) => {
+                    const rounds = data.rounds;
+                    const sortedRoundData = rounds ? [...rounds].sort((a, b) => a.serialNo - b.serialNo) : null;
+                    const optionData = sortedRoundData.slice(0, rounds.length - 1);
+                    setRoundData(optionData);
+                })
+                .catch((error) => {
+                    message.error("Something went wrong!")
+                });
+        }
     }, [circularId]);
 
     return (

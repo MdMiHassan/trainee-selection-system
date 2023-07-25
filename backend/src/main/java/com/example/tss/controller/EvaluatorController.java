@@ -3,6 +3,7 @@ package com.example.tss.controller;
 import com.example.tss.dto.EvaluatorDto;
 import com.example.tss.dto.MarksDto;
 import com.example.tss.service.EvaluatorService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,14 +37,15 @@ public class EvaluatorController {
         return evaluatorService.getAllAssignedApplicants(principal);
     }
 
-    @PostMapping("/{evaluatorId}/assign/candidates/{candidateId}")
+    @PostMapping("/{evaluatorId}/candidates/assign")
     public ResponseEntity<?> assignEvaluatorToApplicants(@PathVariable Long evaluatorId,
-                                                         @PathVariable Long candidateId) {
-        return evaluatorService.assignEvaluatorToApplicants(evaluatorId,candidateId);
+                                                         @RequestParam Long candidate,
+                                                         @RequestParam Long round) {
+        return evaluatorService.assignEvaluatorToApplicants(evaluatorId,candidate,round);
     }
 
     @PostMapping("/current/candidates/marks")
-    public ResponseEntity<?> updateAssignedApplicantsMarks(Principal principal,MarksDto marksDto) {
+    public ResponseEntity<?> updateAssignedApplicantsMarks(Principal principal,@Valid @RequestBody MarksDto marksDto) {
         return evaluatorService.updateAssignedApplicantsMarks(principal, marksDto);
     }
 }

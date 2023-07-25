@@ -3,7 +3,7 @@ package com.example.tss.service.impl;
 import com.example.tss.dto.ScreeningRoundDto;
 import com.example.tss.dto.ScreeningRoundMarkDto;
 import com.example.tss.entity.*;
-import com.example.tss.exception.AdmitCardGenerationException;
+import com.example.tss.exception.ApplicationApprovingFailedException;
 import com.example.tss.exception.RoundCreationException;
 import com.example.tss.model.ApplicationResponseModel;
 import com.example.tss.model.ScreeningRoundResponseModel;
@@ -28,8 +28,9 @@ public class RoundServiceImpl implements RoundService {
     private final EvaluatorService evaluatorService;
     private final CircularRepository circularRepository;
     private final AdmitCardService admitCardService;
-    private  final EmailService emailService;
+    private final EmailService emailService;
     private final UserService userService;
+
     @Override
     public ResponseEntity<?> getAllRoundsUnderCircular(Long circularId) {
         ModelMapper modelMapper = new ModelMapper();
@@ -101,7 +102,7 @@ public class RoundServiceImpl implements RoundService {
         ScreeningRound lastScreeningRound = screeningRoundRepository.findByCircularIdAndSerialNo(circularId, round.getSerialNo() + 1).orElseThrow();
         Long applicationId = application.getId();
         Optional<ScreeningRoundMark> screeningRoundMarkOp = screeningMarksRepository.findByApplicationIdAndRoundId(applicationId, roundId);
-        if(screeningRoundMarkOp.isEmpty()) {
+        if (screeningRoundMarkOp.isEmpty()) {
             ScreeningRoundMark screeningRoundMark = ScreeningRoundMark.builder()
                     .application(application)
                     .round(round)
@@ -159,27 +160,32 @@ public class RoundServiceImpl implements RoundService {
     @Transactional
     public ResponseEntity<?> approveApplicant(Circular circular, Long applicationId) {
         Application application = applicationRepository.findByIdAndCircularId(applicationId, circular.getId())
-                .orElseThrow(AdmitCardGenerationException::new);
-        User user=userService.getUserByApllication(application).orElseThrow();
+                .orElseThrow(ApplicationApprovingFailedException::new);
+        ApplicantProfile applicant = application.getApplicant();
         ScreeningRoundMeta screeningRoundMeta = screeningRoundMetaRepository.findByCircularId(circular.getId())
-                .orElseThrow(AdmitCardGenerationException::new);
-        ScreeningRound currentRound = screeningRoundMeta.getCurrentRound();
-        screeningRoundMetaRepository.findByCircularId(circular.getId()).orElseThrow(AdmitCardGenerationException::new);
-//        if(currentRound.getExamTime().before(new Date(System.currentTimeMillis()))){
+                .orElseThrow(ApplicationApprovingFailedException::new);
+        ScreeningRound applicationCurrentRound = application.getCurrentRound();
+        ScreeningRound circularCurrentRound = screeningRoundMeta.getCurrentRound();
+        if (circularCurrentRound.getSerialNo().intValue() != applicationCurrentRound.getSerialNo().intValue()) {
+            throw new ApplicationApprovingFailedException();
+        }
+//        if(circularCurrentRound.getExamTime().before(new Date(System.currentTimeMillis()))){
 //            return ResponseEntity.badRequest().build();
 //        }
-        ScreeningRound screeningRound = screeningRoundRepository.findByCircularIdAndSerialNo(circular.getId(), currentRound.getSerialNo() + 1).orElseThrow();
+        ScreeningRound screeningRound = screeningRoundRepository.findByCircularIdAndSerialNo(circular.getId(),
+                circularCurrentRound.getSerialNo() + 1).orElseThrow();
         application.setCurrentRound(screeningRound);
-        System.out.println(screeningRound);
+
         if (screeningRound.getRequiredAdmitCard() == null) {
             Application savedApplication = applicationRepository.save(application);
+            User user = applicant.getUser();
             String userEmail = user.getEmail();
-            emailService.sendInvitationEmail(userEmail,application);
-            return ResponseEntity.ok(savedApplication);
+            emailService.sendInvitationEmail(userEmail, application);
+            return ResponseEntity.ok().build();
         }
         if (screeningRound.getRequiredAdmitCard() && admitCardService.generateAdmitCard(application, screeningRound, circular)) {
             Application savedApplication = applicationRepository.save(application);
-            return ResponseEntity.ok(savedApplication);
+            return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
     }

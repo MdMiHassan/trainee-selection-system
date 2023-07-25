@@ -25,9 +25,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ApplicationServiceImpl implements ApplicationService {
     private final ApplicationRepository applicationRepository;
-    private final CircularRepository circularRepository;
-    private final ScreeningRoundMetaRepository screeningRoundMetaRepository;
-    private final ScreeningRoundMarkService screeningRoundMarkService;
 
     @Override
     @Transactional
@@ -45,11 +42,6 @@ public class ApplicationServiceImpl implements ApplicationService {
 
         return ResponseEntity.ok(applications);
     }
-
-    public ResponseEntity<?> getApplication(Long id) {
-        return null;
-    }
-
 
     @Override
     public ResponseEntity<?> getApplicationByIdUnderCircular(Long circularId, Long applicationId) {

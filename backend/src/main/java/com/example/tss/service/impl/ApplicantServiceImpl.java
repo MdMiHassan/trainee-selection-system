@@ -29,7 +29,6 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -65,7 +64,7 @@ public class ApplicantServiceImpl implements ApplicantService {
         try {
             emailService.sendEmail(email,
                     "Email Verification Code",
-                    savedEmailVerification.getVerificationCode());
+                    "Your Verification Code is <h1>"+savedEmailVerification.getVerificationCode()+"</h1>");
             System.out.println("email sent");
         } catch (MessagingException e) {
             throw new RuntimeException(e);
@@ -114,22 +113,6 @@ public class ApplicantServiceImpl implements ApplicantService {
 
     @Transactional
     public ResponseEntity<?> updateApplicantProfile(ApplicantProfileDto profileDto) {
-//        ModelMapper modelMapper = new ModelMapper();
-//        ApplicantProfile applicantProfile = modelMapper.map(request, ApplicantProfile.class);
-//        applicantProfile.setUser(savedUser);
-//        Optional<Resource> profileImage = resourceRepository.findByIdAndResourceTypeAndOwnerId(
-//                request.getProfileImageId(),
-//                ResourceType.PROFILEPICTURE,
-//                savedUser.getId());
-//        profileImage.ifPresent(applicantProfile::setProfileImage);
-//        Optional<Resource> resume = resourceRepository.findByIdAndResourceTypeAndOwnerId(
-//                request.getResumeId(),
-//                ResourceType.RESUME,
-//                savedUser.getId());
-//        resume.ifPresent(applicantProfile::setResume);
-//        applicantProfileRepository.save(applicantProfile);
-//        return authenticationService.login(request.getEmail(), request.getPassword());
-
         ModelMapper modelMapper = new ModelMapper();
         ApplicantProfile applicantProfile = modelMapper.map(profileDto, ApplicantProfile.class);
         ApplicantProfile savedApplicantProfile = applicantProfileRepository.save(applicantProfile);

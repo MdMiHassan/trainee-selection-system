@@ -35,12 +35,6 @@ function AdminAllNotices() {
 
         fetchData();
     }, []);
-    // const columns = tableData.length > 0 ? Object.keys(tableData[0]).map((key) => ({
-    //     title: key,
-    //     dataIndex: key,
-    //     key,
-    //     ellipsis: true, // Enable text truncation
-    //   })) : [];
     return (
         <Table
         columns={columns}

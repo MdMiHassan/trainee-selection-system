@@ -60,7 +60,7 @@ public class WebSecurityConfig{
                                 , "/circulars/{circularId}/rounds/current/actions/end", "/circulars/{circularId}/rounds"
                                 , "/circulars/{circularId}/rounds/{roundId}", "/circulars/{circularId}/rounds/{roundId}/candidates"
                                 , "/circulars/{circularId}/rounds/{roundId}/candidates/{candidateId}"
-                                , "/evaluators","/evaluators/{evaluatorId}/assign/candidates/{candidateId}")
+                                , "/evaluators","/evaluators/{evaluatorId}/candidates/assign")
                         .hasAuthority(Role.ADMIN.name())
                         .requestMatchers(HttpMethod.POST, "/info/{circularId}","/circulars","/circulars/{circularId}",
                                 "/evaluators/{evaluatorId}/candidates")

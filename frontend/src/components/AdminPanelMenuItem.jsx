@@ -25,7 +25,7 @@ const items = [
     label: 'Dashboard',
     key: '1',
     icon: <DashboardOutlined />,
-    path: '/admin',
+    path: '/admin/dashboard',
   },
   {
     label: 'Circular',

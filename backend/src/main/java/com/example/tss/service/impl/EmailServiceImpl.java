@@ -33,16 +33,6 @@ public class EmailServiceImpl implements EmailService {
         helper.setText(body, true);
         javaMailSender.send(message);
     }
-    @Async
-    @Override
-    public void sendEmail(String to, String[] cc, String subject, String body) throws MessagingException {
-
-    }
-    @Async
-    @Override
-    public void sendEmail(String to, String[] cc, String[] bcc, String subject, String body) throws MessagingException {
-
-    }
 
     @Override
     public void sendInvitationEmail(String userEmail, Application application) {
@@ -51,7 +41,8 @@ public class EmailServiceImpl implements EmailService {
             Circular circular = application.getCircular();
             String screeningInvitationEmail = HTMLMold.SCREENING_INVITATION_EMAIL;
             Document document = Jsoup.parse(screeningInvitationEmail);
-            document.getElementById("applicant-name").text(application.getFirstName()+" "+application.getLastName());
+            String applicantName = application.getFirstName() + " " + application.getLastName();
+            document.getElementById("applicant-name").text(applicantName);
             document.getElementById("job-position").text(circular.getTitle());
             String currentRoundTitle = currentRound.getTitle();
             if(currentRoundTitle!=null){
@@ -70,12 +61,7 @@ public class EmailServiceImpl implements EmailService {
                 document.getElementById("round-location").text("Please visit and download admit card from the portal");
             }
             String body = document.html();
-            MimeMessage message = javaMailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            helper.setTo(userEmail);
-            helper.setSubject("You have been selected for the "+currentRound.getTitle());
-            helper.setText(body, true);
-            javaMailSender.send(message);
+            sendEmail(userEmail,"You have been selected for the "+currentRound.getTitle(),body);
         } catch (Exception e) {
             e.printStackTrace();
         }

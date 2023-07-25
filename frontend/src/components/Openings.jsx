@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Card, Typography, Tag, Button, Space, message } from 'antd';
+import { Card, Typography, Tag, Button, Col, Row, } from 'antd';
+import { FileTextOutlined } from '@ant-design/icons';
 import '../styles/openingcard.css'
 import BookmarkButton from './BookmarkButton';
 import ApplyModal from './apply/ApplyModal';
 import CircularViewModal from './circular/CircularVIewModal';
-import { API_BASE_URL } from '../Config';
-const { Title, Text } = Typography;
 
 const Openings = ({ title, type, closing, vacancy, circularId }) => {
     const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
@@ -19,23 +18,33 @@ const Openings = ({ title, type, closing, vacancy, circularId }) => {
         setIsCircularModalOpen(true);
     }
     return (
-        <div className="vacency" >
-            <div className="vacency-details">
-                <div className="flex-row flex-start">
-                    <div className="extra-details-icon">
-                        <i className="fa-light fa-briefcase"></i>
-                    </div>
-                    <div className="extra-details-heading">
-                        <Title level={3} style={{ marginTop: 0 }} onClick={onclickCircularView}>{title} <Tag color="blue">{type}</Tag></Title>
-                        <Text>Closing - <span>{closing}</span> | Vacency - {vacancy} </Text>
-                    </div>
-                    <BookmarkButton circularId={circularId}/>
-                </div>
-            </div>
-            <Button type="primary" block className='action' onClick={onclickApply}>Apply</Button>
+        <Card style={{marginBottom:"20px"}}>
+            <Row>
+                <Col style={{ marginRight: "10px", paddingTop: "5px" }}>
+                    <FileTextOutlined style={{ fontSize: '24px' }} />
+                </Col>
+                <Col>
+                    <Row>
+                        <Typography.Title level={3} style={{ marginTop: 0, padding: 0 }} onClick={onclickCircularView}>
+                            {title} <Tag color="blue">{type}</Tag>
+                        </Typography.Title>
+                        <div style={{ paddingTop: "5px" }}>
+                            <BookmarkButton circularId={circularId} />
+                        </div>
+                    </Row>
+                    <Typography.Text>
+                        Closing - <span>{closing}</span> | Vacancy - {vacancy}
+                    </Typography.Text>
+                </Col>
+            </Row>
+            <Row justify={"end"}>
+                <Col span={4}>
+                    <Button type="primary" block className='action' onClick={onclickApply}>Apply</Button>
+                </Col>
+            </Row>
             <ApplyModal isApplyModalOpen={isApplyModalOpen} setIsApplyModalOpen={setIsApplyModalOpen} circularId={circularId} />
             <CircularViewModal isCircularModalOpen={isCircularModalOpen} setIsCircularModalOpen={setIsCircularModalOpen} circularId={circularId} />
-        </div>
+        </Card >
     );
 };
 
