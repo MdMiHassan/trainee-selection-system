@@ -26,7 +26,7 @@ const NoticeBoard = () => {
                 setNotices(noticesData);
             })
             .catch((error) => {
-                message.error("Failed to load nitices");
+                message.error("Failed to load notices");
                 console.log(error);
             });
     }, []);

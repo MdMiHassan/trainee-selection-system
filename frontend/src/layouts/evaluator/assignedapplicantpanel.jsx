@@ -1,142 +1,140 @@
-import { useState } from 'react';
-import { Button, Form, Input, Popconfirm, Table } from 'antd';
-import MarkModal from './MarkModal';
+import { useContext, useEffect, useState } from 'react';
+import { Button, Form, Input, Popconfirm, Table, message, Modal } from 'antd';
+import { AuthContext } from '../../context/AuthContext';
+import { API_BASE_URL } from '../../Config';
 
 const AssignedApplicantPanel = () => {
-    const [editingKey, setEditingKey] = useState('');
-    const [markModalVisible, setMarkModalVisible] = useState(false);
-    const [selectedRow, setSelectedRow] = useState(null);
-    const [dataSource, setDataSource] = useState(null);
-    const defaultColumns = [
+    const [dataSource, setDataSource] = useState([]);
+    const { token } = useContext(AuthContext);
+    const [selectedRowData, setSelectedRowData] = useState(null);
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const handleModalCancel = () => {
+        setModalVisible(false);
+        setSelectedRowData(null);
+    };
+
+    const showModal = (rowData) => {
+        setSelectedRowData(rowData);
+        setModalVisible(true);
+    };
+
+    const columns = [
         {
             title: '#UniqueId',
-            dataIndex: 'uid',
+            dataIndex: 'candidatesUid',
+        },
+        {
+            title: 'Screening Round',
+            dataIndex: 'screeningRound',
+            render: (screeningRound) => screeningRound.roundId,
         },
         {
             title: 'Marks',
-            dataIndex: 'Marks',
+            dataIndex: 'marks',
             width: '30%',
-            editable: true,
         },
         {
-            title: 'Remarks',
-            dataIndex: 'remarks',
-            width: '30%',
-            editable: true,
-        },
-        {
-            title: 'Operation',
-            dataIndex: 'operation',
-            render: (_, record) =>
-                dataSource.length >= 1 ? (
-                    <Popconfirm title="Are You Sure to save?" onConfirm={() => handleSaveMark(record.key)}>
-                        <a>Save</a>
-                    </Popconfirm>
-                ) : null,
+            title: 'Mark Entry',
+            key: 'enterMark',
+            fixed: 'right',
+            dataIndex: 'enterMark',
+            width: 20,
+            render: (_, rowData) => (
+                <a onClick={() => showModal(rowData)}>Enter Mark</a>
+            ),
         },
     ];
 
-    const handleSave = (row) => {
-        const newData = [...dataSource];
-        const index = newData.findIndex((item) => row.key === item.key);
-        const item = newData[index];
-        newData.splice(index, 1, {
-            ...item,
-            ...row,
-        });
-        setDataSource(newData);
-        setEditingKey('');
-    };
-
-    const handleSaveMark = async (key) => {
-        const newData = dataSource.filter((item) => item.key !== key);
-        setDataSource(newData);
-        useEffect(() => {
-            if (circularId) {
-                fetch(API_BASE_URL + '/circulars/' + circularId + '/rounds', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    }
-                }
-                )
-                    .then((response) => response.json())
-                    .then((data) => {
+    useEffect(() => {
+        if (token) {
+            fetch(API_BASE_URL + '/evaluators/current/candidates', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data && Array.isArray(data) && data.length > 0) {
                         console.log(data);
-                        const fetchedContent = data;
-                        const sortedRoundData = fetchedContent ? [...fetchedContent].sort((a, b) => a.serialNo - b.serialNo) : null;
-                        setRoundData(sortedRoundData);
-                        console.log(sortedRoundData);
-                    })
-                    .catch((error) => {
-                        message.error("Application failed!")
-                    });
-            }
-        }, [circularId]);
-    };
-
-    const handleEdit = (record) => {
-        setSelectedRow(record);
-        setMarkModalVisible(true);
-    };
-
-    const handleCancelMarkModal = () => {
-        setMarkModalVisible(false);
-        setSelectedRow(null);
-    };
-
-    const columns = defaultColumns.map((col) => {
-        if (!col.editable) {
-            return col;
+                        const transformedData = data.map((candidate) => ({
+                            key: candidate.candidatesUid,
+                            candidatesUid: candidate.candidatesUid,
+                            screeningRound: candidate.screeningRound,
+                            marks: candidate.mark,
+                        }));
+                        setDataSource(transformedData);
+                    }
+                })
+                .catch((error) => {
+                    message.error('Application failed!');
+                });
         }
-        return {
-            ...col,
-            onCell: (record) => ({
-                record,
-                editable: col.editable,
-                dataIndex: col.dataIndex,
-                title: col.title,
-                handleSave,
-            }),
-            render: (text, record) => {
-                const editable = isEditing(record);
-                return editable ? (
-                    <span>
-                        <a href="#" onClick={() => handleSaveMark(record.key)}>
-                            Save
-                        </a>
-                    </span>
-                ) : (
-                    <div
-                        className="editable-cell-value-wrap"
-                        style={{ paddingRight: 24 }}
-                        onClick={() => handleEdit(record)}
-                    >
-                        {text}
-                    </div>
-                );
-            },
-        };
-    });
+    }, [token]);
+
+    const handleModalSave = () => {
+        if (selectedRowData) {
+            const enteredMark = parseFloat(selectedRowData.marks);
+            const requestData = {
+                candidateUid: selectedRowData.candidatesUid,
+                totalMarks: enteredMark,
+            };
+            console.log(JSON.stringify(requestData));
+            fetch(API_BASE_URL + '/evaluators/current/candidates/marks', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(requestData),
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        setDataSource((prevData) => {
+                            return prevData.map((row) => {
+                                if (row.key === selectedRowData.key) {
+                                    return { ...row, marks: enteredMark }; 
+                                }
+                                return row;
+                            });
+                        });
+                        setModalVisible(false);
+                        setSelectedRowData(null);
+                        message.success('Mark Updated successfully');
+                    } else {
+                        console.log(response);
+                        message.error('Failed to save mark');
+                    }
+                })
+                .catch((error) => {
+                    message.error('Mark submission failed!');
+                });
+        }
+    };
 
     return (
         <div>
-            <Table
-                bordered
-                dataSource={dataSource}
-                columns={columns}
-            />
-            {selectedRow && (
-                <MarkModal
-                    visible={markModalVisible}
-                    onCancel={handleCancelMarkModal}
-                    onSave={(marks) => {
-                        setSelectedRow({ ...selectedRow, marks });
-                        setMarkModalVisible(false);
-                    }}
+            <Table bordered dataSource={dataSource} columns={columns} />
+            <Modal
+                title="Please enter total marks"
+                open={modalVisible} 
+                onOk={handleModalSave}
+                onCancel={handleModalCancel}
+                okText="Save"
+            >
+                <Input
+                    type="number"
+                    value={selectedRowData ? selectedRowData.marks : ''}
+                    onChange={(e) =>
+                        setSelectedRowData((prevData) => ({
+                            ...prevData,
+                            marks: e.target.value,
+                        }))
+                    }
                 />
-            )}
+            </Modal>
         </div>
     );
 };

@@ -8,12 +8,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.security.Principal;
 
 public interface ResourceService {
-    ResponseEntity<?> getById(Principal principal,Long id);
     ResponseEntity<?> getById(Long id);
 
     ResponseEntity<?> getByIdAndResourceType(Long resourceId, ResourceType resourceType);
-
-    ResponseEntity<?> getByIdAndResourceTypeAndOwnerId(Long resourceId, ResourceType resourceType, Long ownerId);
 
     ResponseEntity<?> uploadResource(Principal principal,MultipartFile multipartFile);
 

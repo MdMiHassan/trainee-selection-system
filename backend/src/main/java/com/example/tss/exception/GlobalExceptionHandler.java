@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleUserWithTheEmailAlreadyExistsException(UserWithTheEmailAlreadyExistsException e) {
         return ResponseEntity.badRequest().body(RegistrationResponse.builder()
                 .success(false)
-                .message("User With Email \"" + e.getMessage() + "\" already exists").build());
+                .message(ErrorMessage.EMAIL_EXISTS).build());
     }
 
     @ExceptionHandler(BadCredentialsException.class)
@@ -52,7 +52,18 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(AdmitCardGenerationFailedException.class)
     public ResponseEntity<?> handleAdmitCardGenerationFailedException(AdmitCardGenerationFailedException e) {
+        return ResponseEntity.badRequest().body(ErrorMessage.ADMIT_CARD_GENERATION_FAILED);
+    }
+    @ExceptionHandler(ApplicationPlacingFailedException.class)
+    public ResponseEntity<?> handleApplicationPlacingFailedException(ApplicationPlacingFailedException e) {
+        return ResponseEntity.badRequest().body(ErrorMessage.FAILED_TO_PLACE_APPLICATION);
+    }
+    @ExceptionHandler(ApplicationApprovingFailedException.class)
+    public ResponseEntity<?> handleApplicationApprovingFailedException(ApplicationApprovingFailedException e) {
         return ResponseEntity.badRequest().build();
     }
-
+    @ExceptionHandler(ApplicantMarkUpdateFailedException.class)
+    public ResponseEntity<?> handleApplicationApprovingFailedException(ApplicantMarkUpdateFailedException e) {
+        return ResponseEntity.badRequest().build();
+    }
 }

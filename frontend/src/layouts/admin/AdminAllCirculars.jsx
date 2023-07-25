@@ -14,7 +14,7 @@ const columns = [
     { title: 'Vacancy', dataIndex: 'vacancy', key: 'vacancy' },
     // { title: 'Skills', dataIndex: 'skills', key: 'skills' },
     // { title: 'Duties', dataIndex: 'duties', key: 'duties' },
-    { title: 'Salary', dataIndex: 'salary', key: 'salary' },
+    // { title: 'Salary', dataIndex: 'salary', key: 'salary' },
     // { title: 'Currency', dataIndex: 'currency', key: 'currency' },
     // { title: 'MinExp', dataIndex: 'minExp', key: 'minExp' },
     // { title: 'MaxExp', dataIndex: 'maxExp', key: 'maxExp' }

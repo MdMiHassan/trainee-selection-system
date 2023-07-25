@@ -1,4 +1,4 @@
-import { Alert, Card, DatePicker } from "antd";
+import { Alert, Card, DatePicker, Space, message } from "antd";
 import { API_BASE_URL } from "../../Config";
 import {
     Button,
@@ -48,7 +48,7 @@ function AdminNewCircular() {
     const [duties, setDuties] = useState('');
     const [skills, setSkills] = useState('');
     const [form] = Form.useForm();
-    const {token}=useContext(AuthContext);
+    const { token } = useContext(AuthContext);
     const onFinish = (values) => {
         const {
             title,
@@ -89,19 +89,28 @@ function AdminNewCircular() {
             },
             body: JSON.stringify(circularData)
         })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log("Circular posted");
+            .then((response) =>  {
+                if(response.ok){
+                    message.success("Circular posted");
+                }
             })
             .catch((error) => {
+                message.error("Something Went Wrong");
                 console.log(error);
             });
-        console.log('Received values of form: ', values);
     };
-
+    const formItemLayout = {
+        labelCol: {
+          xs: { span: 24 },
+          sm: { span: 8 }, 
+        },
+        wrapperCol: {
+          xs: { span: 24 },
+          sm: { span: 16 },
+        },
+      };
     return (<Card title="New Circular">
         <Row justify={'center'}>
-            {/* <Col xs={16} sm={16} md={16} lg={16} xl={16} xxl={16}> */}
             <Col span={15}>
                 <Form
                     {...formItemLayout}
@@ -112,10 +121,8 @@ function AdminNewCircular() {
                         residence: ['zhejiang', 'hangzhou', 'xihu'],
                         prefix: '86',
                     }}
-                    style={{
-                        maxWidth: 600,
-                    }}
                     scrollToFirstError
+                    layout="vertical"
                 >
                     <Form.Item
                         name="title"
@@ -163,44 +170,49 @@ function AdminNewCircular() {
                             <Option value="ENTRY">ENTRY</Option>
                         </Select>
                     </Form.Item>
-                    <Form.Item
-                        name="vacancy"
-                        label="Vacancy"
-                        colon={false}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input vacency!',
-                            },
-                        ]}
-                    >
-                        <InputNumber />
-                    </Form.Item>
-                    <Form.Item
-                        name="minExp"
-                        colon={false}
-                        label="Minumum Experience">
-                        <InputNumber />
-                    </Form.Item>
-                    <Form.Item
-                        name="salary"
-                        colon={false}
-                        label="Salary">
-                        <InputNumber />
-                    </Form.Item>
-                    <Form.Item
-                        name="currency"
-                        colon={false}
-                        label="Salary Currecny">
-                        <Input />
-                    </Form.Item>
+                        <Form.Item
+                            name="vacancy"
+                            label="Vacancy"
+                            colon={false}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Please input vacency!',
+                                },
+                            ]}
+                            style={{ width: '200px' }}
+                        >
+                            <InputNumber style={{ width: '480px' }}/>
 
-                    <Form.Item
-                        name="maxExp"
-                        colon={false}
-                        label="Maximum Experience">
-                        <InputNumber />
-                    </Form.Item>
+                        </Form.Item>
+                        <Form.Item
+                            name="closingDate"
+                            label="Closing Date"
+                            colon={false}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Please select closing date!',
+                                },
+                            ]}
+                            
+                        >
+                            <DatePicker style={{ width: '480px' }}/>
+                        </Form.Item>
+                    <Space.Compact>
+                        <Form.Item
+                            name="minExp"
+                            colon={false}
+                            label="Minumum Experience">
+                            <InputNumber placeholder="Minimum" style={{ width: '238px' }}/>
+                        </Form.Item>
+                        <Form.Item
+                            name="maxExp"
+                            colon={false}
+                            label="Maximum Experience">
+                            <InputNumber placeholder="Maximum" style={{ width: '238px' }}/>
+                        </Form.Item>
+                    </Space.Compact>
                     <Form.Item
                         name="requiredEducation"
                         label="Required Education"
@@ -307,20 +319,7 @@ function AdminNewCircular() {
                             <Option value="ANY">Any</Option>
                         </Select>
                     </Form.Item>
-                    <Form.Item
-                        name="closingDate"
-                        label="Closing Date"
-                        colon={false}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please select closing date!',
-                            },
-                        ]}
-                    >
-                        <DatePicker />
-                    </Form.Item>
-                    <Form.Item {...tailFormItemLayout} wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
+                    <Form.Item {...tailFormItemLayout} wrapperCol={{ span: 16 }} style={{ textAlign: 'right' }}>
                         <Button type="primary" htmlType="submit">
                             Post
                         </Button>

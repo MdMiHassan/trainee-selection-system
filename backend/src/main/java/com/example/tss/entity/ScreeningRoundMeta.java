@@ -19,7 +19,4 @@ public class ScreeningRoundMeta {
     private Circular circular;
     @OneToOne
     private ScreeningRound currentRound;
-    private boolean currentRoundEnd;
-    @OneToOne
-    private ScreeningRound nextRound;
 }

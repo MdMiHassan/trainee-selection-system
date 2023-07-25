@@ -13,9 +13,6 @@ public interface UserService {
     Optional<User> getByEmail(String email);
 
     Optional<User> getUserByPrincipal(Principal principal);
-
-    Optional<User> getUserByApllication(Application application);
-
     Optional<User> getById(Long evaluatorId);
 
     List<User> getAllEvaluators();

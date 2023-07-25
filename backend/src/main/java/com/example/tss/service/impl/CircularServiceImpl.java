@@ -4,6 +4,7 @@ import com.example.tss.dto.ApplicantProfileDto;
 import com.example.tss.dto.CircularDto;
 import com.example.tss.dto.ScreeningRoundMetaDto;
 import com.example.tss.entity.*;
+import com.example.tss.exception.ApplicationPlacingFailedException;
 import com.example.tss.repository.*;
 import com.example.tss.service.*;
 import jakarta.persistence.EntityNotFoundException;
@@ -97,18 +98,23 @@ public class CircularServiceImpl implements CircularService {
     @Override
     @Transactional
     public ResponseEntity<?> apply(Long circularId, ApplicantProfileDto applicantProfileDto,Principal principal) {
-        User user=userService.getUserByPrincipal(principal).orElseThrow();
-        System.out.println("hello 1");
-        ApplicantProfile applicantProfile=applicantProfileService.getByUser(user).orElseThrow();
-        System.out.println("hello 2");
-        Circular circular = circularRepository.findById(circularId).orElseThrow();
-        System.out.println("hello 3");
-        ScreeningRoundMeta screeningRoundMeta = screeningRoundMetaRepository.findByCircularId(circularId).orElseThrow();
-        System.out.println("hello 4");
-        Resource profilePicture=resourceRepository.findByIdAndOwnerId(applicantProfileDto.getProfileImageId(),user.getId()).orElseThrow();
-        System.out.println("hello 5");
-        Resource resume=resourceRepository.findByIdAndOwnerId(applicantProfileDto.getResumeId(),user.getId()).orElseThrow();
-        System.out.println("hello 6");
+        User user=userService.getUserByPrincipal(principal)
+                .orElseThrow(ApplicationPlacingFailedException::new);
+        ApplicantProfile applicantProfile=applicantProfileService.getByUser(user)
+                .orElseThrow(ApplicationPlacingFailedException::new);
+        Circular circular = circularRepository.findById(circularId)
+                .orElseThrow(ApplicationPlacingFailedException::new);
+        Optional<Application> applied = applicationRepository.findByCircularIdAndApplicantId(circularId, applicantProfile.getId());
+        if(applied.isPresent()){
+            throw  new ApplicationPlacingFailedException();
+        }
+        ScreeningRoundMeta screeningRoundMeta = screeningRoundMetaRepository.findByCircularId(circularId)
+                .orElseThrow(ApplicationPlacingFailedException::new);
+        Resource profilePicture=resourceRepository.findByIdAndOwnerId(applicantProfileDto.getProfileImageId(),user.getId())
+                .orElseThrow(ApplicationPlacingFailedException::new);
+        Resource resume=resourceRepository.findByIdAndOwnerId(applicantProfileDto.getResumeId(),user.getId())
+                .orElseThrow(ApplicationPlacingFailedException::new);
+
         Application application = Application.builder()
                 .applicant(applicantProfile)
                 .circular(circular)
@@ -128,7 +134,10 @@ public class CircularServiceImpl implements CircularService {
                 .appliedAt(new Timestamp(System.currentTimeMillis()))
                 .build();
         Application savedApplication = applicationRepository.save(application);
-        return ResponseEntity.ok(savedApplication);
+        savedApplication.setUniqueIdentifier(savedApplication.getId()+1000);
+        Application saved = applicationRepository.save(application);
+        saved.setUniqueIdentifier(null);
+        return ResponseEntity.ok(saved);
     }
 
     @Override

@@ -1,6 +1,4 @@
 import { Row, Col, Collapse, Card, Steps } from "antd";
-import AppliedChild from "./AppliedChild";
-import JobDescriptionCard from "../layouts/Jobdescription";
 import { useContext, useEffect, useState } from "react";
 import "../styles/Applied.css"
 import { AuthContext } from "../context/AuthContext";

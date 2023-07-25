@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Breadcrumb, Layout, Menu, Row, Typography, theme } from 'antd';
+import { Breadcrumb, Col, Layout, Menu, Row, Typography, theme } from 'antd';
 import { Route, Router, Routes } from 'react-router-dom';
 import AdminPanelMenuItem from '../components/AdminPanelMenuItem';
 import AdminNewCircular from '../layouts/admin/AdminNewCircular';
@@ -13,6 +13,7 @@ import AdminUpdateNotice from '../layouts/admin/AdminUpdateNotice';
 import AdminConfigureAdmit from '../layouts/admin/AdminConfigureAdmit';
 import AdminAllEvaluator from '../layouts/admin/AdminAllEvaluator';
 import NewEvaluator from '../components/evaluator/NewEvaluator';
+import DashBoard from '../layouts/admin/DashBoard';
 const { Content, Footer, Sider } = Layout;
 
 function AdminPanel() {
@@ -27,11 +28,14 @@ function AdminPanel() {
             }}
         >
             <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-                {/* <Row justify={"center"} style={{margin:"30px auto"}}> */}
-                <Row justify={"center"} style={{margin:"30px auto"}}>
-                <Typography.Title level={3}>
-                    TSS
-                </Typography.Title>
+                <Row justify={"center"} style={{ margin: "30px auto" }}>
+                    <Row style={{ border: "3px solid #fff", padding: "4px" }}>
+                        <Col style={{ textAlign: "center" }}>
+                            <Typography.Title level={4} style={{ margin: "0" }}>
+                                TSS
+                            </Typography.Title>
+                        </Col>
+                    </Row>
                 </Row>
                 <AdminPanelMenuItem />
             </Sider>
@@ -47,16 +51,7 @@ function AdminPanel() {
                     }}
                         items={[
                             {
-                                title: 'Home',
-                            },
-                            {
-                                title: <a href="">Application Center</a>,
-                            },
-                            {
-                                title: <a href="">Application List</a>,
-                            },
-                            {
-                                title: 'An Application',
+                                title: 'Greetings, Have a great day',
                             },
                         ]}
                     />
@@ -68,6 +63,7 @@ function AdminPanel() {
                         }}
                     >
                         <Routes >
+                            <Route path="/dashboard" element={<DashBoard />} />
                             <Route path="/circular/new" element={<AdminNewCircular />} />
                             <Route path="/circular/screening" element={<AdminCircularScreening />} />
                             <Route path="/circular/update" element={<AdminCircularUpdate />} />

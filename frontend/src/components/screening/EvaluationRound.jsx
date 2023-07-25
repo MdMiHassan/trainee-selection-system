@@ -7,10 +7,9 @@ import { AuthContext } from '../../context/AuthContext';
 
 
 const EvaluationRound = ({ circularId, roundId }) => {
-    const [rowId, setRowId] = useState(0);
+    const { token } = useContext(AuthContext);
     const [tableData, setTableData] = useState([]);
     const [selectedRowData, setSelectedRowData] = useState([]);
-    const { token } = useContext(AuthContext);
     const [modalVisible, setModalVisible] = useState(false);
     const [assignModalVisible, setAssignModalVisible] = useState(false);
     const [evaluators, setEvaluators] = useState([]);
@@ -227,7 +226,7 @@ const EvaluationRound = ({ circularId, roundId }) => {
     const handleModalAssign = () => {
         if (selectedEvaluatorId&&selectedRowData) {
             const enteredMark = parseFloat(selectedRowData.currentRoundMark);
-            fetch(API_BASE_URL + `/evaluators/${selectedEvaluatorId}/assign/candidates/${selectedRowData.uid}`, {
+            fetch(API_BASE_URL + `/evaluators/${selectedEvaluatorId}/candidates/assign?candidate=${selectedRowData.uid}&round=${roundId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -9,6 +9,7 @@ import com.example.tss.repository.ApplicantProfileRepository;
 import com.example.tss.repository.ApplicationRepository;
 import com.example.tss.repository.UserRepository;
 import com.example.tss.service.UserService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final ApplicantProfileRepository applicantProfileRepository;
     @Override
+    @Transactional
     public User save(User newUser) {
         String email = newUser.getEmail();
         String encodedPassword = passwordEncoder.encode(newUser.getPassword());
@@ -60,12 +62,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(userEmail);
     }
 
-    @Override
-    public Optional<User> getUserByApllication(Application application) {
-        ApplicantProfile applicant= applicantProfileRepository.findById(application.getId()).orElseThrow();
-        User user = applicant.getUser();
-        return userRepository.findById(user.getId());
-    }
 
     @Override
     public Optional<User> getById(Long id) {

@@ -315,8 +315,6 @@ public interface HTMLMold {
             </p>
             <span>The details of the next round are as follows:</span><br>
             <strong>Round: </strong> <span id="round-name">[Round Name]</span><br>
-            <strong>Date: </strong> <span id="round-date">[Round Date]</span><br>
-            <strong>Location: </strong> <span id="round-location">[Round Location/Online]</span><br>
             
             <p id="admit-instructions"></p>
             <p>Once again, congratulations on your achievement! We wish you all the best in this stage of the recruitment

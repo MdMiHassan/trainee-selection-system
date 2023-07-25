@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MarksDto {
-    @NotNull(message = "Circular Id is required")
-    private Long circularId;
     @NotNull(message = "Candidate Id is required")
     private Long candidateUid;
     @NotNull(message = "Mark is required")

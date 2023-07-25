@@ -18,7 +18,7 @@ const Openings = ({ title, type, closing, vacancy, circularId }) => {
         setIsCircularModalOpen(true);
     }
     return (
-        <Card>
+        <Card style={{marginBottom:"20px"}}>
             <Row>
                 <Col style={{ marginRight: "10px", paddingTop: "5px" }}>
                     <FileTextOutlined style={{ fontSize: '24px' }} />

@@ -30,15 +30,6 @@ public class ResourceServiceImpl implements ResourceService {
     private final UserRepository userRepository;
 
     @Override
-    public ResponseEntity<?> getById(Principal principal,Long resourceId) {
-        Resource fileResource = getResourceById(principal, resourceId);
-        MediaType mediaType = MediaTypeFactory.getMediaType(fileResource.getFileName()).orElseThrow();
-        return ResponseEntity.ok()
-                .contentType(mediaType)
-                .body(fileResource.getFileData());
-    }
-
-    @Override
     public ResponseEntity<?> getById(Long id) {
         Resource fileResource = resourceRepository.findById(id).orElseThrow();
         MediaType mediaType = MediaTypeFactory.getMediaType(fileResource.getFileName()).orElseThrow();
@@ -57,18 +48,6 @@ public class ResourceServiceImpl implements ResourceService {
                 .body(fileResource.getFileData());
     }
 
-    @Override
-    public ResponseEntity<?> getByIdAndResourceTypeAndOwnerId(Long resourceId, ResourceType resourceType, Long ownerId) {
-        Resource fileResource = resourceRepository.findByIdAndResourceTypeAndOwnerId(resourceId, resourceType, ownerId)
-                .orElseThrow(() -> new ResourceNotFoundException(resourceId.toString()));
-        Optional<MediaType> mediaType = MediaTypeFactory.getMediaType(fileResource.getFileName());
-        if (mediaType.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok()
-                .contentType(mediaType.get())
-                .body(fileResource.getFileData());
-    }
 
     @Override
     public ResponseEntity<?> uploadResource(Principal principal, MultipartFile multipartFile) {

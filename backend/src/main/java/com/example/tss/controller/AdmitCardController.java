@@ -11,7 +11,6 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/admits")
 @RequiredArgsConstructor
-//@CrossOrigin
 public class AdmitCardController {
     private final AdmitCardService admitCardService;
 

@@ -20,8 +20,6 @@ public class Evaluator {
     @ManyToOne
     private User user;
     @ManyToOne
-    private Circular circular;
-    @ManyToOne
     private ScreeningRound assignedRound;
     @ManyToOne
     private Application application;

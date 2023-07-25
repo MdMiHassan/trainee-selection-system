@@ -33,10 +33,7 @@ public class CircularDto {
     private String skills;
     @NotBlank(message = "Duties are required")
     private String duties;
-    @NotNull(message = "Salary is required")
-    @DecimalMin(value = "0.0", inclusive = false, message = "Salary must be greater than 0")
     private Float salary;
-    @NotBlank(message = "Currency is required")
     private String currency;
     @NotNull(message = "Minimum experience is required")
     @DecimalMin(value = "0.0", inclusive = false, message = "Minimum experience must be greater than 0")

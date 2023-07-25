@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Form, Input, Button, Row, Col, Card } from 'antd';
+import { Form, Input, Button, Row, Col, Card, message } from 'antd';
 import { API_BASE_URL } from '../Config';
 import { decodeToken, removeSortedToken } from '../utils/auth';
 import { AuthContext } from './AuthContext';
@@ -11,7 +11,7 @@ const LoginForm = () => {
     const { updateRole, updateToken } = useContext(AuthContext);
     const roleRedirections = {
         APPLICANT: '/',
-        ADMIN: '/admin',
+        ADMIN: '/admin/dashboard',
         EVALUATOR: '/evaluator'
     };
 
@@ -37,9 +37,11 @@ const LoginForm = () => {
                     console.log(role);
                     updateRole(role);
                     updateToken(data.token);
-                    const redirectionRoute = roleRedirections[role] || '/default';
+                    const redirectionRoute = roleRedirections[role] || '/404';
                     navigateTo(redirectionRoute)
+                    message.success("Succesfully Loged In");
                 } else {
+                    message.error("Login Failed");
                     console.error('Login response:', data);
                 }
             })

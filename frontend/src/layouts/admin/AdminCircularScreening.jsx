@@ -1,6 +1,5 @@
-import { EditOutlined, EllipsisOutlined, PoweroffOutlined, SettingOutlined, PlusOutlined } from "@ant-design/icons";
-import { Avatar, Button, Card, Col, Divider, Modal, Row, Select, Skeleton, Switch, Tabs, Typography, message } from "antd";
-import Meta from "antd/es/card/Meta";
+import { PlusOutlined } from "@ant-design/icons";
+import { Button, Col, Divider,Row, Select, Tabs, Typography, message } from "antd";
 import { useContext, useEffect, useState } from "react";
 import ApplicationScreening from "./screening/ApplicationScreening";
 import NewRoundForm from "../../components/forms/rounds/NewRoundForm";
@@ -45,7 +44,7 @@ function AdminCircularScreening() {
                 setCircularsOptions(options);
             })
             .catch((error) => {
-                message.error("Circular fetching failed")
+                message.error("Circular fetching failed");
             });
 
     }, [circularId, isModalOpen]);
@@ -64,10 +63,10 @@ function AdminCircularScreening() {
                     const fetchedRounds = data.rounds;
                     const sortedRounds = fetchedRounds ? fetchedRounds.sort((a, b) => a.serialNo - b.serialNo) : [];
                     setRounds(sortedRounds);
-                    message.success("Your Application received")
+                    message.success("Round data loaded successfully");
                 })
                 .catch((error) => {
-                    message.error("Application failed!")
+                    message.error("Failed to load round data!");
                 });
         }
     }, [circularId]);
@@ -79,9 +78,13 @@ function AdminCircularScreening() {
                 'Authorization': `Bearer ${token}`
             }
         })
-            .then((response) => response.json())
-            .then((data) => {
-                message.success("Successfully current round closed")
+            .then((response) => {
+                if(response.ok){
+                    setCircularId(circularId);
+                    message.success("Successfully current round closed");
+                }else{
+                    message.error("Something went wrong!")
+                }
             })
             .catch((error) => {
                 message.error("Something went wrong!")
