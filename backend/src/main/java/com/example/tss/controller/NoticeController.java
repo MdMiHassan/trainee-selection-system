@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/notices")
+@RequestMapping("/api/v1/notices")
 @RequiredArgsConstructor
 public class NoticeController {
     private final NoticeService noticeService;

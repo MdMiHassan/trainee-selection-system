@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/resource")
+@RequestMapping("/api/v1/resource")
 @RequiredArgsConstructor
 public class ResourceController {
     private final ResourceService resourceService;
