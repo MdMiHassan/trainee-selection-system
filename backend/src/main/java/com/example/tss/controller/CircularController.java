@@ -54,12 +54,6 @@ public class CircularController {
     public ResponseEntity<?> deleteCircular(@PathVariable Long circularId) {
         return circularService.delete(circularId);
     }
-
-    @GetMapping("/{circularId}/meta")
-    public ResponseEntity<?> getCircularMeta(@PathVariable Long circularId) {
-        return circularService.getCircularMeta(circularId);
-    }
-
     @PostMapping("/{circularId}/apply")
     public ResponseEntity<?> apply(@Valid @RequestBody ApplicantProfileDto applicantProfileDto, @PathVariable Long circularId, Principal principal) {
         return circularService.apply(circularId, applicantProfileDto, principal);

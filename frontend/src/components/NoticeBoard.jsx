@@ -1,9 +1,7 @@
-import { Card, Typography, List, Button, Row, Col, Divider, message } from 'antd';
+import { Card, Typography, List, Button, Row, Col, message } from 'antd';
 import { useContext, useEffect, useState } from 'react';
 import { API_BASE_URL } from '../Config';
 import { AuthContext } from '../context/AuthContext';
-
-const { Title } = Typography;
 
 const NoticeBoard = () => {
     const { token } = useContext(AuthContext);

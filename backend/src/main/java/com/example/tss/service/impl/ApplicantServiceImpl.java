@@ -3,9 +3,8 @@ package com.example.tss.service.impl;
 import com.example.tss.constants.ResourceType;
 import com.example.tss.constants.Role;
 import com.example.tss.dto.ApplicantProfileDto;
-import com.example.tss.dto.ApplicationDto;
+import com.example.tss.dto.ApplicationInfoDto;
 import com.example.tss.entity.*;
-import com.example.tss.exception.UserWithTheEmailAlreadyExistsException;
 import com.example.tss.model.ApplicantRegistrationRequest;
 import com.example.tss.model.ApplicantRegistrationResponse;
 import com.example.tss.repository.ApplicantProfileRepository;
@@ -88,15 +87,26 @@ public class ApplicantServiceImpl implements ApplicantService {
     public ResponseEntity<?> getAllApplications(Principal principal) {
         User user = userService.getUserByPrincipal(principal).orElseThrow();
         ApplicantProfile applicantProfile=applicantProfileRepository.getByUserId(user.getId()).orElseThrow();
-        List<Long> applications=applicationService.getAllApplicationsOfApplicant(applicantProfile.getId()).stream()
-                .map(application ->
-                    application.getCircular().getId()
+        List<ApplicationInfoDto> applicationInfoDtos=applicationService.getAllApplicationsOfApplicant(applicantProfile.getId()).stream()
+                .map(application ->{
+                    ScreeningRound currentRound = application.getCurrentRound();
+                    ApplicationInfoDto applicationInfoDto = ApplicationInfoDto.builder()
+                                    .applicationId(application.getId())
+                                    .circularId(application.getCircular().getId())
+                                    .currentRoundSerialNo(currentRound.getSerialNo())
+                                    .build();
+                    Boolean requiredAdmitCard = currentRound.getRequiredAdmitCard();
+                    Resource applicationAdmit = application.getAdmit();
+                    if(requiredAdmitCard!=null&&requiredAdmitCard){
+                        applicationInfoDto.setRequiredAdmitCard(true);
+                        applicationInfoDto.setCurrentRoundAdmitId(applicationAdmit.getId());
+                    }
+                    return applicationInfoDto;
+                }
+
                 ).toList();
 
-        return ResponseEntity.ok(ApplicationDto.builder()
-                        .count(applications.size())
-                        .message("Application Found")
-                        .circularIds(applications).build());
+        return ResponseEntity.ok(applicationInfoDtos);
     }
 
     public ResponseEntity<?> getApplicant(Long id) {

@@ -38,17 +38,6 @@ function ApplicantActivity() {
       <TabPane
         tab={
           <span className="tab-icon">
-            <i className="fa-regular fa-bookmark"></i>
-            Saved
-          </span>
-        }
-        key="saved"
-      >
-        <OpeningsListing />
-      </TabPane>
-      <TabPane
-        tab={
-          <span className="tab-icon">
             <i className="fa-regular fa-bell"></i>
             Notice
           </span>

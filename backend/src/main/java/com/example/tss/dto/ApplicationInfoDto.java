@@ -13,4 +13,8 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApplicationInfoDto {
     private Long currentRoundAdmitId;
+    private Long applicationId;
+    private Long circularId;
+    private Integer currentRoundSerialNo;
+    private Boolean requiredAdmitCard;
 }

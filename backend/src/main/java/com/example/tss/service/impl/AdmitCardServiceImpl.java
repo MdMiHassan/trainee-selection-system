@@ -1,14 +1,12 @@
 package com.example.tss.service.impl;
 
 import com.example.tss.dto.AdmitCardInfoDto;
-import com.example.tss.dto.ApplicationDto;
 import com.example.tss.dto.ApplicationInfoDto;
 import com.example.tss.exception.AdmitCardGenerationException;
 import com.example.tss.service.UserService;
 import com.example.tss.util.admit.AdmitCardMoldFactory;
 import com.example.tss.constants.ResourceType;
 import com.example.tss.entity.*;
-import com.example.tss.exception.AdmitCardGenerationFailedException;
 import com.example.tss.repository.*;
 import com.example.tss.service.AdmitCardService;
 import com.example.tss.service.ResourceService;

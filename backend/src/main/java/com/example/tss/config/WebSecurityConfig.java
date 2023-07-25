@@ -50,20 +50,20 @@ public class WebSecurityConfig{
                         .permitAll()
                         .requestMatchers("/api/v1/applicants/current/applications")
                         .hasAuthority(Role.APPLICANT.name())
-                        .requestMatchers(HttpMethod.POST,"/api/v1/circulars/{circularId}/apply","/api/v1/applicants/profile",
-                                "/api/v1/{circularId}/rounds/{roundId}/admits/generate")
+                        .requestMatchers(HttpMethod.POST,"/api/v1/circulars/{circularId}/apply","/api/v1/applicants/profile")
                         .hasAuthority(Role.APPLICANT.name())
                         .requestMatchers(HttpMethod.GET,"/api/v1/applicants/profile","/api/v1/admits/current/{circularId}")
                         .hasAuthority(Role.APPLICANT.name())
                         .requestMatchers("/api/v1/applicants", "/api/v1/applicants/{applicantId}", "/api/v1/applicants/{applicantId}/actions/lock"
                                 , "/api/v1/circulars/{circularId}/applications", "/api/v1/circulars/{circularId}/rounds/next/applications/{applicationId}/actions/approve"
-                                , "/api/v1/circulars/{circularId}/rounds/current/actions/end", "/api/v1/circulars/{circularId}/rounds"
-                                , "/api/v1/circulars/{circularId}/rounds/{roundId}", "/api/v1/circulars/{circularId}/rounds/{roundId}/candidates"
-                                , "/api/v1/circulars/{circularId}/rounds/{roundId}/candidates/{candidateId}"
+                                , "/api/v1/circulars/{circularId}/rounds/current/actions/end", "/api/v1/circulars/{circularId}/rounds/{roundId}",
+                                "/api/v1/circulars/{circularId}/rounds/{roundId}/candidates", "/api/v1/circulars/{circularId}/rounds/{roundId}/candidates/{candidateId}"
                                 , "/api/v1/evaluators","/api/v1/evaluators/{evaluatorId}/candidates/assign")
                         .hasAuthority(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.GET, "/api/v1/circulars/{circularId}","/api/v1/circulars/{circularId}/rounds")
+                        .hasAnyAuthority(Role.ADMIN.name(),Role.APPLICANT.name())
                         .requestMatchers(HttpMethod.POST, "/api/v1/info/{circularId}","/api/v1/circulars","/api/v1/circulars/{circularId}",
-                                "/api/v1/evaluators/{evaluatorId}/candidates")
+                                "/api/v1/evaluators/{evaluatorId}/candidates","/api/v1/circulars/{circularId}/rounds")
                         .hasAnyAuthority(Role.ADMIN.name())
                         .requestMatchers(HttpMethod.GET,"/api/v1/evaluators/{evaluatorId}/candidates")
                         .hasAuthority(Role.EVALUATOR.name())
@@ -71,8 +71,6 @@ public class WebSecurityConfig{
                         .hasAuthority(Role.EVALUATOR.name())
                         .requestMatchers("/api/v1/resource/upload")
                         .hasAnyAuthority(Role.ADMIN.name(), Role.APPLICANT.name())
-                        .requestMatchers(HttpMethod.GET, "/api/v1/circulars/{circularId}","/api/v1/circulars/{circularId}/meta")
-                        .hasAnyAuthority(Role.ADMIN.name(),Role.APPLICANT.name())
                         .anyRequest()
                         .authenticated()
                 )
