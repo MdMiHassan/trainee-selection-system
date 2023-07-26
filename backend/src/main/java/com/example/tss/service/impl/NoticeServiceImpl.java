@@ -36,12 +36,12 @@ public class NoticeServiceImpl implements NoticeService {
     @Override
     @Transactional
     public ResponseEntity<?> postNotice(Principal principal, NoticeDto noticeDto) {
-        String email=principal.getName();
-        User user=userService.getByEmail(email).orElseThrow();
-        if(!user.getRole().equals(Role.ADMIN)){
+        String email = principal.getName();
+        User user = userService.getByEmail(email).orElseThrow();
+        if (!user.getRole().equals(Role.ADMIN)) {
             return ResponseEntity.badRequest().build();
         }
-        Resource attachment=resourceService.getResourceById(principal,noticeDto.getAttachmentId());
+        Resource attachment = resourceService.getResourceById(principal, noticeDto.getAttachmentId());
         Notice notice = Notice.builder()
                 .title(noticeDto.getTitle())
                 .details(noticeDto.getDetails())

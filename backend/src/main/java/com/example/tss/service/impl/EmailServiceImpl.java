@@ -4,7 +4,6 @@ import com.example.tss.constants.molds.HTMLMold;
 import com.example.tss.entity.Application;
 import com.example.tss.entity.Circular;
 import com.example.tss.entity.ScreeningRound;
-import com.example.tss.entity.ScreeningRoundMeta;
 import com.example.tss.service.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -45,23 +44,23 @@ public class EmailServiceImpl implements EmailService {
             document.getElementById("applicant-name").text(applicantName);
             document.getElementById("job-position").text(circular.getTitle());
             String currentRoundTitle = currentRound.getTitle();
-            if(currentRoundTitle!=null){
+            if (currentRoundTitle != null) {
                 document.getElementById("round-name").text(currentRound.getTitle());
             }
             String location = currentRound.getLocation();
-            if(location!=null){
+            if (location != null) {
                 document.getElementById("round-location").text(currentRound.getLocation());
             }
             Timestamp examTime = currentRound.getExamTime();
-            if(examTime!=null){
+            if (examTime != null) {
                 document.getElementById("round-date").text(examTime.toString());
             }
             Boolean requiredAdmitCard = currentRound.getRequiredAdmitCard();
-            if(requiredAdmitCard!=null&&requiredAdmitCard){
+            if (requiredAdmitCard != null && requiredAdmitCard) {
                 document.getElementById("round-location").text("Please visit and download admit card from the portal");
             }
             String body = document.html();
-            sendEmail(userEmail,"You have been selected for the "+currentRound.getTitle(),body);
+            sendEmail(userEmail, "You have been selected for the " + currentRound.getTitle(), body);
         } catch (Exception e) {
             e.printStackTrace();
         }

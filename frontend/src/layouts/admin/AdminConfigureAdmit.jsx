@@ -63,10 +63,9 @@ function AdminConfigureAdmit() {
             {circularId ? <AdmitCardForm circularId={circularId} /> :
                 <Row justify={"center"}>
                     <Typography.Text style={{marginTop:"100px"}}>
-                        Please Select a circular for providing admitcard option
+                        Please Select a circular for providing admitcard info
                     </Typography.Text>
                 </Row>}
-
         </>);
 }
 

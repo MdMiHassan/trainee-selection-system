@@ -29,7 +29,7 @@ function AdminPanel() {
         >
             <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
                 <Row justify={"center"} style={{ margin: "30px auto" }}>
-                    <Row style={{ border: "3px solid #fff", padding: "4px" }}>
+                    <Row>
                         <Col style={{ textAlign: "center" }}>
                             <Typography.Title level={4} style={{ margin: "0" }}>
                                 TSS

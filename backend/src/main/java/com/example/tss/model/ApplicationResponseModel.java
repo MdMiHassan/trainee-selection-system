@@ -1,8 +1,6 @@
 package com.example.tss.model;
 
-import com.example.tss.dto.ApplicantProfileDto;
 import com.example.tss.dto.ScreeningRoundMarkDto;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ApplicationResponseModel {
     private Long id;
+    private Long uid;
     private String name;
     private String gender;
     private Date dateOfBirth;

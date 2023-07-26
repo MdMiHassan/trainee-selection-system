@@ -63,7 +63,7 @@ public class ApplicantServiceImpl implements ApplicantService {
         try {
             emailService.sendEmail(email,
                     "Email Verification Code",
-                    "Your Verification Code is <h1>"+savedEmailVerification.getVerificationCode()+"</h1>");
+                    "Your Verification Code is <h1>" + savedEmailVerification.getVerificationCode() + "</h1>");
             System.out.println("email sent");
         } catch (MessagingException e) {
             throw new RuntimeException(e);
@@ -86,23 +86,23 @@ public class ApplicantServiceImpl implements ApplicantService {
     @Override
     public ResponseEntity<?> getAllApplications(Principal principal) {
         User user = userService.getUserByPrincipal(principal).orElseThrow();
-        ApplicantProfile applicantProfile=applicantProfileRepository.getByUserId(user.getId()).orElseThrow();
-        List<ApplicationInfoDto> applicationInfoDtos=applicationService.getAllApplicationsOfApplicant(applicantProfile.getId()).stream()
-                .map(application ->{
-                    ScreeningRound currentRound = application.getCurrentRound();
-                    ApplicationInfoDto applicationInfoDto = ApplicationInfoDto.builder()
+        ApplicantProfile applicantProfile = applicantProfileRepository.getByUserId(user.getId()).orElseThrow();
+        List<ApplicationInfoDto> applicationInfoDtos = applicationService.getAllApplicationsOfApplicant(applicantProfile.getId()).stream()
+                .map(application -> {
+                            ScreeningRound currentRound = application.getCurrentRound();
+                            ApplicationInfoDto applicationInfoDto = ApplicationInfoDto.builder()
                                     .applicationId(application.getId())
                                     .circularId(application.getCircular().getId())
                                     .currentRoundSerialNo(currentRound.getSerialNo())
                                     .build();
-                    Boolean requiredAdmitCard = currentRound.getRequiredAdmitCard();
-                    Resource applicationAdmit = application.getAdmit();
-                    if(requiredAdmitCard!=null&&requiredAdmitCard){
-                        applicationInfoDto.setRequiredAdmitCard(true);
-                        applicationInfoDto.setCurrentRoundAdmitId(applicationAdmit.getId());
-                    }
-                    return applicationInfoDto;
-                }
+                            Boolean requiredAdmitCard = currentRound.getRequiredAdmitCard();
+                            Resource applicationAdmit = application.getAdmit();
+                            if (requiredAdmitCard != null && requiredAdmitCard) {
+                                applicationInfoDto.setRequiredAdmitCard(true);
+                                applicationInfoDto.setCurrentRoundAdmitId(applicationAdmit.getId());
+                            }
+                            return applicationInfoDto;
+                        }
 
                 ).toList();
 
@@ -161,11 +161,11 @@ public class ApplicantServiceImpl implements ApplicantService {
                 resumeId,
                 ResourceType.RESUME,
                 user.getId());
-        if(resume.isEmpty()||profileImage.isEmpty()){
+        if (resume.isEmpty() || profileImage.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
         ModelMapper modelMapper = new ModelMapper();
-        if(applicantProfileOptional.isEmpty()){
+        if (applicantProfileOptional.isEmpty()) {
             ApplicantProfile applicantProfile = modelMapper.map(applicantProfileDto, ApplicantProfile.class);
             profileImage.ifPresent(applicantProfile::setProfileImage);
             applicantProfile.setUser(user);
@@ -173,13 +173,13 @@ public class ApplicantServiceImpl implements ApplicantService {
             resume.ifPresent(applicantProfile::setResume);
             ApplicantProfile saved = applicantProfileRepository.save(applicantProfile);
             return ResponseEntity.ok(modelMapper.map(saved, ApplicantProfileDto.class));
-        }else{
-            ApplicantProfile applicantProfile=applicantProfileOptional.get();
+        } else {
+            ApplicantProfile applicantProfile = applicantProfileOptional.get();
             applicantProfileDto.setProfileImageId(null);
             applicantProfileDto.setResumeId(null);
             //have to fix foreign key constrain failed
             modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
-            modelMapper.map(applicantProfileDto,applicantProfile);
+            modelMapper.map(applicantProfileDto, applicantProfile);
             applicantProfile.setUser(user);
             profileImage.ifPresent(applicantProfile::setProfileImage);
             resume.ifPresent(applicantProfile::setResume);

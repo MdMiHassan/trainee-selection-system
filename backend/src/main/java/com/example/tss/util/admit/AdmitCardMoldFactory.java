@@ -16,7 +16,6 @@ public class AdmitCardMoldFactory {
     public AdmitCardMold getAdmitCardMold() {
         Document document = Jsoup.parse(HTMLMold.ADMIT_CARD);
         document.outputSettings().syntax( Document.OutputSettings.Syntax.xml);
-//        doc.select("a").unwrap();
         return new SimpleAdmitCardMold(document);
     }
 
@@ -185,11 +184,6 @@ public class AdmitCardMoldFactory {
                 admit.getElementById("applicantPhoto").attr("src", ImageUtils.encodeImageToBase64(applicantPhoto));
             }
             System.out.println("time to replace: " + (System.currentTimeMillis() - start));
-            return this;
-        }
-
-        public SimpleAdmitCardMold setExamLocation(String examLocation) {
-            this.examLocation = examLocation;
             return this;
         }
     }

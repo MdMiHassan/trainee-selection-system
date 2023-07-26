@@ -19,7 +19,7 @@ import java.util.Map;
 public class CodeGenerator {
 
     public BufferedImage generateQRCodeImage(String text, int width, int height)
-            throws WriterException, IOException {
+            throws WriterException {
         Map<EncodeHintType, Object> hintMap = new HashMap<>();
         hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
         hintMap.put(EncodeHintType.MARGIN, 0);
@@ -29,7 +29,7 @@ public class CodeGenerator {
     }
 
     public BufferedImage generateBarcodeImage(String text, int width, int height)
-            throws WriterException, IOException {
+            throws WriterException {
         Map<EncodeHintType, Object> hintMap = new HashMap<>();
         hintMap.put(EncodeHintType.MARGIN, 0);
         MultiFormatWriter barcodeWriter = new MultiFormatWriter();

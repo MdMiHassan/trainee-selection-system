@@ -18,6 +18,7 @@ public class Circular {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
+    @Column(length = 500)
     private String overview;
     @Enumerated(EnumType.STRING)
     private TrainingType trainingType;
@@ -27,7 +28,9 @@ public class Circular {
     @Enumerated(EnumType.STRING)
     private CareerLevel careerLevel;
     private Integer vacancy;
+    @Column(length = 1000)
     private String skills;
+    @Column(length = 1000)
     private String duties;
     private Float salary;
     private String currency;

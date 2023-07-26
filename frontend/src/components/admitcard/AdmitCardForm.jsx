@@ -44,7 +44,7 @@ const AdmitCardForm = ({ circularId }) => {
 
         <Row justify={"center"} style={{marginTop:"50px"}}>
             <Col>
-                <Card title={"Provide Admit Card Information For Current Round"}>
+                <Card title={"Provide Admit Card Information"}>
                     <Form form={form} layout="vertical" onFinish={onFinish}>
                         <Space.Compact>
                             <Form.Item label="Exam Date" name="examDate" rules={[{ required: true, message: 'Please select exam date' }]}>

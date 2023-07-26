@@ -13,8 +13,9 @@ public class FileUtils {
         }
         return "";
     }
+
     public static boolean isValidFileType(String type) {
-        List<String> validFileTypes = Arrays.asList("jpeg", "jpg", "png","pdf");
+        List<String> validFileTypes = Arrays.asList("jpeg", "jpg", "png", "pdf");
         return validFileTypes.contains(type);
     }
 }

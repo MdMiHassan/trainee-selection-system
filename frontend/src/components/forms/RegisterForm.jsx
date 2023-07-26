@@ -1,4 +1,4 @@
-import { Row, Col, Form, Input, Button, Select, DatePicker, Upload, message, Steps } from 'antd';
+import {  Form, Input, Button, message,} from 'antd';
 import '../../styles/RegisterForm.css';
 import { useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '../../Config';

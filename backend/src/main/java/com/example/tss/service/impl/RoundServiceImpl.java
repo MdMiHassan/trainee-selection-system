@@ -8,7 +8,9 @@ import com.example.tss.exception.RoundCreationException;
 import com.example.tss.model.ApplicationResponseModel;
 import com.example.tss.model.ScreeningRoundResponseModel;
 import com.example.tss.repository.*;
-import com.example.tss.service.*;
+import com.example.tss.service.AdmitCardService;
+import com.example.tss.service.EmailService;
+import com.example.tss.service.RoundService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -25,11 +27,9 @@ public class RoundServiceImpl implements RoundService {
     private final ApplicationRepository applicationRepository;
     private final ScreeningRoundMetaRepository screeningRoundMetaRepository;
     private final ScreeningMarksRepository screeningMarksRepository;
-    private final EvaluatorService evaluatorService;
     private final CircularRepository circularRepository;
     private final AdmitCardService admitCardService;
     private final EmailService emailService;
-    private final UserService userService;
 
     @Override
     public ResponseEntity<?> getAllRoundsUnderCircular(Long circularId) {

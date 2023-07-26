@@ -52,7 +52,7 @@ public class WebSecurityConfig{
                         .hasAuthority(Role.APPLICANT.name())
                         .requestMatchers(HttpMethod.POST,"/api/v1/circulars/{circularId}/apply","/api/v1/applicants/profile")
                         .hasAuthority(Role.APPLICANT.name())
-                        .requestMatchers(HttpMethod.GET,"/api/v1/applicants/profile","/api/v1/admits/current/{circularId}")
+                        .requestMatchers(HttpMethod.GET,"/api/v1/applicants/profile","/api/v1/admits/current/{circularId}","/api/v1/notices")
                         .hasAuthority(Role.APPLICANT.name())
                         .requestMatchers("/api/v1/applicants", "/api/v1/applicants/{applicantId}", "/api/v1/applicants/{applicantId}/actions/lock"
                                 , "/api/v1/circulars/{circularId}/applications", "/api/v1/circulars/{circularId}/rounds/next/applications/{applicationId}/actions/approve"
@@ -63,7 +63,7 @@ public class WebSecurityConfig{
                         .requestMatchers(HttpMethod.GET, "/api/v1/circulars/{circularId}","/api/v1/circulars/{circularId}/rounds")
                         .hasAnyAuthority(Role.ADMIN.name(),Role.APPLICANT.name())
                         .requestMatchers(HttpMethod.POST, "/api/v1/info/{circularId}","/api/v1/circulars","/api/v1/circulars/{circularId}",
-                                "/api/v1/evaluators/{evaluatorId}/candidates","/api/v1/circulars/{circularId}/rounds")
+                                "/api/v1/evaluators/{evaluatorId}/candidates","/api/v1/circulars/{circularId}/rounds","/api/v1/notices")
                         .hasAnyAuthority(Role.ADMIN.name())
                         .requestMatchers(HttpMethod.GET,"/api/v1/evaluators/{evaluatorId}/candidates")
                         .hasAuthority(Role.EVALUATOR.name())

@@ -8,24 +8,19 @@ function IndexGuard({ children }) {
         console.log("Token before checking: "+token);
         return token? true : false;
     };
-    const isApplicant = () => {
-        console.log("Role before checking: "+role);
-        return role === "APPLICANT";
-    }
-    console.log("index gurd is authenticated: "+isAuthenticated());
-    console.log("index gurd is applicant: "+isApplicant());
-    if (!isAuthenticated() || isApplicant()) {
-        console.log("Inside If!!")
-        return children;
-    }
-    console.log("Outeside IF!!")
-    switch (role) {
-        case "ADMIN":
-            return <Navigate to="/admin" />;
-        case "EVALUATOR":
-            return <Navigate to="/evaluator" />;
-        default:
-            return <Navigate to="/404" />;
+    if (isAuthenticated()) {
+        switch (role) {
+            case "APPLICANT":
+                return <Navigate to="/applicant" />;
+            case "ADMIN":
+                return <Navigate to="/admin" />;
+            case "EVALUATOR":
+                return <Navigate to="/evaluator" />;
+            default:
+                return <Navigate to="/404" />;
+        }
+    }else{
+        return <Navigate to="/login" />;
     }
 }
 

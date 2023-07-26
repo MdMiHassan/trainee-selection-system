@@ -2,22 +2,16 @@ import { Link } from 'react-router-dom';
 import { Menu } from 'antd';
 import {
   DashboardOutlined,
-  DesktopOutlined,
   FileTextOutlined,
   PlusOutlined,
   FileSearchOutlined,
   FileSyncOutlined,
   UnorderedListOutlined,
   NotificationOutlined,
-  MailOutlined,
-  CarryOutOutlined,
   ExperimentOutlined,
   IdcardOutlined,
   TeamOutlined,
   SafetyCertificateOutlined,
-  SubnodeOutlined,
-  UserOutlined,
-  FileOutlined,
 } from '@ant-design/icons';
 
 const items = [

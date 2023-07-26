@@ -15,9 +15,10 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class AdminServiceImpl implements AdminService {
+public class SimpleAdminService implements AdminService {
     private final UserService userService;
     private final AdminProfileRepository adminProfileRepository;
+
     @Override
     @Transactional
     public void createSuperAdmin() {
@@ -29,8 +30,8 @@ public class AdminServiceImpl implements AdminService {
                 .enabled(true)
                 .build();
         User savedUser = userService.save(superAdmin);
-        Optional<AdminProfile> adminProfileById=adminProfileRepository.findByUserId(savedUser.getId());
-        if(adminProfileById.isEmpty()) {
+        Optional<AdminProfile> adminProfileById = adminProfileRepository.findByUserId(savedUser.getId());
+        if (adminProfileById.isEmpty()) {
             adminProfileRepository.save(AdminProfile.builder()
                     .user(savedUser)
                     .firstName("Super")

@@ -6,12 +6,10 @@ import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import javax.security.auth.login.CredentialException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -50,18 +48,22 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleCredentialException(NoSuchElementException e) {
         return ResponseEntity.notFound().build();
     }
+
     @ExceptionHandler(AdmitCardGenerationFailedException.class)
     public ResponseEntity<?> handleAdmitCardGenerationFailedException(AdmitCardGenerationFailedException e) {
         return ResponseEntity.badRequest().body(ErrorMessage.ADMIT_CARD_GENERATION_FAILED);
     }
+
     @ExceptionHandler(ApplicationPlacingFailedException.class)
     public ResponseEntity<?> handleApplicationPlacingFailedException(ApplicationPlacingFailedException e) {
         return ResponseEntity.badRequest().body(ErrorMessage.FAILED_TO_PLACE_APPLICATION);
     }
+
     @ExceptionHandler(ApplicationApprovingFailedException.class)
     public ResponseEntity<?> handleApplicationApprovingFailedException(ApplicationApprovingFailedException e) {
         return ResponseEntity.badRequest().build();
     }
+
     @ExceptionHandler(ApplicantMarkUpdateFailedException.class)
     public ResponseEntity<?> handleApplicationApprovingFailedException(ApplicantMarkUpdateFailedException e) {
         return ResponseEntity.badRequest().build();

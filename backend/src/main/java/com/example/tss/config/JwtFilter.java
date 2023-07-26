@@ -22,7 +22,6 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
-
     private final JwtService jwtService;
 
     private String extractTokenFromRequest(HttpServletRequest serverHttpRequest) {

@@ -51,7 +51,7 @@ function NewRoundForm({ modalTitle, isModalOpen, setIsModalOpen, circularId }) {
             })
                 .then((response) => response.json())
                 .then((data) => {
-                    message.success("Round Added");
+                    message.success("Round Saved");
                     setIsModalOpen(false);
                 })
                 .catch((error) => {
@@ -101,13 +101,8 @@ function NewRoundForm({ modalTitle, isModalOpen, setIsModalOpen, circularId }) {
             <Card>
                 <Form
                     form={form}
-                    labelCol={{
-                        span: 10,
-                    }}
-                    wrapperCol={{
-                        span: 14,
-                    }}
-                    layout="horizontal"
+
+                    layout="vertical"
                     initialValues={{
                         size: componentSize,
                     }}
@@ -137,34 +132,36 @@ function NewRoundForm({ modalTitle, isModalOpen, setIsModalOpen, circularId }) {
                         </Select>
                     </Form.Item>
                     <Space.Compact>
-                        <Form.Item label="Marks"
+                        <Form.Item
+                            label="Max Mark"
                             maxMark="maxMark"
                         >
                             <InputNumber placeholder='maximum marks' />
                         </Form.Item>
                         <Form.Item
+                            label="Pass Mark"
                             passMark="passMark"
                         >
                             <InputNumber placeholder='pass marks' />
                         </Form.Item>
+                        <Form.Item
+                            label="Closing Date"
+
+                        >
+                            <DatePicker />
+                        </Form.Item>
+                        <Form.Item
+                            label="Admit"
+                            name="requiredAdmitCard"
+                            valuePropName="checked"
+                            style={{marginLeft:"15px"}}
+                        >
+                            <Switch />
+                        </Form.Item>
                     </Space.Compact>
-
-                    <Form.Item
-                        label="Closing Date"
-
-                    >
-                        <DatePicker />
-                    </Form.Item>
-                    <Form.Item
-                        label="Required Admit Card"
-                        name="requiredAdmitCard"
-                        valuePropName="checked"
-                    >
-                        <Switch />
-                    </Form.Item>
                 </Form>
             </Card>
-        </Modal>
+        </Modal >
 
     );
 };

@@ -1,16 +1,10 @@
 import { Avatar, Dropdown, Menu } from 'antd';
-import { UserOutlined, UploadOutlined } from '@ant-design/icons';
+import { UserOutlined} from '@ant-design/icons';
 import Logout from './auth/Logout';
 
 const AvatarDropdown = () => {
-    const handleMenuClick = (e) => {
-        if (e.key === 'logout') {
-            // Perform logout logic here
-        }
-    };
-
     const menu = (
-        <Menu onClick={handleMenuClick}>
+        <Menu>
             <Logout />
         </Menu>
     );

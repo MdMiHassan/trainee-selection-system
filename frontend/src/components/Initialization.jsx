@@ -2,7 +2,6 @@ import { useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { getStoredToken,decodeToken } from '../utils/auth';
 
-
 function Initialization() {
   const { updateRole, updateToken } = useContext(AuthContext);
   useEffect(() => {

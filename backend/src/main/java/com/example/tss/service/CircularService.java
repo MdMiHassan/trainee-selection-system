@@ -19,8 +19,6 @@ public interface CircularService {
 
     ResponseEntity<?> updateCircularById(Long id, CircularDto circularDto);
 
-    ResponseEntity<?> getAllApplicationsUnderCircular(Long id,Pageable pageable);
-
     ResponseEntity<?> delete(Long id);
 
     ResponseEntity<?> getApplicationByIdUnderCircular(Long circularId, Long applicationId);
@@ -32,8 +30,6 @@ public interface CircularService {
     Optional<Circular> getCircular(Long circularId);
 
     ResponseEntity<?> bookmarkCircular(Principal principal, Long circularId);
-
-    ResponseEntity<?> getCircularMeta(Long circularId);
 
     ResponseEntity<?> apply(Long circularId, ApplicantProfileDto applicantProfileDto, Principal principal);
 }

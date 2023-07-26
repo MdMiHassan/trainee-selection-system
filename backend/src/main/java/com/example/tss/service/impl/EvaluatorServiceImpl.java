@@ -8,7 +8,10 @@ import com.example.tss.dto.ScreeningRoundDto;
 import com.example.tss.entity.*;
 import com.example.tss.exception.ApplicantMarkUpdateFailedException;
 import com.example.tss.exception.EvaluatorAssigningFailedException;
-import com.example.tss.repository.*;
+import com.example.tss.repository.ApplicationRepository;
+import com.example.tss.repository.EvaluatorRepository;
+import com.example.tss.repository.ScreeningMarksRepository;
+import com.example.tss.repository.ScreeningRoundMetaRepository;
 import com.example.tss.service.EvaluatorService;
 import com.example.tss.service.UserService;
 import jakarta.transaction.Transactional;
@@ -77,15 +80,15 @@ public class EvaluatorServiceImpl implements EvaluatorService {
 
     @Override
     @Transactional
-    public ResponseEntity<?> assignEvaluatorToApplicants(Long evaluatorId, Long candidateId,Long assignedRoundId) {
+    public ResponseEntity<?> assignEvaluatorToApplicants(Long evaluatorId, Long candidateId, Long assignedRoundId) {
         User user = userService.getById(evaluatorId).orElseThrow();
         Application application = applicationRepository.findById(candidateId).orElseThrow(EvaluatorAssigningFailedException::new);
         Circular circular = application.getCircular();
         ScreeningRoundMeta screeningRoundMeta = screeningRoundMetaRepository.findByCircularId(circular.getId()).orElseThrow();
-        if(evaluatorRepository.existsByApplicationIdAndAssignedRoundId(application.getId(),assignedRoundId)){
+        if (evaluatorRepository.existsByApplicationIdAndAssignedRoundId(application.getId(), assignedRoundId)) {
             throw new EvaluatorAssigningFailedException();
         }
-        if(evaluatorRepository.existsByUserIdAndApplicationIdAndAssignedRoundId(user.getId(),application.getId(),assignedRoundId)){
+        if (evaluatorRepository.existsByUserIdAndApplicationIdAndAssignedRoundId(user.getId(), application.getId(), assignedRoundId)) {
             throw new EvaluatorAssigningFailedException();
         }
         ScreeningRound applicationCurrentRound = application.getCurrentRound();
@@ -103,22 +106,22 @@ public class EvaluatorServiceImpl implements EvaluatorService {
     }
 
     @Override
-    public ResponseEntity<?> updateAssignedApplicantsMarks(Principal principal,MarksDto marksDto) {
+    public ResponseEntity<?> updateAssignedApplicantsMarks(Principal principal, MarksDto marksDto) {
         User user = userService.getUserByPrincipal(principal)
                 .orElseThrow(ApplicantMarkUpdateFailedException::new);
         long applicationUid = marksDto.getCandidateUid();
         Application application = applicationRepository.findByUniqueIdentifier(applicationUid)
                 .orElseThrow(ApplicantMarkUpdateFailedException::new);
         Double totalMarks = marksDto.getTotalMarks();
-        long applicationId=application.getId();
-        Evaluator evaluator = evaluatorRepository.findByUserIdAndApplicationId(user.getId(),applicationId)
+        long applicationId = application.getId();
+        Evaluator evaluator = evaluatorRepository.findByUserIdAndApplicationId(user.getId(), applicationId)
                 .orElseThrow(ApplicantMarkUpdateFailedException::new);
         Circular circular = application.getCircular();
         ScreeningRoundMeta circularMeta = screeningRoundMetaRepository.findByCircularId(circular.getId())
                 .orElseThrow(ApplicantMarkUpdateFailedException::new);
-        ScreeningRound circularCurrentRound=circularMeta.getCurrentRound();
+        ScreeningRound circularCurrentRound = circularMeta.getCurrentRound();
         ScreeningRound assignedRound = evaluator.getAssignedRound();
-        if(circularCurrentRound.getSerialNo().intValue()!=assignedRound.getSerialNo().intValue()){
+        if (circularCurrentRound.getSerialNo().intValue() != assignedRound.getSerialNo().intValue()) {
             throw new ApplicantMarkUpdateFailedException();
         }
         Optional<ScreeningRoundMark> screeningRoundMarkOp = screeningMarksRepository.findByApplicationIdAndRoundId(applicationId, assignedRound.getId());

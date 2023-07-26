@@ -17,7 +17,6 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class JwtServiceImpl implements JwtService {
-
     private final Key SECRET_KEY;
 
     @Override

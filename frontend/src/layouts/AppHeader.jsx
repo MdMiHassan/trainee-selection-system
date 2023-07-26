@@ -47,10 +47,9 @@ function AppHeader() {
                 <div className="header-left">
                     <div className="header-logo">
                         <a className="flex-row flex-center" href="/">
-                            {/* <img src="/icon.svg" alt="" style={{ width: "150px" }}></img> */}
-                            <Row style={{border:"3px solid #fff",padding:"4px"}}>
-                                <Col style={{textAlign:"center"}}>
-                                    <Typography.Title level={4} style={{margin:"0"}}>
+                            <Row>
+                                <Col style={{ textAlign: "center" }}>
+                                    <Typography.Title level={4} style={{ margin: "0" }}>
                                         TSS
                                     </Typography.Title>
                                 </Col>

@@ -12,6 +12,7 @@ function AdminCircularScreening() {
     const [circularsOptions, setCircularsOptions] = useState([]);
     const [circularId, setCircularId] = useState(null);
     const [rounds, setRounds] = useState([]);
+    const [reloadRequired, setReloadRequired] = useState([]);
     const { token } = useContext(AuthContext);
     const handleChangeCircularSelect = (value) => {
         console.log(value);
@@ -63,13 +64,12 @@ function AdminCircularScreening() {
                     const fetchedRounds = data.rounds;
                     const sortedRounds = fetchedRounds ? fetchedRounds.sort((a, b) => a.serialNo - b.serialNo) : [];
                     setRounds(sortedRounds);
-                    message.success("Round data loaded successfully");
                 })
                 .catch((error) => {
-                    message.error("Failed to load round data!");
+                    message.error("Something went wrong!");
                 });
         }
-    }, [circularId]);
+    }, [circularId, isModalOpen]);
     const handleEndCurrentRound = (event) => {
         fetch(API_BASE_URL + `/circulars/${circularId}/rounds/current/actions/end`, {
             method: 'POST',
@@ -80,8 +80,9 @@ function AdminCircularScreening() {
         })
             .then((response) => {
                 if(response.ok){
+                    setReloadRequired(!reloadRequired);
                     setCircularId(circularId);
-                    message.success("Successfully current round closed");
+                    message.success("Current Round Closed Successfully");
                 }else{
                     message.error("Something went wrong!")
                 }
@@ -133,7 +134,7 @@ function AdminCircularScreening() {
             </Col>
         </Row>
         <Row>
-            <CircularRounds circularId={circularId} />
+            <CircularRounds circularId={circularId} isModalOpen={isModalOpen} reloadRequired={reloadRequired}/>
         </Row>
         <Divider></Divider>
         <Typography.Title level={5}>

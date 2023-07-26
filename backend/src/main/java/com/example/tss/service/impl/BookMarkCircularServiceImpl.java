@@ -15,18 +15,19 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BookMarkCircularServiceImpl implements BookMarkCircularService {
     private final BookMarkCircularRepository bookMarkCircularRepository;
+
     @Override
     @Transactional
     public void toggleBookMark(User user, Circular circular) {
-        Optional<BookMarkCircular> bookMarkCircular=bookMarkCircularRepository.findByUserIdAndCircularId(user.getId(),circular.getId());
-        if(bookMarkCircular.isEmpty()){
+        Optional<BookMarkCircular> bookMarkCircular = bookMarkCircularRepository.findByUserIdAndCircularId(user.getId(), circular.getId());
+        if (bookMarkCircular.isEmpty()) {
             bookMarkCircularRepository.save(
                     BookMarkCircular.builder()
                             .user(user)
                             .circular(circular)
                             .build()
             );
-        }else{
+        } else {
             bookMarkCircularRepository.delete(bookMarkCircular.get());
         }
     }

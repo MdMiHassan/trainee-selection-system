@@ -1,10 +1,7 @@
-
-
 import React, { useContext, useEffect, useState } from 'react';
 import { Input, Modal, Select, Switch, Table, message } from 'antd';
 import { API_BASE_URL } from "../../Config";
 import { AuthContext } from '../../context/AuthContext';
-
 
 const EvaluationRound = ({ circularId, roundId }) => {
     const { token } = useContext(AuthContext);
@@ -14,7 +11,72 @@ const EvaluationRound = ({ circularId, roundId }) => {
     const [assignModalVisible, setAssignModalVisible] = useState(false);
     const [evaluators, setEvaluators] = useState([]);
     const [selectedEvaluatorId, setSelectedEvaluatorId] = useState(null);
-
+    const [reloadRequired,setReloadRequired]=useState(false);
+    const additionalColumns = Object.keys(tableData[0] || {}).filter(key =>
+        key !== 'uid' &&
+        key !== 'fullName' &&
+        key !== 'currentRoundMark' &&
+        key !== 'totalMark' &&
+        key !== 'key' &&
+        key !== 'gender'
+    ).map(key => ({
+        title: key,
+        dataIndex: key,
+        key: key,
+        width: 20,
+        sorter: (a, b) => a[key] - b[key],
+    }));
+    const columns = [
+        {
+            title: 'Uniqe Id',
+            width: 5,
+            dataIndex: 'uid',
+            key: 'uid',
+        },
+        {
+            title: 'Full Name',
+            width: 25,
+            dataIndex: 'fullName',
+            key: 'name',
+        },
+        ...additionalColumns,
+        {
+            title: 'Total Mark',
+            key: 'totalMark',
+            fixed: 'right',
+            dataIndex: 'totalMark',
+            width: 5
+        },
+        {
+            title: 'Evaluator',
+            key: 'evaluator',
+            fixed: 'right',
+            dataIndex: 'evaluator',
+            width: 5,
+            render: (_, rowData) => (
+                <a onClick={() => showAssignModal(rowData)}>Assign</a>
+            ),
+        },
+        {
+            title: 'Mark Entry',
+            key: 'enterMark',
+            fixed: 'right',
+            dataIndex: 'enterMark',
+            width: 5,
+            render: (_, rowData) => (
+                <a onClick={() => showModal(rowData)}>Enter Mark</a>
+            ),
+        },
+        {
+            title: 'Next Round',
+            key: 'operation',
+            fixed: 'right',
+            width: 5,
+            render: (text, record) => (
+                <a onClick={() => handleInvite(record.uid)}>Invite</a>
+            ),
+        },
+    ];
     useEffect(() => {
         const fetchData = async () => {
             fetch(API_BASE_URL + '/circulars/' + circularId + '/rounds/' + roundId + '/candidates', {
@@ -32,7 +94,8 @@ const EvaluationRound = ({ circularId, roundId }) => {
                         let totalMark = 0;
                         const rowMarkData = roundMarks.reduce((acc, marks) => {
                             totalMark += marks.mark;
-                            acc[`${marks.roundId}`] = marks.mark;
+                            let key = marks.title.replace(/\s/g, "");
+                            acc[`${key}`] = marks.mark;
                             return acc;
                         }, {});
 
@@ -53,125 +116,10 @@ const EvaluationRound = ({ circularId, roundId }) => {
                 .catch((error) => {
                     message.error("Round Data Fetching Fialed!")
                 });
-
         };
         fetchData();
-    }, []);
-    const additionalColumns = Object.keys(tableData[0] || {}).filter(key =>
-        key !== 'uid' &&
-        key !== 'fullName' &&
-        key !== 'currentRoundMark' &&
-        key !== 'totalMark' &&
-        key !== 'key' &&
-        key !== 'gender'
-    ).map(key => ({
-        title: key,
-        dataIndex: key,
-        key: key,
-        width: 20,
-        sorter: (a, b) => a[key] - b[key],
-    }));
+    }, [reloadRequired]);
 
-    console.log("Aditional Column " + JSON.stringify(additionalColumns))
-
-    const columns = [
-        {
-            title: 'Uniqe Id',
-            width: 20,
-            dataIndex: 'uid',
-            key: 'uid',
-            fixed: 'left',
-        },
-        {
-            title: 'Full Name',
-            width: 100,
-            dataIndex: 'fullName',
-            key: 'name',
-            fixed: 'left',
-        },
-        ...additionalColumns,
-        {
-            title: 'Current Round Mark',
-            key: 'currentRoundMark',
-            fixed: 'right',
-            dataIndex: 'currentRoundMark',
-            width: 20,
-        },
-        {
-            title: 'Total Mark',
-            key: 'totalMark',
-            fixed: 'right',
-            dataIndex: 'totalMark',
-            width: 20
-        },
-        {
-            title: 'Evaluator',
-            key: 'evaluator',
-            fixed: 'right',
-            dataIndex: 'evaluator',
-            width: 20,
-            render: (_, rowData) => (
-                <a onClick={() => showAssignModal(rowData)}>Assign</a>
-            ),
-        },
-        {
-            title: 'Mark Entry',
-            key: 'enterMark',
-            fixed: 'right',
-            dataIndex: 'enterMark',
-            width: 20,
-            render: (_, rowData) => (
-                <a onClick={() => showModal(rowData)}>Enter Mark</a>
-            ),
-        },
-        {
-            title: 'Next Round',
-            key: 'operation',
-            fixed: 'right',
-            width: 20,
-            render: (text, record) => (
-                <a onClick={() => handleInvite(record.uid)}>Invite</a>
-            ),
-        },
-    ];
-    console.log("All Column " + JSON.stringify(columns))
-    console.log(columns);
-    const showAssignModal = (rowData) => {
-        setSelectedRowData(rowData);
-        setAssignModalVisible(true);
-    }
-    const showModal = (rowData) => {
-        setSelectedRowData(rowData);
-        setModalVisible(true);
-    };
-    const handleInvite = (applicationId) => {
-        fetch(
-            API_BASE_URL +
-            `/circulars/${circularId}/rounds/next/applications/${applicationId}/actions/invite`,
-            {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
-            }
-        )
-            .then((response) => {
-                if (response.ok) {
-                    message.success('Invitation sent successfully.');
-                } else {
-                    message.error('Failed to send invitation.');
-                }
-            })
-            .catch((error) => {
-                console.error('Error sending invitation:', error);
-                message.error('An error occurred while sending the invitation.');
-            });
-    };
-
-    const handleEvaluatorChange = (value) => {
-        setSelectedEvaluatorId(value);
-    };
     useEffect(() => {
         fetch(API_BASE_URL + '/evaluators', {
             method: 'GET',
@@ -188,6 +136,32 @@ const EvaluationRound = ({ circularId, roundId }) => {
                 console.error('Failed to fetch evaluators:', error);
             });
     }, [assignModalVisible]);
+
+    const handleInvite = (applicationId) => {
+        fetch(
+            API_BASE_URL +
+            `/circulars/${circularId}/rounds/next/applications/${applicationId}/actions/invite`,
+            {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            }
+        )
+            .then((response) => {
+                if (response.ok) {
+                    message.success('Invitation sent successfully.');
+                    setReloadRequired(!reloadRequired);
+                } else {
+                    message.error('Failed to send invitation.');
+                }
+            })
+            .catch((error) => {
+                console.error('Error sending invitation:', error);
+                message.error('An error occurred while sending the invitation.');
+            });
+    };
     const handleModalSave = () => {
         if (selectedRowData) {
             const enteredMark = parseFloat(selectedRowData.currentRoundMark);
@@ -211,6 +185,7 @@ const EvaluationRound = ({ circularId, roundId }) => {
                         setModalVisible(false);
                         setSelectedRowData(null);
                         message.success("Mark Updated successfully");
+                        setReloadRequired(!reloadRequired);
                     } else {
                         message.error("Failed to save mark");
                     }
@@ -224,7 +199,7 @@ const EvaluationRound = ({ circularId, roundId }) => {
         }
     };
     const handleModalAssign = () => {
-        if (selectedEvaluatorId&&selectedRowData) {
+        if (selectedEvaluatorId && selectedRowData) {
             const enteredMark = parseFloat(selectedRowData.currentRoundMark);
             fetch(API_BASE_URL + `/evaluators/${selectedEvaluatorId}/candidates/assign?candidate=${selectedRowData.uid}&round=${roundId}`, {
                 method: 'POST',
@@ -262,7 +237,17 @@ const EvaluationRound = ({ circularId, roundId }) => {
         setAssignModalVisible(false);
         setSelectedRowData(null);
     };
-
+    const handleEvaluatorChange = (value) => {
+        setSelectedEvaluatorId(value);
+    };
+    const showAssignModal = (rowData) => {
+        setSelectedRowData(rowData);
+        setAssignModalVisible(true);
+    }
+    const showModal = (rowData) => {
+        setSelectedRowData(rowData);
+        setModalVisible(true);
+    };
     return (
         <>
             <Table

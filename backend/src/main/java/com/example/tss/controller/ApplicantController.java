@@ -15,7 +15,6 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/api/v1/applicants")
 @RequiredArgsConstructor
-@CrossOrigin
 public class ApplicantController {
     private final ApplicantService applicantService;
     private final AuthenticationService authenticationService;

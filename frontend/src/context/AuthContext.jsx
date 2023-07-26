@@ -23,9 +23,7 @@ function AuthProvider({ children }) {
 
     useEffect(() => {
         checkTokenExpiry();
-        return () => {
-            // cleanup if needed
-        };
+        return () => {};
     }, []);
 
     const checkTokenExpiry = () => {

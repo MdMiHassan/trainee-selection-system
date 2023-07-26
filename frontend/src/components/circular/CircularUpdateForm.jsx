@@ -1,58 +1,36 @@
-import { Alert, Card, DatePicker, Space, message } from "antd";
-import { API_BASE_URL } from "../../Config";
-import {
-    Button,
-    Col,
-    Form,
-    Input,
-    InputNumber,
-    Row,
-    Select,
-} from 'antd';
+import { Button, Card, Col, DatePicker, Form, Input, InputNumber, Row, Select, Space } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import React, { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from "react";
+import { API_BASE_URL } from "../../Config";
 import { AuthContext } from "../../context/AuthContext";
-const { Option } = Select;
-const formItemLayout = {
-    labelCol: {
-        xs: {
-            span: 24,
-        },
-        sm: {
-            span: 8,
-        },
-    },
-    wrapperCol: {
-        xs: {
-            span: 24,
-        },
-        sm: {
-            span: 16,
-        },
-    },
-};
-const tailFormItemLayout = {
-    wrapperCol: {
-        xs: {
-            span: 24,
-            offset: 0,
-        },
-        sm: {
-            span: 16,
-            offset: 8,
-        },
-    },
-};
-function AdminNewCircular() {
+
+function CircularUpdateForm({ circularId }) {
     const [overview, setOverview] = useState('');
     const [duties, setDuties] = useState('');
     const [skills, setSkills] = useState('');
-    const [form] = Form.useForm();
     const { token } = useContext(AuthContext);
+    const [form] = Form.useForm();
+    useEffect(() => {
+        fetch(API_BASE_URL + `/circulars/${circularId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                form.setFieldsValue(data);
+            })
+            .catch((error) => {
+                message.error("Something Went Wrong");
+                console.log(error);
+            });
+    }, [circularId])
     const onFinish = (values) => {
         const {
             title,
-            closingDate,
+            // closingDate,
             trainingType,
             careerLevel,
             requiredEducation,
@@ -66,7 +44,7 @@ function AdminNewCircular() {
 
         const circularData = {
             title,
-            closingDate,
+            // closingDate,
             overview,
             trainingType,
             vacancy,
@@ -81,16 +59,16 @@ function AdminNewCircular() {
             maxExp
         };
         console.log(JSON.stringify(circularData));
-        fetch(API_BASE_URL + '/circulars', {
-            method: 'POST',
+        fetch(API_BASE_URL + `/circulars${circularId}`, {
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(circularData)
         })
-            .then((response) =>  {
-                if(response.ok){
+            .then((response) => {
+                if (response.ok) {
                     message.success("Circular posted");
                 }
             })
@@ -101,15 +79,15 @@ function AdminNewCircular() {
     };
     const formItemLayout = {
         labelCol: {
-          xs: { span: 24 },
-          sm: { span: 8 }, 
+            xs: { span: 24 },
+            sm: { span: 8 },
         },
         wrapperCol: {
-          xs: { span: 24 },
-          sm: { span: 16 },
+            xs: { span: 24 },
+            sm: { span: 16 },
         },
-      };
-    return (<Card title="New Circular">
+    };
+    return (<Card>
         <Row justify={'center'}>
             <Col span={15}>
                 <Form
@@ -170,47 +148,47 @@ function AdminNewCircular() {
                             <Option value="ENTRY">ENTRY</Option>
                         </Select>
                     </Form.Item>
-                        <Form.Item
-                            name="vacancy"
-                            label="Vacancy"
-                            colon={false}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Please input vacency!',
-                                },
-                            ]}
-                            style={{ width: '200px' }}
-                        >
-                            <InputNumber style={{ width: '410px' }}/>
+                    <Form.Item
+                        name="vacancy"
+                        label="Vacancy"
+                        colon={false}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input vacency!',
+                            },
+                        ]}
+                        style={{ width: '200px' }}
+                    >
+                        <InputNumber style={{ width: '405px' }} />
 
-                        </Form.Item>
-                        <Form.Item
-                            name="closingDate"
-                            label="Closing Date"
-                            colon={false}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Please select closing date!',
-                                },
-                            ]}
-                            
-                        >
-                            <DatePicker style={{ width: '410px' }}/>
-                        </Form.Item>
+                    </Form.Item>
+                    {/* <Form.Item
+                        name="closingDate"
+                        label="Closing Date"
+                        colon={false}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please select closing date!',
+                            },
+                        ]}
+
+                    >
+                        <DatePicker style={{ width: '480px' }} />
+                    </Form.Item> */}
                     <Space.Compact>
                         <Form.Item
                             name="minExp"
                             colon={false}
                             label="Minumum Experience">
-                            <InputNumber placeholder="Minimum" style={{ width: '206px' }}/>
+                            <InputNumber placeholder="Minimum" style={{ width: '200px' }} />
                         </Form.Item>
                         <Form.Item
                             name="maxExp"
                             colon={false}
                             label="Maximum Experience">
-                            <InputNumber placeholder="Maximum" style={{ width: '206px' }}/>
+                            <InputNumber placeholder="Maximum" style={{ width: '205px' }} />
                         </Form.Item>
                     </Space.Compact>
                     <Form.Item
@@ -319,16 +297,15 @@ function AdminNewCircular() {
                             <Option value="ANY">Any</Option>
                         </Select>
                     </Form.Item>
-                    <Form.Item {...tailFormItemLayout} wrapperCol={{ span: 16 }} style={{ textAlign: 'right' }}>
+                    <Form.Item wrapperCol={{ span: 16 }} style={{ textAlign: 'right' }}>
                         <Button type="primary" htmlType="submit">
                             Post
                         </Button>
                     </Form.Item>
                 </Form>
-
             </Col>
         </Row>
     </Card>);
 }
 
-export default AdminNewCircular;
+export default CircularUpdateForm;

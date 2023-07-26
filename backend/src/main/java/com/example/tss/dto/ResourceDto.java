@@ -1,7 +1,6 @@
-package com.example.tss.entity;
+package com.example.tss.dto;
 
-import com.example.tss.constants.ResourceType;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,21 +9,15 @@ import lombok.NoArgsConstructor;
 import java.sql.Timestamp;
 
 @Data
-@Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Resource {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ResourceDto {
     private Long id;
-    @Lob
-    @Column(columnDefinition = "LONGBLOB")
     private byte[] fileData;
-    @ManyToOne
-    private User owner;
-    @Enumerated(EnumType.STRING)
-    private ResourceType resourceType;
+    private Long ownerId;
+    private String ownerUsername;
+    private String resourceType;
     private Boolean fileRead;
     private Boolean fileWrite;
     private Boolean fileDelete;

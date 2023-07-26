@@ -73,7 +73,7 @@ function ApplyModal({ isApplyModalOpen, setIsApplyModalOpen, circularId }) {
                     setIsApplyModalOpen(false)
                 })
                 .catch((error) => {
-                    message.error("Application failed!")
+                    message.error("Failed to apply!")
                 });
         });
     };

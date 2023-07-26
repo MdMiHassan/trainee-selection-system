@@ -18,7 +18,7 @@ function AdminAllNotices() {
         const fetchData = async () => {
             setLoading(true);
             try {
-                fetch(API_BASE_URL + '/v1/notices')
+                fetch(API_BASE_URL + '/notices')
                     .then((response) => response.json())
                     .then((data) => {
                         const tableRows = data.content;

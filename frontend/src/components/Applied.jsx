@@ -1,10 +1,9 @@
-import { Row, Col, Collapse, Card, Steps } from "antd";
+import { Row, Col} from "antd";
 import { useContext, useEffect, useState } from "react";
 import "../styles/Applied.css"
 import { AuthContext } from "../context/AuthContext";
 import AppliedCard from "./apply/AppliedCard";
 import { API_BASE_URL } from "../Config";
-const application = null;
 
 function Applied() {
     const { token } = useContext(AuthContext);

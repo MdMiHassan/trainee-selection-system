@@ -17,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -29,10 +28,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtService jwtService;
     private final EmailVerificationRepository emailVerificationRepository;
     private final UserRepository userRepository;
+
     @Override
     @Transactional
-    public ResponseEntity<?> login(String email, String password){
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email,password));
+    public ResponseEntity<?> login(String email, String password) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
         if (!authentication.isAuthenticated()) {
             return ResponseEntity.badRequest().body(AuthenticationResponse.builder()
                     .success(false)
@@ -54,22 +54,22 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     public ResponseEntity<?> login(AuthenticationRequest authenticationRequest) {
-        return login(authenticationRequest.getEmail(),authenticationRequest.getPassword());
+        return login(authenticationRequest.getEmail(), authenticationRequest.getPassword());
     }
 
     @Override
     @Transactional
     public ResponseEntity<?> verifyEmail(EmailVerificationRequest emailVerificationRequest) {
-        String email=emailVerificationRequest.getEmail();
+        String email = emailVerificationRequest.getEmail();
         String counterVerificationCode = emailVerificationRequest.getVerificationCode();
         Optional<EmailVerification> verificationEntityByEmail = emailVerificationRepository.findByEmail(email);
         Optional<User> userByEmail = userRepository.findByEmail(email);
-        if (verificationEntityByEmail.isPresent()&&userByEmail.isPresent()){
+        if (verificationEntityByEmail.isPresent() && userByEmail.isPresent()) {
             EmailVerification emailVerificationEntity = verificationEntityByEmail.get();
             User user = userByEmail.get();
             String verificationCode = emailVerificationEntity.getVerificationCode();
 
-            if(!emailVerificationEntity.isVerified()&&verificationCode.equals(counterVerificationCode)){
+            if (!emailVerificationEntity.isVerified() && verificationCode.equals(counterVerificationCode)) {
                 emailVerificationEntity.setVerified(true);
                 user.setEmailVerified(true);
                 userRepository.save(user);

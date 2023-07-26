@@ -1,12 +1,10 @@
-import { EditFilled } from "@ant-design/icons";
-import { Button, Card, Col, Input, Modal, Row, Switch, Typography, message } from "antd";
+import {Row,message } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { API_BASE_URL } from "../../Config";
 import { AuthContext } from "../../context/AuthContext";
-import { Form } from "react-router-dom";
 import CircularRoundCard from "./CircularRoundCard";
 
-function CircularRounds({ circularId }) {
+function CircularRounds({ circularId,isModalOpen,reloadRequired }) {
     const [roundData, setRoundData] = useState([]);
     const [currentRoundSerialNo, setCurrentRoundSerialNo] = useState(3);
     const { token } = useContext(AuthContext);
@@ -30,10 +28,10 @@ function CircularRounds({ circularId }) {
                     console.log(sortedRoundData);
                 })
                 .catch((error) => {
-                    message.error("Round data fatching failed!")
+                    message.error("Round data fetching failed!")
                 });
         }
-    }, [circularId]);
+    }, [circularId,isModalOpen,reloadRequired]);
     return (
         <Row>
                 {roundData ? (

@@ -19,20 +19,13 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/api/v1/circulars")
 @RequiredArgsConstructor
-@CrossOrigin
 public class CircularController {
     private final CircularService circularService;
-    private final ApplicationService applicationService;
     private final RoundService roundService;
-    private final AdmitCardService admitCardService;
 
     @GetMapping
     public Page<?> getAllCirculars(Pageable pageable) {
         return circularService.getAllCircular(pageable);
-    }
-
-    public ResponseEntity<?> getAllCirculars() {
-        return circularService.getAllCircular();
     }
 
     @GetMapping("/{circularId}")
@@ -54,6 +47,7 @@ public class CircularController {
     public ResponseEntity<?> deleteCircular(@PathVariable Long circularId) {
         return circularService.delete(circularId);
     }
+
     @PostMapping("/{circularId}/apply")
     public ResponseEntity<?> apply(@Valid @RequestBody ApplicantProfileDto applicantProfileDto, @PathVariable Long circularId, Principal principal) {
         return circularService.apply(circularId, applicantProfileDto, principal);
@@ -62,11 +56,6 @@ public class CircularController {
     @PostMapping("/{circularId}/bookmark/toggle")
     public ResponseEntity<?> bookmarkCircular(Principal principal, @PathVariable Long circularId) {
         return circularService.bookmarkCircular(principal, circularId);
-    }
-
-    @GetMapping("/{circularId}/applications")
-    public ResponseEntity<?> getAllApplicationsUnderCircular(@PathVariable Long circularId, Pageable pageable) {
-        return circularService.getAllApplicationsUnderCircular(circularId, pageable);
     }
 
     @GetMapping("/{circularId}/applications/{applicationId}")
@@ -109,8 +98,8 @@ public class CircularController {
                                                @PathVariable Long roundId,
                                                @PathVariable Long candidateId,
                                                @RequestParam Float mark) {
-        System.out.println("mark "+mark);
-        return roundService.saveCandidateMark(circularId,roundId,candidateId,mark );
+        System.out.println("mark " + mark);
+        return roundService.saveCandidateMark(circularId, roundId, candidateId, mark);
     }
 
     @PatchMapping("/{circularId}/rounds/{roundId}")

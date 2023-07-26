@@ -1,12 +1,13 @@
 package com.example.tss.controller;
 
 import com.example.tss.dto.AdmitCardInfoDto;
+import com.example.tss.dto.ResourceDto;
 import com.example.tss.service.AdmitCardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
+import org.springframework.http.MediaTypeFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/v1/admits")
@@ -16,10 +17,16 @@ public class AdmitCardController {
 
     @GetMapping("/verify/{admitCardId}")
     public ResponseEntity<?> verify(@PathVariable Long admitCardId) {
-        return admitCardService.retrieveAdmit(admitCardId);
+        ResourceDto fileResource = admitCardService.retrieveAdmit(admitCardId);
+        MediaType mediaType = MediaTypeFactory.getMediaType(fileResource.getFileName()).orElseThrow();
+        return ResponseEntity.ok()
+                .contentType(mediaType)
+                .body(fileResource.getFileData());
     }
+
     @PostMapping("/info/{circularId}")
     public ResponseEntity<?> saveInfo(@PathVariable Long circularId, @RequestBody AdmitCardInfoDto admitCardInfoDto) {
-        return admitCardService.saveAdmitInfo(circularId,admitCardInfoDto);
+        AdmitCardInfoDto savedAdmitCardInfoDto = admitCardService.saveAdmitInfo(circularId, admitCardInfoDto);
+        return ResponseEntity.ok(savedAdmitCardInfoDto);
     }
 }

@@ -1,12 +1,8 @@
 package com.example.tss.service.impl;
 
 import com.example.tss.constants.Role;
-import com.example.tss.entity.ApplicantProfile;
-import com.example.tss.entity.Application;
 import com.example.tss.entity.User;
-import com.example.tss.exception.UserWithTheEmailAlreadyExistsException;
 import com.example.tss.repository.ApplicantProfileRepository;
-import com.example.tss.repository.ApplicationRepository;
 import com.example.tss.repository.UserRepository;
 import com.example.tss.service.UserService;
 import jakarta.transaction.Transactional;
@@ -24,7 +20,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final ApplicantProfileRepository applicantProfileRepository;
+
     @Override
     @Transactional
     public User save(User newUser) {
@@ -42,7 +38,7 @@ public class UserServiceImpl implements UserService {
                     .expiredAt(newUser.getExpiredAt())
                     .build());
         }
-        User oldUser =userByEmail.get();
+        User oldUser = userByEmail.get();
         oldUser.setEmail(email);
         oldUser.setPassword(encodedPassword);
         oldUser.setEnabled(newUser.getEnabled());
@@ -58,7 +54,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> getUserByPrincipal(Principal principal) {
-        String userEmail=principal.getName();
+        String userEmail = principal.getName();
         return userRepository.findByEmail(userEmail);
     }
 

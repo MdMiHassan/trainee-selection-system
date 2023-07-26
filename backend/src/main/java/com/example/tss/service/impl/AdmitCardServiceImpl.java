@@ -1,36 +1,34 @@
 package com.example.tss.service.impl;
 
-import com.example.tss.dto.AdmitCardInfoDto;
-import com.example.tss.dto.ApplicationInfoDto;
-import com.example.tss.exception.AdmitCardGenerationException;
-import com.example.tss.service.UserService;
-import com.example.tss.util.admit.AdmitCardMoldFactory;
 import com.example.tss.constants.ResourceType;
+import com.example.tss.dto.AdmitCardInfoDto;
+import com.example.tss.dto.ResourceDto;
 import com.example.tss.entity.*;
-import com.example.tss.repository.*;
+import com.example.tss.exception.AdmitCardGenerationException;
+import com.example.tss.exception.ResourceNotFoundException;
+import com.example.tss.repository.AdmitCardInformationRepository;
+import com.example.tss.repository.ApplicationRepository;
+import com.example.tss.repository.CircularRepository;
+import com.example.tss.repository.ResourceRepository;
 import com.example.tss.service.AdmitCardService;
-import com.example.tss.service.ResourceService;
 import com.example.tss.util.CodeGenerator;
 import com.example.tss.util.SystemUtils;
+import com.example.tss.util.admit.AdmitCardMoldFactory;
 import com.google.zxing.WriterException;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.MediaTypeFactory;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
-import java.security.Principal;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -42,13 +40,13 @@ public class AdmitCardServiceImpl implements AdmitCardService {
     private final ApplicationRepository applicationRepository;
     private final AdmitCardMoldFactory admitCardMoldFactory;
     private final CodeGenerator codeGenerator;
-    private final ResourceService resourceService;
-    private final UserService userService;
-    private final ApplicantProfileRepository applicantProfileRepository;
+    private final ModelMapper modelMapper;
 
     @Override
-    public ResponseEntity<?> retrieveAdmit(Long id) {
-        return resourceService.getByIdAndResourceType(id, ResourceType.ADMITCARD);
+    public ResourceDto retrieveAdmit(Long resourceId) {
+        Resource resource = resourceRepository.findByIdAndResourceType(resourceId, ResourceType.ADMITCARD)
+                .orElseThrow(() -> new ResourceNotFoundException(resourceId.toString()));
+        return modelMapper.map(resource, ResourceDto.class);
     }
 
 
@@ -67,8 +65,8 @@ public class AdmitCardServiceImpl implements AdmitCardService {
             String companyName = admitCardInformation.getCompanyName();
             String companyAddress = admitCardInformation.getCompanyAddress();
             String examName = screeningRound.getTitle();
-            String authorityName=admitCardInformation.getAuthorityName();
-            String examLocation=admitCardInformation.getLocation();
+            String authorityName = admitCardInformation.getAuthorityName();
+            String examLocation = admitCardInformation.getLocation();
 
             LinkedHashMap<String, String> basicInfo = new LinkedHashMap<>();
             basicInfo.put("Applicant's Name", application.getFirstName() + " " + application.getLastName());
@@ -121,22 +119,18 @@ public class AdmitCardServiceImpl implements AdmitCardService {
 
     @Override
     @Transactional
-    public ResponseEntity<?> saveAdmitInfo(Long circularId, AdmitCardInfoDto admitCardInfoDto) {
+    public AdmitCardInfoDto saveAdmitInfo(Long circularId, AdmitCardInfoDto admitCardInfoDto) {
         try {
-            byte[] logoLeftContent =resourceLoader.getResource("classpath:static/logo/bjitacademylogo.png")
-                    .getInputStream().readAllBytes();
-            byte[] logoRightContent =resourceLoader.getResource("classpath:static/logo/bjitlogo.png")
-                    .getInputStream().readAllBytes();
-            Resource logoleftResource = Resource.builder().fileData(logoLeftContent).build();
-            Resource logoRightResource = Resource.builder().fileData(logoRightContent).build();
+            Resource logoleftResource = createLogoResource("classpath:static/logo/bjitacademylogo.png");
+            Resource logoRightResource = createLogoResource("classpath:static/logo/bjitlogo.png");
             Resource signature = resourceRepository.findById(admitCardInfoDto.getAuthoritySignatureImageId()).orElseThrow();
             Circular circular = circularRepository.findById(circularId).orElseThrow();
-            resourceRepository.save(logoleftResource);
-            resourceRepository.save(logoRightResource);
+            Resource savedLogoleftResource = resourceRepository.save(logoleftResource);
+            Resource savedLogoRightResource = resourceRepository.save(logoRightResource);
             AdmitCardInformation admitCardInformation = AdmitCardInformation.builder()
                     .circular(circular)
-                    .companyLogoLeft(logoleftResource)
-                    .companyLogoRight(logoRightResource)
+                    .companyLogoLeft(savedLogoleftResource)
+                    .companyLogoRight(savedLogoRightResource)
                     .companyName("BJIT ACADEMY")
                     .companyAddress("BJIT Baridhara Office 02, House No C, 7 Road No. 2, Dhaka")
                     .authorityName(admitCardInfoDto.getAuthorityName())
@@ -146,26 +140,17 @@ public class AdmitCardServiceImpl implements AdmitCardService {
                     .examDate(admitCardInfoDto.getExamDate())
                     .time(admitCardInfoDto.getTime())
                     .build();
-            AdmitCardInformation saved = admitCardInformationRepository.save(admitCardInformation);
-            return ResponseEntity.ok(saved);
+            AdmitCardInformation savedAdmitCardInformation = admitCardInformationRepository.save(admitCardInformation);
+            return modelMapper.map(savedAdmitCardInformation, AdmitCardInfoDto.class);
         } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.notFound().build();
+            throw new ResourceNotFoundException(e.getMessage());
         }
 
     }
 
-    @Override
-    public ResponseEntity<?> getAdmitId(Principal principal,Long circularId) {
-        User user = userService.getUserByPrincipal(principal).orElseThrow();
-        ApplicantProfile applicantProfile = applicantProfileRepository.findByUserId(user.getId()).orElseThrow();
-        Application application=applicationRepository.findByCircularIdAndApplicantId(circularId,applicantProfile.getId()).orElseThrow();
-        Resource admit = application.getAdmit();
-        if(admit==null){
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok(ApplicationInfoDto.builder()
-                        .currentRoundAdmitId(admit.getId()).build()) ;
+    private Resource createLogoResource(String path) throws IOException {
+        byte[] logoContent = resourceLoader.getResource(path).getInputStream().readAllBytes();
+        return Resource.builder().fileData(logoContent).build();
     }
 
     private byte[] convertHtmlToPdf(String html) throws IOException {
@@ -175,16 +160,6 @@ public class AdmitCardServiceImpl implements AdmitCardService {
         builder.toStream(pdfOutputStream);
         builder.run();
         return pdfOutputStream.toByteArray();
-    }
-
-    private ResponseEntity<?> buildResourceResponse(Resource admit) {
-        Optional<MediaType> mediaType = MediaTypeFactory.getMediaType(admit.getFileName());
-        if (mediaType.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.FAILED_DEPENDENCY);
-        }
-        return ResponseEntity.ok()
-                .contentType(mediaType.get())
-                .body(admit.getFileData());
     }
 
     private byte[] getQrCodeByte(Long admitId) throws IOException, WriterException {

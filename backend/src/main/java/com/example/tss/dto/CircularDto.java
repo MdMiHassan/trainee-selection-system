@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
