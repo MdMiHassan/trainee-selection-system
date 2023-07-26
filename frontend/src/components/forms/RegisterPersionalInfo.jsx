@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Row, Col, Form, Input, Button, Select, DatePicker, Upload, message, Steps } from 'antd';
+import { Row, Col, Form, Input, Button, Select, DatePicker, Upload, message, Steps, Space } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import '../../styles/RegisterForm.css'
 import { AuthContext } from '../../context/AuthContext';
@@ -9,7 +9,7 @@ function RegisterPersonalInfo() {
     const [resumeId, setResumeId] = useState(null);
     const [profileImageId, setProfileImageId] = useState(null);
     const { token } = useContext(AuthContext);
-    const navigateTo=useNavigate();
+    const navigateTo = useNavigate();
     const headers = {
         Authorization: `Bearer ${token}`,
     };
@@ -28,9 +28,9 @@ function RegisterPersonalInfo() {
     const onFinishPersionalInfo = (values) => {
         console.log('Step 3:', values);
         const { firstName,
-            lastName, gender,dateOfBirth,
-            degreeName,institutionName,
-            cgpa,passingYear,
+            lastName, gender, dateOfBirth,
+            degreeName, institutionName,
+            cgpa, passingYear,
             presentAddress, phone } = values;
         const requestData = {
             firstName,
@@ -52,7 +52,7 @@ function RegisterPersonalInfo() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization':`Bearer ${token}`
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(requestData),
         })
@@ -126,40 +126,42 @@ function RegisterPersonalInfo() {
         >
             <Input.TextArea />
         </Form.Item>
-        <Form.Item
-            label="Upload Your Profile Picture"
-            name="profilePicture"
-            valuePropName="fileList"
-            getValueFromEvent={(e) => e.fileList}
-            rules={[{ required: true, message: 'Please upload your profile picture' }]}
-        >
-            <Upload
-                action={API_BASE_URL + "/resource/upload"}
-                listType="picture"
-                maxCount={1}
-                headers={headers}
-                onChange={handleProfileUploadChange}
+        <Space.Compact>
+            <Form.Item
+                label="Upload Your Profile Picture"
+                name="profilePicture"
+                valuePropName="fileList"
+                getValueFromEvent={(e) => e.fileList}
+                rules={[{ required: true, message: 'Please upload your profile picture' }]}
             >
-                <Button icon={<UploadOutlined />}>Profile Picture</Button>
-            </Upload>
-        </Form.Item>
-        <Form.Item
-            label="Upload Your resume"
-            name="resume"
-            valuePropName="fileList"
-            getValueFromEvent={(e) => e.fileList}
-            rules={[{ required: true, message: 'Please upload your profile picture' }]}
-        >
-            <Upload
-                action={API_BASE_URL + "/resource/upload"}
-                listType='picture'
-                maxCount={1}
-                headers={headers}
-                onChange={handleResumeUploadChange}
+                <Upload
+                    action={API_BASE_URL + "/resource/upload"}
+                    listType="picture"
+                    maxCount={1}
+                    headers={headers}
+                    onChange={handleProfileUploadChange}
+                >
+                    <Button icon={<UploadOutlined />}>Profile Picture</Button>
+                </Upload>
+            </Form.Item>
+            <Form.Item
+                label="Upload Your resume"
+                name="resume"
+                valuePropName="fileList"
+                getValueFromEvent={(e) => e.fileList}
+                rules={[{ required: true, message: 'Please upload your profile picture' }]}
             >
-                <Button icon={<UploadOutlined />}>Resume</Button>
-            </Upload>
-        </Form.Item>
+                <Upload
+                    action={API_BASE_URL + "/resource/upload"}
+                    listType='picture'
+                    maxCount={1}
+                    headers={headers}
+                    onChange={handleResumeUploadChange}
+                >
+                    <Button icon={<UploadOutlined />}>Resume</Button>
+                </Upload>
+            </Form.Item>
+        </Space.Compact>
         <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
             <Button type="primary" htmlType="submit" onClick={onFinishPersionalInfo}>
                 Save

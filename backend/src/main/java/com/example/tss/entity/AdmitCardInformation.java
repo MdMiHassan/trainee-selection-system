@@ -21,6 +21,7 @@ public class AdmitCardInformation {
     private Circular circular;
     private String companyName;
     private String companyAddress;
+    @Column(length = 1000)
     private String instructions;
     private String authorityName;
     private String division;
