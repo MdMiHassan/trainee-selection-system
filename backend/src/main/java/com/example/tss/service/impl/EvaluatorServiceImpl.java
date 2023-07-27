@@ -93,9 +93,9 @@ public class EvaluatorServiceImpl implements EvaluatorService {
         }
         ScreeningRound applicationCurrentRound = application.getCurrentRound();
         ScreeningRound circularCurrentRound = screeningRoundMeta.getCurrentRound();
-        if (circularCurrentRound.getSerialNo().intValue() != applicationCurrentRound.getSerialNo().intValue()) {
-            return ResponseEntity.badRequest().build();
-        }
+//        if (circularCurrentRound.getSerialNo().intValue() != applicationCurrentRound.getSerialNo().intValue()) {
+//            return ResponseEntity.badRequest().build();
+//        }
         Evaluator evaluator = Evaluator.builder()
                 .user(user)
                 .application(application)
@@ -166,7 +166,7 @@ public class EvaluatorServiceImpl implements EvaluatorService {
 
                     AssignedApplicantDto assignedApplicantDto = AssignedApplicantDto.builder()
                             .screeningRound(screeningRoundDto)
-                            .candidatesUid(application.getUniqueIdentifier())
+                            .candidatesUid(application.getId()+1000)
                             .build();
 
                     if (roundMarkOp.isPresent()) {

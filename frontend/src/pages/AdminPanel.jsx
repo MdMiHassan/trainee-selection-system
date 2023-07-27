@@ -70,7 +70,6 @@ function AdminPanel() {
                             <Route path="/circular/all" element={<AdminAllCirculars />} />
                             <Route path="/notice/new" element={<AdminNewNotice />} />
                             <Route path="/notice/all" element={<AdminAllNotice />} />
-                            <Route path="/notice/update" element={<AdminUpdateNotice />} />
                             <Route path="/admit/configure" element={<AdminConfigureAdmit />} />
                             <Route path="/evaluators" element={<AdminAllEvaluator />} />
                             <Route path="/evaluators/new" element={<NewEvaluator />} />

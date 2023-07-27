@@ -13,7 +13,7 @@ function IndexGuard({ children }) {
             case "APPLICANT":
                 return <Navigate to="/applicant" />;
             case "ADMIN":
-                return <Navigate to="/admin" />;
+                return <Navigate to="/admin/dashboard" />;
             case "EVALUATOR":
                 return <Navigate to="/evaluator" />;
             default:

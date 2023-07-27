@@ -21,20 +21,24 @@ const AssignedApplicantPanel = () => {
 
     const columns = [
         {
+            key: 'candidatesUid',
             title: '#UniqueId',
             dataIndex: 'candidatesUid',
         },
         {
+            key: 'screeningRound',
             title: 'Screening Round',
             dataIndex: 'screeningRound',
             render: (screeningRound) => screeningRound.roundId,
         },
         {
+            key: 'marks',
             title: 'Marks',
             dataIndex: 'marks',
             width: '30%',
         },
         {
+
             title: 'Mark Entry',
             key: 'enterMark',
             fixed: 'right',
@@ -57,6 +61,7 @@ const AssignedApplicantPanel = () => {
             })
                 .then((response) => response.json())
                 .then((data) => {
+                    console.log("hello" + JSON.stringify(data));
                     if (data && Array.isArray(data) && data.length > 0) {
                         console.log(data);
                         const transformedData = data.map((candidate) => ({
@@ -95,7 +100,7 @@ const AssignedApplicantPanel = () => {
                         setDataSource((prevData) => {
                             return prevData.map((row) => {
                                 if (row.key === selectedRowData.key) {
-                                    return { ...row, marks: enteredMark }; 
+                                    return { ...row, marks: enteredMark };
                                 }
                                 return row;
                             });
@@ -119,7 +124,7 @@ const AssignedApplicantPanel = () => {
             <Table bordered dataSource={dataSource} columns={columns} />
             <Modal
                 title="Please enter total marks"
-                open={modalVisible} 
+                open={modalVisible}
                 onOk={handleModalSave}
                 onCancel={handleModalCancel}
                 okText="Save"

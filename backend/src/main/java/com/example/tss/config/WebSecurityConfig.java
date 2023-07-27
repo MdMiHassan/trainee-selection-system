@@ -58,7 +58,7 @@ public class WebSecurityConfig{
                                 , "/api/v1/circulars/{circularId}/applications", "/api/v1/circulars/{circularId}/rounds/next/applications/{applicationId}/actions/approve"
                                 , "/api/v1/circulars/{circularId}/rounds/current/actions/end", "/api/v1/circulars/{circularId}/rounds/{roundId}",
                                 "/api/v1/circulars/{circularId}/rounds/{roundId}/candidates", "/api/v1/circulars/{circularId}/rounds/{roundId}/candidates/{candidateId}"
-                                , "/api/v1/evaluators","/api/v1/evaluators/{evaluatorId}/candidates/assign")
+                                , "/api/v1/evaluators","/api/v1/evaluators/{evaluatorId}/candidates/assign","/api/v1/{circularId}/rounds/next/applications/{applicationId}/actions/invite")
                         .hasAuthority(Role.ADMIN.name())
                         .requestMatchers(HttpMethod.GET, "/api/v1/circulars/{circularId}","/api/v1/circulars/{circularId}/rounds")
                         .hasAnyAuthority(Role.ADMIN.name(),Role.APPLICANT.name())

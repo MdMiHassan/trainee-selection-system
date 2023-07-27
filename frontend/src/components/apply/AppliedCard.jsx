@@ -44,6 +44,9 @@ function AppliedCard({ application }) {
                     setStatus(application.currentRoundSerialNo <= data.currentRoundSerialNo);
                     const rounds = data.rounds.sort((a, b) => a.serialNo - b.serialNo);
                     setApplicationSteps(rounds);
+                    if (application.requiredAdmitCard) {
+                        setDownloadLink(`http://localhost:8080/api/v1/admits/verify/${application.currentRoundAdmitId}`);
+                    }
                 })
                 .catch((error) => {
                     message.error("Circular fetching failed")
@@ -51,12 +54,10 @@ function AppliedCard({ application }) {
         }
 
     }, [application]);
-    if (application.requiredAdmitCard) {
-        setDownloadLink(`http://localhost:8080/admits/verify/${application.currentRoundAdmitId}`);
-    }
     const handleDownloadAdmit = () => {
         window.open(downloadLink, "_blank");
     };
+    console.log(application);
     return (<Card style={{marginBottom:"20px"}}>
         <Collapse
             bordered={false}

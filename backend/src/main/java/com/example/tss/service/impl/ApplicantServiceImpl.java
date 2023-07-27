@@ -149,7 +149,6 @@ public class ApplicantServiceImpl implements ApplicantService {
         System.out.println(applicantProfileDto);
         System.out.println(principal.getName());
         User user = userService.getUserByPrincipal(principal).orElseThrow();
-        System.out.println("hello");
         Optional<ApplicantProfile> applicantProfileOptional = applicantProfileRepository.findByUserId(user.getId());
         Long profileImageId = applicantProfileDto.getProfileImageId();
         Long resumeId = applicantProfileDto.getResumeId();
@@ -177,7 +176,6 @@ public class ApplicantServiceImpl implements ApplicantService {
             ApplicantProfile applicantProfile = applicantProfileOptional.get();
             applicantProfileDto.setProfileImageId(null);
             applicantProfileDto.setResumeId(null);
-            //have to fix foreign key constrain failed
             modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
             modelMapper.map(applicantProfileDto, applicantProfile);
             applicantProfile.setUser(user);

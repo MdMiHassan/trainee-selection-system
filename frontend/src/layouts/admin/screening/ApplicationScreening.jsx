@@ -72,7 +72,7 @@ function ApplicationScreening({ circularId, roundId }) {
         }
     ];
     const handleViewResume = (resumeId) => {
-        window.open("http://localhost:8080/resource/" + resumeId, "_blank");
+        window.open(`${API_BASE_URL}/resource/${resumeId}`, "_blank");
     }
     const handleInvite = (applicationId) => {
         fetch(

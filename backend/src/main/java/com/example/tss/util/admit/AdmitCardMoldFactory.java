@@ -26,7 +26,6 @@ public class AdmitCardMoldFactory {
         private String examName;
         private String authorityName;
         private String authorityDesignation;
-        private String examLocation;
         private byte[] barCode;
         private byte[] qrCode;
         private byte[] applicantPhoto;
@@ -168,9 +167,9 @@ public class AdmitCardMoldFactory {
             if (companyLogoRight != null) {
                 admit.getElementById("companyLogoRight").attr("src", ImageUtils.encodeImageToBase64(companyLogoRight));
             }
-            if (barCode != null) {
-                admit.getElementById("barCode").attr("src", ImageUtils.encodeImageToBase64(barCode));
-            }
+//            if (barCode != null) {
+//                admit.getElementById("barCode").attr("src", ImageUtils.encodeImageToBase64(barCode));
+//            }
             if (qrCode != null) {
                 admit.getElementById("qrCode").attr("src", ImageUtils.encodeImageToBase64(qrCode));
             }

@@ -78,13 +78,10 @@ class TraineeSelectionSystemApplicationTests {
 	@Test
 	void createCircularTest() {
 		CircularDto circularDto = new CircularDto();
-		// Set circularDto properties here
 
 		Circular savedCircular = new Circular();
-		// Set savedCircular properties here
 
 		ScreeningRoundMeta savedScreeningRoundMeta = new ScreeningRoundMeta();
-		// Set savedScreeningRoundMeta properties here
 
 		when(circularRepository.save(any())).thenReturn(savedCircular);
 		when(screeningRoundRepository.save(any())).thenReturn(new ScreeningRound());
@@ -103,16 +100,12 @@ class TraineeSelectionSystemApplicationTests {
 
 		Principal principal = mock(Principal.class);
 		User user = new User();
-		// Set user properties here
 
 		ApplicantProfile applicantProfile = new ApplicantProfile();
-		// Set applicantProfile properties here
 
 		Circular circular = new Circular();
-		// Set circular properties here
 
 		Application application = new Application();
-		// Set application properties here
 
 		when(userService.getUserByPrincipal(principal)).thenReturn(Optional.of(user));
 		when(applicantProfileService.getByUser(user)).thenReturn(Optional.of(applicantProfile));

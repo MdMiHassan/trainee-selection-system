@@ -69,12 +69,6 @@ const items = [
         icon: <UnorderedListOutlined />,
         path: '/admin/notice/all',
       },
-      {
-        label: 'Update Notice',
-        key: '9',
-        icon: <FileSyncOutlined />,
-        path: '/admin/notice/update',
-      },
     ],
   },
   {

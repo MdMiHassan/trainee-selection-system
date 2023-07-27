@@ -220,7 +220,7 @@ public interface HTMLMold {
                             <div id="basicInformation"></div>
                         </td>
                         <td class="security-data">
-                            <img id="barCode" alt="barcode" class="bar-code" style="margin-bottom:10px;"></img>
+                            
                             <img id="applicantPhoto" alt="applicants" class="applicants-photo" ></img>
                             <div class="applicants-sig">
                                 

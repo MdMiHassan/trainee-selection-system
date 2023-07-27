@@ -113,6 +113,7 @@ public class AdmitCardServiceImpl implements AdmitCardService {
             applicationRepository.save(application);
             return true;
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             throw new AdmitCardGenerationException();
         }
     }
