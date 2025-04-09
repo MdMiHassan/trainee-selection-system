@@ -2,7 +2,6 @@ package com.example.tss.service;
 
 import com.example.tss.dto.ApplicantProfileDto;
 import com.example.tss.dto.CircularDto;
-import com.example.tss.entity.Circular;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +26,9 @@ public interface CircularService {
 
     ResponseEntity<?> getAllCircular();
 
-    Optional<Circular> getCircular(Long circularId);
+    Optional<CircularDto> getCircular(Long circularId);
 
     ResponseEntity<?> bookmarkCircular(Principal principal, Long circularId);
 
-    ResponseEntity<?> apply(Long circularId, ApplicantProfileDto applicantProfileDto, Principal principal);
+    ApplicantProfileDto apply(Long circularId, ApplicantProfileDto applicantProfileDto, Principal principal);
 }

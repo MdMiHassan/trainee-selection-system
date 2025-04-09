@@ -17,6 +17,7 @@ import java.sql.Date;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class CircularDto {
+    private Long id;
     @NotBlank(message = "Title is required")
     private String title;
     private Date closingDate;

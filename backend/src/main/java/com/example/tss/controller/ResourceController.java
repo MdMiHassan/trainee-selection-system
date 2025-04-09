@@ -16,13 +16,15 @@ import java.security.Principal;
 @RequiredArgsConstructor
 public class ResourceController {
     private final ResourceService resourceService;
+
     @PostMapping("/upload")
-    public ResponseEntity<?> uploadFile( Principal principal,@RequestParam("file") MultipartFile multipartFile){
-        return resourceService.uploadResource(principal,multipartFile);
+    public ResponseEntity<?> uploadFile(Principal principal, @RequestParam("file") MultipartFile multipartFile) {
+        return resourceService.uploadResource(principal, multipartFile);
     }
+
     @GetMapping("/{resourceId}")
-    public ResponseEntity<?> downloadFile(@PathVariable Long resourceId){
-        ResourceDto fileResource =resourceService.getById(resourceId);
+    public ResponseEntity<?> downloadFile(@PathVariable Long resourceId) {
+        ResourceDto fileResource = resourceService.getById(resourceId);
         MediaType mediaType = MediaTypeFactory.getMediaType(fileResource.getFileName()).orElseThrow();
         return ResponseEntity.ok()
                 .contentType(mediaType)

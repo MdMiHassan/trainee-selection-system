@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
-    User save(User user);
+    User save(User newUser);
 
-    Optional<User> getByEmail(String email);
+    Optional<User> getUser(Long id);
 
-    Optional<User> getUserByPrincipal(Principal principal);
+    Optional<User> getUser(String email);
 
-    Optional<User> getById(Long evaluatorId);
+    Optional<User> getUser(Principal principal);
 
     List<User> getAllEvaluators();
 }

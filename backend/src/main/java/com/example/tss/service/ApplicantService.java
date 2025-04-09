@@ -3,7 +3,6 @@ package com.example.tss.service;
 import com.example.tss.dto.ApplicantProfileDto;
 import com.example.tss.model.ApplicantRegistrationRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 
 import java.security.Principal;
 

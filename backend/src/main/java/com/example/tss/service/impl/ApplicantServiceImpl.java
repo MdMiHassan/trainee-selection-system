@@ -44,7 +44,9 @@ public class ApplicantServiceImpl implements ApplicantService {
     @Transactional
     public ResponseEntity<?> registerApplicant(ApplicantRegistrationRequest request) {
         String email = request.getEmail();
-        User user = userRepository.findByEmail(email).orElseGet(() -> User.builder().build());
+        userRepository.findByEmail(email)
+                .orElseGet(() -> User.builder().build());
+        User user = new User();
         user.setEmail(request.getEmail());
         user.setRole(Role.APPLICANT);
         user.setPassword(request.getPassword());
@@ -85,9 +87,9 @@ public class ApplicantServiceImpl implements ApplicantService {
 
     @Override
     public ResponseEntity<?> getAllApplications(Principal principal) {
-        User user = userService.getUserByPrincipal(principal).orElseThrow();
+        User user = userService.getUser(principal).orElseThrow();
         ApplicantProfile applicantProfile = applicantProfileRepository.getByUserId(user.getId()).orElseThrow();
-        List<ApplicationInfoDto> applicationInfoDtos = applicationService.getAllApplicationsOfApplicant(applicantProfile.getId()).stream()
+        List<ApplicationInfoDto> applicationInfoDtos = applicationService.getAllApplications(applicantProfile).stream()
                 .map(application -> {
                             ScreeningRound currentRound = application.getCurrentRound();
                             ApplicationInfoDto applicationInfoDto = ApplicationInfoDto.builder()
@@ -148,13 +150,13 @@ public class ApplicantServiceImpl implements ApplicantService {
     public ResponseEntity<?> updateApplicantProfile(Principal principal, ApplicantProfileDto applicantProfileDto) {
         System.out.println(applicantProfileDto);
         System.out.println(principal.getName());
-        User user = userService.getUserByPrincipal(principal).orElseThrow();
+        User user = userService.getUser(principal).orElseThrow();
         Optional<ApplicantProfile> applicantProfileOptional = applicantProfileRepository.findByUserId(user.getId());
         Long profileImageId = applicantProfileDto.getProfileImageId();
         Long resumeId = applicantProfileDto.getResumeId();
         Optional<Resource> profileImage = resourceRepository.findByIdAndResourceTypeAndOwnerId(
                 profileImageId,
-                ResourceType.PROFILEPICTURE,
+                ResourceType.PROFILE_PICTURE,
                 user.getId());
         Optional<Resource> resume = resourceRepository.findByIdAndResourceTypeAndOwnerId(
                 resumeId,

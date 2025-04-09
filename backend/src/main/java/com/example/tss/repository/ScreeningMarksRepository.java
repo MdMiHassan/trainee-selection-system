@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ScreeningMarksRepository extends JpaRepository<ScreeningRoundMark,Long> {
+public interface ScreeningMarksRepository extends JpaRepository<ScreeningRoundMark, Long> {
     List<ScreeningRoundMark> findByApplicationId(Long id);
 
-    Optional<ScreeningRoundMark> findByApplicationIdAndRoundId(Long applicationId,Long roundId);
+    Optional<ScreeningRoundMark> findByApplicationIdAndRoundId(Long applicationId, Long roundId);
 }

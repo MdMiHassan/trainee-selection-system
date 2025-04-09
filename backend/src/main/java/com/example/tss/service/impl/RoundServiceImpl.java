@@ -195,16 +195,16 @@ public class RoundServiceImpl implements RoundService {
     public ResponseEntity<?> endRound(Long circularId) {
         ScreeningRoundMeta screeningRoundMeta = screeningRoundMetaRepository.findByCircularId(circularId).orElseThrow();
         ScreeningRound currentRound = screeningRoundMeta.getCurrentRound();
-        if (currentRound != null) {
-            Integer serialNo = currentRound.getSerialNo();
-            System.out.println("serial" + serialNo);
-            ScreeningRound screeningRound = screeningRoundRepository.findByCircularIdAndSerialNo(circularId, serialNo + 1).orElseThrow();
-            System.out.println("serial new" + screeningRound.getSerialNo());
-            screeningRoundMeta.setCurrentRound(screeningRound);
-            ScreeningRoundMeta saved = screeningRoundMetaRepository.save(screeningRoundMeta);
-            return ResponseEntity.ok().build();
+        if (currentRound == null) {
+            return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.badRequest().build();
+        Integer serialNo = currentRound.getSerialNo();
+        System.out.println("serial" + serialNo);
+        ScreeningRound screeningRound = screeningRoundRepository.findByCircularIdAndSerialNo(circularId, serialNo + 1).orElseThrow();
+        System.out.println("serial new" + screeningRound.getSerialNo());
+        screeningRoundMeta.setCurrentRound(screeningRound);
+        ScreeningRoundMeta saved = screeningRoundMetaRepository.save(screeningRoundMeta);
+        return ResponseEntity.ok().build();
     }
 
     @Override

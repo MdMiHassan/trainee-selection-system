@@ -5,7 +5,10 @@ import com.example.tss.dto.CircularDto;
 import com.example.tss.entity.*;
 import com.example.tss.exception.ApplicationPlacingFailedException;
 import com.example.tss.repository.*;
-import com.example.tss.service.*;
+import com.example.tss.service.ApplicationService;
+import com.example.tss.service.CircularService;
+import com.example.tss.service.RoundService;
+import com.example.tss.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,7 +36,6 @@ public class CircularServiceImpl implements CircularService {
     private final RoundService roundService;
     private final ScreeningRoundMetaRepository screeningRoundMetaRepository;
     private final ScreeningRoundRepository screeningRoundRepository;
-    private final BookMarkCircularService bookMarkCircularService;
     private final UserService userService;
     private final ApplicationRepository applicationRepository;
 
@@ -94,25 +97,68 @@ public class CircularServiceImpl implements CircularService {
 
     @Override
     @Transactional
-    public ResponseEntity<?> apply(Long circularId, ApplicantProfileDto applicantProfileDto, Principal principal) {
-        User user = userService.getUserByPrincipal(principal)
+    public ApplicantProfileDto apply(Long circularId, ApplicantProfileDto applicantProfileDto, Principal principal) {
+        Circular circular = getCircularOrThrow(circularId);
+        User user = getUserFromPrincipal(principal);
+        ApplicantProfile applicantProfile = getApplicantProfileForUser(user);
+        ScreeningRoundMeta screeningRoundMeta = getScreeningRoundMetaForCircular(circularId);
+        Resource profilePicture = getResourceByIdAndOwnerId(applicantProfileDto.getProfileImageId(), user.getId());
+        Resource resume = getResourceByIdAndOwnerId(applicantProfileDto.getResumeId(), user.getId());
+        ScreeningRound currentRound = screeningRoundMeta.getCurrentRound();
+
+        validateApplicationConditions(circularId, applicantProfile.getId(), currentRound);
+
+        Application application = createApplication(applicantProfile, circular, applicantProfileDto, profilePicture, resume, currentRound);
+        Application savedApplication = saveApplication(application);
+        savedApplication.setUniqueIdentifier(savedApplication.getId() + 1000);
+        Application cleanSavedApplication = clearUniqueIdentifier(savedApplication);
+
+        return modelMapper.map(cleanSavedApplication, ApplicantProfileDto.class);
+    }
+
+    private Circular getCircularOrThrow(Long circularId) {
+        return circularRepository.findById(circularId)
                 .orElseThrow(ApplicationPlacingFailedException::new);
-        ApplicantProfile applicantProfile = applicantProfileService.getByUser(user)
+    }
+
+    private User getUserFromPrincipal(Principal principal) {
+        return userService.getUser(principal)
                 .orElseThrow(ApplicationPlacingFailedException::new);
-        Circular circular = circularRepository.findById(circularId)
+    }
+
+    private ApplicantProfile getApplicantProfileForUser(User user) {
+        return applicantProfileService.getApplicantProfile(user)
                 .orElseThrow(ApplicationPlacingFailedException::new);
-        Optional<Application> applied = applicationRepository.findByCircularIdAndApplicantId(circularId, applicantProfile.getId());
-        if (applied.isPresent()) {
+    }
+
+    private ScreeningRoundMeta getScreeningRoundMetaForCircular(Long circularId) {
+        return screeningRoundMetaRepository.findByCircularId(circularId)
+                .orElseThrow(ApplicationPlacingFailedException::new);
+    }
+
+    private Resource getResourceByIdAndOwnerId(Long resourceId, Long ownerId) {
+        return resourceRepository.findByIdAndOwnerId(resourceId, ownerId)
+                .orElseThrow(ApplicationPlacingFailedException::new);
+    }
+
+    private void validateApplicationConditions(Long circularId, Long applicantId, ScreeningRound currentRound) {
+        boolean alreadyApplied = applicationRepository.existsByCircularIdAndApplicantId(circularId, applicantId);
+        Circular circular = currentRound.getCircular();
+        boolean circularClosed = circular.getClosingDate().after(new Date(System.currentTimeMillis()));
+        boolean applicationReceivingClosed = currentRound.getSerialNo() > 0;
+
+        if (alreadyApplied || circularClosed || applicationReceivingClosed) {
             throw new ApplicationPlacingFailedException();
         }
-        ScreeningRoundMeta screeningRoundMeta = screeningRoundMetaRepository.findByCircularId(circularId)
-                .orElseThrow(ApplicationPlacingFailedException::new);
-        Resource profilePicture = resourceRepository.findByIdAndOwnerId(applicantProfileDto.getProfileImageId(), user.getId())
-                .orElseThrow(ApplicationPlacingFailedException::new);
-        Resource resume = resourceRepository.findByIdAndOwnerId(applicantProfileDto.getResumeId(), user.getId())
-                .orElseThrow(ApplicationPlacingFailedException::new);
+    }
 
-        Application application = Application.builder()
+    private Application createApplication(ApplicantProfile applicantProfile,
+                                          Circular circular,
+                                          ApplicantProfileDto applicantProfileDto,
+                                          Resource profilePicture,
+                                          Resource resume,
+                                          ScreeningRound currentRound) {
+        return Application.builder()
                 .applicant(applicantProfile)
                 .circular(circular)
                 .firstName(applicantProfileDto.getFirstName())
@@ -127,19 +173,24 @@ public class CircularServiceImpl implements CircularService {
                 .passingYear(applicantProfileDto.getPassingYear())
                 .profileImage(profilePicture)
                 .resume(resume)
-                .currentRound(screeningRoundMeta.getCurrentRound())
+                .currentRound(currentRound)
                 .appliedAt(new Timestamp(System.currentTimeMillis()))
                 .build();
-        Application savedApplication = applicationRepository.save(application);
-        savedApplication.setUniqueIdentifier(savedApplication.getId() + 1000);
-        Application saved = applicationRepository.save(application);
-        saved.setUniqueIdentifier(null);
-        return ResponseEntity.ok(saved);
     }
+
+    private Application saveApplication(Application application) {
+        return applicationRepository.save(application);
+    }
+
+    private Application clearUniqueIdentifier(Application application) {
+        application.setUniqueIdentifier(null);
+        return application;
+    }
+
 
     @Override
     public ResponseEntity<?> getApplicationByIdUnderCircular(Long circularId, Long applicationId) {
-        return applicationService.getApplicationByIdUnderCircular(circularId, applicationId);
+        return applicationService.getApplication(circularId, applicationId);
     }
 
     @Override
@@ -155,19 +206,16 @@ public class CircularServiceImpl implements CircularService {
     }
 
     @Override
-    public Optional<Circular> getCircular(Long circularId) {
-        return circularRepository.findById(circularId);
+    public Optional<CircularDto> getCircular(Long circularId) {
+        ModelMapper mapper = new ModelMapper();
+        Optional<CircularDto> circularDto = circularRepository.findById(circularId)
+                .map(circular -> mapper.map(circular, CircularDto.class));
+        return circularDto;
     }
 
     @Override
-    @Transactional
     public ResponseEntity<?> bookmarkCircular(Principal principal, Long circularId) {
-        Optional<User> userByPrincipal = userService.getUserByPrincipal(principal);
-        Optional<Circular> circularById = circularRepository.findById(circularId);
-        if (userByPrincipal.isEmpty() || circularById.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
-        bookMarkCircularService.toggleBookMark(userByPrincipal.get(), circularById.get());
-        return ResponseEntity.ok().build();
+        return null;
     }
+
 }

@@ -1,5 +1,6 @@
 package com.example.tss.controller;
 
+import com.example.tss.dto.AssignedApplicantDto;
 import com.example.tss.dto.EvaluatorDto;
 import com.example.tss.dto.MarksDto;
 import com.example.tss.service.EvaluatorService;
@@ -8,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.print.Pageable;
 import java.security.Principal;
 import java.util.List;
 
@@ -20,16 +20,20 @@ public class EvaluatorController {
 
     @PostMapping
     public ResponseEntity<?> createEvaluator(@RequestBody EvaluatorDto evaluatorDto) {
-        return evaluatorService.createEvaluator(evaluatorDto);
+        EvaluatorDto evaluator = evaluatorService.createEvaluator(evaluatorDto);
+        return ResponseEntity.ok(evaluator);
     }
+
     @GetMapping
     public ResponseEntity<?> getEvaluators() {
-        return evaluatorService.getEvaluators();
+        List<EvaluatorDto> evaluatorDto = evaluatorService.getEvaluators();
+        return ResponseEntity.ok(evaluatorDto);
     }
 
     @GetMapping("/{evaluatorId}/candidates")
     public ResponseEntity<?> getAllAssignedApplicants(@PathVariable Long evaluatorId) {
-        return evaluatorService.getAllAssignedApplicants(evaluatorId);
+        List<AssignedApplicantDto> assignedApplicants = evaluatorService.getAllAssignedApplicants(evaluatorId);
+        return ResponseEntity.ok(assignedApplicants);
     }
 
     @GetMapping("/current/candidates")
@@ -41,11 +45,11 @@ public class EvaluatorController {
     public ResponseEntity<?> assignEvaluatorToApplicants(@PathVariable Long evaluatorId,
                                                          @RequestParam Long candidate,
                                                          @RequestParam Long round) {
-        return evaluatorService.assignEvaluatorToApplicants(evaluatorId,candidate,round);
+        return evaluatorService.assignEvaluatorToApplicants(evaluatorId, candidate, round);
     }
 
     @PostMapping("/current/candidates/marks")
-    public ResponseEntity<?> updateAssignedApplicantsMarks(Principal principal,@Valid @RequestBody MarksDto marksDto) {
+    public ResponseEntity<?> updateAssignedApplicantsMarks(Principal principal, @Valid @RequestBody MarksDto marksDto) {
         return evaluatorService.updateAssignedApplicantsMarks(principal, marksDto);
     }
 }

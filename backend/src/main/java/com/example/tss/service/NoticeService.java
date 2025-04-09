@@ -9,11 +9,11 @@ import java.security.Principal;
 public interface NoticeService {
     ResponseEntity<?> getAllNotices(Pageable page);
 
-    ResponseEntity<?> postNotice(Principal principal, NoticeDto noticeDto);
+    NoticeDto postNotice(Principal principal, NoticeDto noticeDto);
 
-    ResponseEntity<?> getNotice(Long noticeId);
+    NoticeDto getNotice(Long noticeId);
 
-    ResponseEntity<?> updateNotice(Long noticeId, NoticeDto noticeDto);
+    NoticeDto updateNotice(Long noticeId, NoticeDto noticeDto);
 
-    ResponseEntity<?> deleteNotice(Long noticeId);
+    void deleteNotice(Long noticeId);
 }

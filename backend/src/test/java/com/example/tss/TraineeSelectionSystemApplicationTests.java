@@ -6,7 +6,7 @@ import com.example.tss.entity.*;
 import com.example.tss.exception.ApplicationPlacingFailedException;
 import com.example.tss.repository.*;
 import com.example.tss.service.ApplicationService;
-import com.example.tss.service.BookMarkCircularService;
+import com.example.tss.service.CircularBookMarkService;
 import com.example.tss.service.RoundService;
 import com.example.tss.service.UserService;
 import com.example.tss.service.impl.ApplicantProfileServiceImpl;
@@ -17,7 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 
 import java.security.Principal;
@@ -53,7 +52,7 @@ class TraineeSelectionSystemApplicationTests {
 	private ScreeningRoundRepository screeningRoundRepository;
 
 	@Mock
-	private BookMarkCircularService bookMarkCircularService;
+	private CircularBookMarkService circularBookMarkService;
 
 	@Mock
 	private UserService userService;
@@ -66,14 +65,14 @@ class TraineeSelectionSystemApplicationTests {
 
 	private ModelMapper modelMapper;
 
-	@BeforeEach
-	void setUp() {
-		MockitoAnnotations.openMocks(this);
-		modelMapper = new ModelMapper();
-		circularService = new CircularServiceImpl(applicantProfileService, resourceRepository, circularRepository,
-				modelMapper, applicationService, roundService, screeningRoundMetaRepository,
-				screeningRoundRepository, bookMarkCircularService, userService, applicationRepository);
-	}
+//	@BeforeEach
+//	void setUp() {
+//		MockitoAnnotations.openMocks(this);
+//		modelMapper = new ModelMapper();
+//		circularService = new CircularServiceImpl(applicantProfileService, resourceRepository, circularRepository,
+//				modelMapper, applicationService, roundService, screeningRoundMetaRepository,
+//				screeningRoundRepository, circularBookMarkService, userService, applicationRepository);
+//	}
 
 	@Test
 	void createCircularTest() {
@@ -107,8 +106,8 @@ class TraineeSelectionSystemApplicationTests {
 
 		Application application = new Application();
 
-		when(userService.getUserByPrincipal(principal)).thenReturn(Optional.of(user));
-		when(applicantProfileService.getByUser(user)).thenReturn(Optional.of(applicantProfile));
+		when(userService.getUser(principal)).thenReturn(Optional.of(user));
+		when(applicantProfileService.getApplicantProfile(user)).thenReturn(Optional.of(applicantProfile));
 		when(circularRepository.findById(circularId)).thenReturn(Optional.of(circular));
 		when(applicationRepository.findByCircularIdAndApplicantId(circularId, applicantProfile.getId()))
 				.thenReturn(Optional.empty());

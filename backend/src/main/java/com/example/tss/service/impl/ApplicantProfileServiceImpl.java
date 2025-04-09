@@ -15,9 +15,8 @@ public class ApplicantProfileServiceImpl implements ApplicantProfileService {
     private final ApplicantProfileRepository applicantProfileRepository;
 
     @Override
-    public Optional<ApplicantProfile> getByUser(User user) {
+    public Optional<ApplicantProfile> getApplicantProfile(User user) {
         Long userId = user.getId();
-        System.out.println(applicantProfileRepository.findByUserId(userId).isEmpty());
         return applicantProfileRepository.findByUserId(userId);
     }
 }

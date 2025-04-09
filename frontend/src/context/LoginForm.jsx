@@ -8,7 +8,7 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 
 const LoginForm = () => {
     const navigateTo = useNavigate();
-    const { updateRole, updateToken } = useContext(AuthContext);
+    const { login,getAccessRoles } = useContext(AuthContext);
     const roleRedirections = {
         APPLICANT: '/',
         ADMIN: '/admin/dashboard',
@@ -32,12 +32,8 @@ const LoginForm = () => {
             .then((response) => response.json())
             .then((data) => {
                 if (data.success) {
-                    removeSortedToken();
-                    const role = decodeToken(data.token).role[0];
-                    console.log(role);
-                    updateRole(role);
-                    updateToken(data.token);
-                    const redirectionRoute = roleRedirections[role] || '/404';
+                    login(data.token);
+                    const redirectionRoute = roleRedirections[getAccessRoles()[0]] || '/404';
                     navigateTo(redirectionRoute)
                     message.success("Succesfully Loged In");
                 } else {

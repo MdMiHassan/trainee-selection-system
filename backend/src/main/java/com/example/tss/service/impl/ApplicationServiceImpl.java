@@ -1,6 +1,7 @@
 package com.example.tss.service.impl;
 
 import com.example.tss.dto.ScreeningRoundMarkDto;
+import com.example.tss.entity.ApplicantProfile;
 import com.example.tss.entity.Application;
 import com.example.tss.model.ApplicationResponseModel;
 import com.example.tss.repository.ApplicationRepository;
@@ -20,7 +21,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     @Transactional
-    public ResponseEntity<?> getAllApplicationsUnderCircular(Long circularId, Pageable pageable) {
+    public ResponseEntity<?> getAllApplications(Long circularId, Pageable pageable) {
         List<ApplicationResponseModel> applications = applicationRepository.findByCircularId(circularId).stream()
                 .map(application -> {
                     ScreeningRoundMarkDto.builder()
@@ -34,14 +35,15 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public ResponseEntity<?> getApplicationByIdUnderCircular(Long circularId, Long applicationId) {
+    public ResponseEntity<?> getApplication(Long circularId, Long applicationId) {
         Application application = applicationRepository.findByIdAndCircularId(applicationId, circularId).orElseThrow();
         return ResponseEntity.ok(application);
     }
 
     @Override
-    public List<Application> getAllApplicationsOfApplicant(Long applicantId) {
-        List<Application> applications=applicationRepository.findByApplicantId(applicantId);
+    public List<Application> getAllApplications(ApplicantProfile applicant) {
+        Long applicantId = applicant.getId();
+        List<Application> applications = applicationRepository.findByApplicantId(applicantId);
         return applications;
     }
 }

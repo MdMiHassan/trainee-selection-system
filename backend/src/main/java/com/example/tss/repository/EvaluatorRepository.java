@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface EvaluatorRepository extends JpaRepository<Evaluator,Long> {
+public interface EvaluatorRepository extends JpaRepository<Evaluator, Long> {
     List<Evaluator> findByUserId(Long id);
 
     Optional<Evaluator> findByUserIdAndApplicationId(Long id, long applicationId);

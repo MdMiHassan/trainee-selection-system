@@ -3,8 +3,9 @@ package com.example.tss.controller;
 import com.example.tss.dto.ApplicantProfileDto;
 import com.example.tss.model.ApplicantRegistrationRequest;
 import com.example.tss.model.EmailVerificationRequest;
+import com.example.tss.model.EmailVerificationResponse;
 import com.example.tss.service.ApplicantService;
-import com.example.tss.service.AuthenticationService;
+import com.example.tss.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ import java.security.Principal;
 @RequiredArgsConstructor
 public class ApplicantController {
     private final ApplicantService applicantService;
-    private final AuthenticationService authenticationService;
+    private final AuthService authService;
 
     @GetMapping
     public ResponseEntity<?> getAllApplicants() {
@@ -51,7 +52,8 @@ public class ApplicantController {
 
     @PostMapping("/register/email/verify")
     public ResponseEntity<?> verifyEmail(@RequestBody EmailVerificationRequest emailVerificationRequest) {
-        return authenticationService.verifyEmail(emailVerificationRequest);
+        EmailVerificationResponse verificationResponse = authService.verifyEmail(emailVerificationRequest);
+        return ResponseEntity.ok(verificationResponse);
     }
 
     @PatchMapping("/{applicantId}")

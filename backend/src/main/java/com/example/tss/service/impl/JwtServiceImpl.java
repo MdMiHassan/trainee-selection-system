@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -30,13 +31,16 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public String generateJwtToken(Authentication authentication) {
         final long issueTime = System.currentTimeMillis();
+        Date issuedAt = new Date(issueTime);
+        Date expiration = new Date(issueTime + 1000L * 60 * 60 * 24 * 30);
+        List<String> roles = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority).toList();
+        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
         return Jwts.builder()
-                .addClaims(Map.of("role", authentication.getAuthorities().stream()
-                        .map(GrantedAuthority::getAuthority).toList()))
-                .setSubject(((UserDetails) authentication.getPrincipal()).getUsername())
-                .setIssuedAt(new Date(issueTime))
-                .setExpiration(new Date(issueTime + 1000L * 60 * 60 * 24 * 30))
-                .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
-                .compact();
+                .addClaims(Map.of("roles", roles))
+                .setSubject(username)
+                .setIssuedAt(issuedAt)
+                .setExpiration(expiration)
+                .signWith(SECRET_KEY, SignatureAlgorithm.HS256).compact();
     }
 }

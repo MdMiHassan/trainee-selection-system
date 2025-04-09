@@ -1,6 +1,6 @@
 package com.example.tss.exception;
 
-import com.example.tss.model.AuthenticationResponse;
+import com.example.tss.dto.AuthResponseDto;
 import com.example.tss.model.RegistrationResponse;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<?> handleBadCredentialsException(BadCredentialsException e) {
-        return new ResponseEntity<>(AuthenticationResponse.builder()
+        return new ResponseEntity<>(AuthResponseDto.builder()
                 .success(false)
                 .message(ErrorMessage.USERNAME_OR_PASSWORD_MISMATCH)
                 .build(), HttpStatus.OK);

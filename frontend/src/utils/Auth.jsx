@@ -1,4 +1,4 @@
-import jwt_decode from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 
 function getStoredToken() {
     return localStorage.getItem('tssaccesstoken');
@@ -13,7 +13,7 @@ function removeSortedToken() {
 
 function decodeToken(token) {
     try {
-        return jwt_decode(token);
+        return jwtDecode(token);
     } catch (error) {
         console.error('Error decoding token:', error);
         return null;

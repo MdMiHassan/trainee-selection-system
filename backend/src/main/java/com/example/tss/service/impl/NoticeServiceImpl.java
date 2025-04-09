@@ -5,6 +5,7 @@ import com.example.tss.dto.NoticeDto;
 import com.example.tss.entity.Notice;
 import com.example.tss.entity.Resource;
 import com.example.tss.entity.User;
+import com.example.tss.exception.UnauthorizedAccessException;
 import com.example.tss.mapper.NoticeMapper;
 import com.example.tss.repository.NoticeRepository;
 import com.example.tss.service.NoticeService;
@@ -19,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,17 +31,18 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Override
     public ResponseEntity<?> getAllNotices(Pageable page) {
-        Page<NoticeDto> noticeDtos = noticeRepository.findAll(page).map(NoticeMapper::mapToNoticeDto);
-        return ResponseEntity.ok(noticeDtos);
+        Page<NoticeDto> notices = noticeRepository.findAll(page).map(NoticeMapper::mapToNoticeDto);
+        return ResponseEntity.ok(notices);
     }
 
     @Override
     @Transactional
-    public ResponseEntity<?> postNotice(Principal principal, NoticeDto noticeDto) {
-        String email = principal.getName();
-        User user = userService.getByEmail(email).orElseThrow();
-        if (!user.getRole().equals(Role.ADMIN)) {
-            return ResponseEntity.badRequest().build();
+    public NoticeDto postNotice(Principal principal, NoticeDto noticeDto) {
+        User user = userService.getUser(principal)
+                .orElseThrow(() -> new UnauthorizedAccessException("User not found"));
+
+        if (user.getRole() != Role.ADMIN) {
+            throw new UnauthorizedAccessException("Only admins can post notices");
         }
         Resource attachment = resourceService.getResourceById(principal, noticeDto.getAttachmentId());
         Notice notice = Notice.builder()
@@ -49,24 +52,26 @@ public class NoticeServiceImpl implements NoticeService {
                 .postedBy(user)
                 .postedAt(SystemUtils.getCurrentTimeStamp())
                 .build();
-        Notice saved = noticeRepository.save(notice);
-        return ResponseEntity.ok(NoticeMapper.mapToNoticeDto(saved));
+
+        Notice savedNotice = noticeRepository.save(notice);
+        return NoticeMapper.mapToNoticeDto(savedNotice);
     }
 
     @Override
-    public ResponseEntity<?> getNotice(Long noticeId) {
-        NoticeDto noticeDto = noticeRepository.findById(noticeId).map(NoticeMapper::mapToNoticeDto)
-                .orElseThrow();
-        return ResponseEntity.ok(noticeDto);
+    public NoticeDto getNotice(Long noticeId) {
+        Optional<Notice> notice = noticeRepository.findById(noticeId);
+        return notice.map(NoticeMapper::mapToNoticeDto).orElseThrow();
     }
 
     @Override
-    public ResponseEntity<?> updateNotice(Long noticeId, NoticeDto noticeDto) {
+    @Transactional
+    public NoticeDto updateNotice(Long noticeId, NoticeDto noticeDto) {
         return null;
     }
 
     @Override
-    public ResponseEntity<?> deleteNotice(Long noticeId) {
-        return null;
+    @Transactional
+    public void deleteNotice(Long noticeId) {
+        noticeRepository.deleteById(noticeId);
     }
 }

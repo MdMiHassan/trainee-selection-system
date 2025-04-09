@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CircularRepository extends JpaRepository<Circular,Long> {
+public interface CircularRepository extends JpaRepository<Circular, Long> {
 }

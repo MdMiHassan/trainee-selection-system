@@ -9,6 +9,7 @@ import com.example.tss.service.AdminService;
 import com.example.tss.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -30,10 +31,12 @@ public class SimpleAdminService implements AdminService {
                 .enabled(true)
                 .build();
         User savedUser = userService.save(superAdmin);
+        ModelMapper mapper = new ModelMapper();
+        User user = mapper.map(savedUser, User.class);
         Optional<AdminProfile> adminProfileById = adminProfileRepository.findByUserId(savedUser.getId());
         if (adminProfileById.isEmpty()) {
             adminProfileRepository.save(AdminProfile.builder()
-                    .user(savedUser)
+                    .user(user)
                     .firstName("Super")
                     .lastName("Admin")
                     .empId("000000")

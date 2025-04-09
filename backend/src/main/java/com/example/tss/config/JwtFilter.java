@@ -24,23 +24,6 @@ import java.util.List;
 public class JwtFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
 
-    private String extractTokenFromRequest(HttpServletRequest serverHttpRequest) {
-        String authorization = serverHttpRequest.getHeader("Authorization");
-        if (authorization == null || !authorization.startsWith("Bearer ")) {
-            return null;
-        }
-        return authorization.substring(7);
-    }
-
-    public Authentication getAuthentication(Claims claims) {
-        List<String> roles = (List<String>) claims.get("role");
-        return new UsernamePasswordAuthenticationToken(
-                claims.getSubject(),
-                null,
-                roles.stream().map(SimpleGrantedAuthority::new).toList()
-        );
-    }
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = extractTokenFromRequest(request);
@@ -51,5 +34,21 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         }
         filterChain.doFilter(request, response);
+    }
+
+    private String extractTokenFromRequest(HttpServletRequest serverHttpRequest) {
+        String authHeader = serverHttpRequest.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return null;
+        }
+        return authHeader.substring(7);
+    }
+
+    public Authentication getAuthentication(Claims claims) {
+        String subject = claims.getSubject();
+        List<String> roles = (List<String>) claims.get("roles");
+        List<SimpleGrantedAuthority> authorities = roles.stream()
+                .map(SimpleGrantedAuthority::new).toList();
+        return new UsernamePasswordAuthenticationToken(subject, null, authorities);
     }
 }

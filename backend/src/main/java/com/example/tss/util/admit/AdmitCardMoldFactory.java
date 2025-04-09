@@ -5,17 +5,18 @@ import com.example.tss.util.ImageUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.parser.Parser;
 import org.jsoup.parser.Tag;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Objects;
 
 @Component
 public class AdmitCardMoldFactory {
     public AdmitCardMold getAdmitCardMold() {
         Document document = Jsoup.parse(HTMLMold.ADMIT_CARD);
-        document.outputSettings().syntax( Document.OutputSettings.Syntax.xml);
+        document.outputSettings().syntax(Document.OutputSettings.Syntax.xml);
         return new SimpleAdmitCardMold(document);
     }
 
@@ -134,7 +135,7 @@ public class AdmitCardMoldFactory {
                     Element pElement = new Element(Tag.valueOf("p"), "");
                     System.out.println(basicInfo.get(infoTitle));
                     String s = basicInfo.get(infoTitle);
-                    if(s!=null){
+                    if (s != null) {
                         pElement.text(basicInfo.get(infoTitle));
                         System.out.println("After p");
                         divElement.appendChild(pElement);

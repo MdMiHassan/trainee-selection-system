@@ -1,8 +1,8 @@
 package com.example.tss.constants;
 
 public enum ResourceType {
-    ADMITCARD,
-    PROFILEPICTURE,
+    ADMIT_CARD,
+    PROFILE_PICTURE,
     RESUME,
     OTHER
 }

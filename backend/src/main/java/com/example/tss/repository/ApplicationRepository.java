@@ -25,4 +25,6 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     Optional<Application> findByCircularIdAndApplicantId(Long circularId, Long id);
 
     Optional<Application> findByUniqueIdentifier(long uniqueIdentifier);
+
+    boolean existsByCircularIdAndApplicantId(Long circularId, Long applicantId);
 }

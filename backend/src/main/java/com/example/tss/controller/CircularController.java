@@ -3,8 +3,6 @@ package com.example.tss.controller;
 import com.example.tss.dto.ApplicantProfileDto;
 import com.example.tss.dto.CircularDto;
 import com.example.tss.dto.ScreeningRoundDto;
-import com.example.tss.service.AdmitCardService;
-import com.example.tss.service.ApplicationService;
 import com.example.tss.service.CircularService;
 import com.example.tss.service.RoundService;
 import jakarta.validation.Valid;
@@ -50,7 +48,8 @@ public class CircularController {
 
     @PostMapping("/{circularId}/apply")
     public ResponseEntity<?> apply(@Valid @RequestBody ApplicantProfileDto applicantProfileDto, @PathVariable Long circularId, Principal principal) {
-        return circularService.apply(circularId, applicantProfileDto, principal);
+        ApplicantProfileDto applicationProfile = circularService.apply(circularId, applicantProfileDto, principal);
+        return ResponseEntity.ok(applicationProfile);
     }
 
     @PostMapping("/{circularId}/bookmark/toggle")

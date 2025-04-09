@@ -3,7 +3,7 @@ package com.example.tss.constants.molds;
 public interface HTMLMold {
     String ADMIT_CARD = """
             <html>
-                        
+            
             <head>
                 <style>
                     * {
@@ -11,160 +11,160 @@ public interface HTMLMold {
                         margin: 0;
                         box-sizing: border-box;
                     }
-                        
+            
                     img {
                         display: block;
                     }
-                        
+            
                     .instructions ol li p {
                         font-size: 14px;
                     }
-                        
+            
                     .basic-info div p,
                     .basic-info div h4 {
                         font-size: 16px;
                     }
-                        
+            
                     .heading {
                         display: table;
                         width: 100%;
                     }
-                        
+            
                     .company-logo-left,
                     .companyIntro,
                     .company-logo-right {
                         display: table-cell;
                         vertical-align: middle;
                     }
-                        
+            
                     .company-logo-right,
                     .company-logo-left {
                         width: 80px;
                     }
-                        
+            
                     .company-logo-left img,
                     .company-logo-right img {
                         margin: 0 auto;
                         width: 70px;
                     }
-                        
+            
                     .companyIntro {
                         text-align: center;
-                        
+            
                     }
-                        
+            
                     .heading {
                         padding-bottom: 5px;
                         border-bottom: .5px solid #000000;
                     }
-                        
+            
                     .companyIntro h1 {
                         margin-bottom: 5px;
                         font-size: 36px;
                         color: #383691;
                     }
-                        
-                        
+            
+            
                     .agenda {
                         text-align: center;
                         margin: 20px 0 30px 0;
                     }
-                        
+            
                     .agenda h2 {
                         font-size: 24px;
                     }
-                        
+            
                     .companyIntro p {
                         font-style: italic;
                         font-size: 12px;
                     }
-                        
+            
                     .applicants-data {
                         width: 100%;
                         margin-bottom: 20px;
                     }
-                        
+            
                     .security-data {
                         width: 100px;
                     }
-                        
+            
                     .basic-info,
                     .security-data {
                         vertical-align: top;
                     }
-                        
+            
                     .basic-info {
                         display: table;
                     }
-                        
+            
                     .basic-info div {
                         display: table-row;
                     }
-                        
+            
                     .basic-info div h4 {
                         width: 150px;
                         display: table-cell;
                     }
-                        
+            
                     .applicants-sig {
                         width: 100px;
                     }
-                        
+            
                     .bar-code,
                     .applicants-sig img,
                     .applicants-photo,
                     .qr-code {
                         margin: 0 auto;
                     }
-                        
+            
                     .bar-code {
                         width: 100px;
                         height: 50px;
                     }
-                        
+            
                     .applicants-sig img {
                         width: 100px;
                         height: 40px;
                     }
-                        
+            
                     .applicants-photo {
                         width: 100px;
                         height: 100px;
                     }
-                        
+            
                     .qr-code {
                         width: 100px;
                         height: 100px;
                     }
-                        
+            
                     .basic-info h3,
                     .instructions h3 {
                         margin-bottom: 5px;
                     }
-                        
+            
                     .instructions h3 {
                         width: 100%;
                         text-align: center;
                         margin-bottom: 10px;
                     }
-                        
+            
                     .instructions {
                         margin-bottom: 8%;
                         border: .5px solid #000000;
                         padding: 10px 15px 15px 5px;
                     }
-                        
+            
                     .auth-inv-signature,
                     .auth-inv-signature tr {
                         width: 100%;
                     }
-                        
+            
                     .auth-inv-signature tr td {
                         width: 50%;
                         text-align: center;
                         vertical-align: top;
                     }
-                        
+            
                     .auth-sig img,
                     .auth-sig p,
                     .auth-sig h4,
@@ -173,30 +173,30 @@ public interface HTMLMold {
                         margin: 0 auto;
                         text-align: center;
                     }
-                        
+            
                     .auth-sig img {
                         width: 200px;
                         height: 70px;
                     }
-                        
+            
                     .applicants-sig h4,
                     .inv-sig h4,
                     .auth-sig h4 {
                         border-top: .5px solid #000000;
                     }
-                        
+            
                     .applicants-sig h4 {
                         width: 100%;
                         text-align: center;
                     }
-                        
+            
                     .applicants-sig {
                         width: 100%;
                         margin: 10px 0 30px 0;
                     }
                 </style>
             </head>
-                        
+            
             <body>
                 <div class="heading">
                     <div class="company-logo-left">
@@ -220,10 +220,10 @@ public interface HTMLMold {
                             <div id="basicInformation"></div>
                         </td>
                         <td class="security-data">
-                            
+            
                             <img id="applicantPhoto" alt="applicants" class="applicants-photo" ></img>
                             <div class="applicants-sig">
-                                
+            
                                 <h4 style="margin-top:50px;">Signature</h4>
                             </div>
                             <img id="qrCode" alt="qrcode" class="qr-code" ></img>
@@ -250,7 +250,7 @@ public interface HTMLMold {
                     </tr>
                 </table>
             </body>
-                        
+            
             </html>
             """;
     String REJECTION_EMAIL = """
@@ -285,14 +285,14 @@ public interface HTMLMold {
             <span id="regards-position">[Your Position]</span><br>
             <span id="regards-companyname">[Company Name]</span><br>
             <span id="regards-information">[Contact Information]</span><br>
-                        
+            
             </body>
             </html>
             """;
     String SCREENING_INVITATION_EMAIL = """
             <!DOCTYPE html>
             <html lang="en">
-                        
+            
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -304,7 +304,7 @@ public interface HTMLMold {
                     }
                 </style>
             </head>
-                        
+            
             <body>
             <p>Dear <span id="applicant-name">[Candidate's Name]</span>,</p>
             <p><strong>Congratulations!</strong> We are delighted to inform you that <strong>
@@ -325,13 +325,13 @@ public interface HTMLMold {
             <span id="regards-company"></span><br>
             <span id="regards-information"></span><br>
             </body>
-                        
+            
             </html>
             """;
     String THANKS_FOR_APPLYING_EMAIL = """
             <!DOCTYPE html>
             <html lang="en">
-                        
+            
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -343,7 +343,7 @@ public interface HTMLMold {
                     }
                 </style>
             </head>
-                        
+            
             <body>
             <p>Dear <span id="applicant-name">[Candidate's Name]</span>,</p>
             <p>
@@ -367,7 +367,7 @@ public interface HTMLMold {
             <span id="regards-company">[Company Name]</span><br>
             <span id="regards-information">[Contact Information]</span><br>
             </body>
-                        
+            
             </html>
             """;
 }

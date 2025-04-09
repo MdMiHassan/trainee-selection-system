@@ -16,6 +16,7 @@ import com.example.tss.service.EvaluatorService;
 import com.example.tss.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -33,62 +34,66 @@ public class EvaluatorServiceImpl implements EvaluatorService {
     private final ScreeningMarksRepository screeningMarksRepository;
 
     @Override
-    public ResponseEntity<?> createEvaluator(EvaluatorDto evaluatorDto) {
+    public EvaluatorDto createEvaluator(EvaluatorDto evaluatorDto) {
         String email = evaluatorDto.getEmail();
-        Optional<User> userOptional = userService.getByEmail(email);
-        if (userOptional.isEmpty()) {
-            User evaluatorUser = User.builder()
-                    .email(email)
-                    .password(evaluatorDto.getPassword())
-                    .expiredAt(evaluatorDto.getExpireAt())
-                    .locked(false)
-                    .role(Role.EVALUATOR)
-                    .enabled(true)
-                    .build();
-            User savedEvaluatorUser = userService.save(evaluatorUser);
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.badRequest().build();
+        userService.getUser(email).ifPresent(user -> {
+            throw new RuntimeException();
+        });
+        User evaluatorUser = User.builder()
+                .email(email)
+                .password(evaluatorDto.getPassword())
+                .expiredAt(evaluatorDto.getExpireAt())
+                .locked(false)
+                .role(Role.EVALUATOR)
+                .enabled(true)
+                .build();
+        User savedEvaluatorDto = userService.save(evaluatorUser);
+        ModelMapper mapper = new ModelMapper();
+        return mapper.map(savedEvaluatorDto, EvaluatorDto.class);
     }
 
     @Override
     @Transactional
-    public ResponseEntity<?> getAllAssignedApplicants(Long evaluatorId) {
-        List<AssignedApplicantDto> assigned = evaluatorRepository.findByUserId(evaluatorId).stream()
+    public List<AssignedApplicantDto> getAllAssignedApplicants(Long evaluatorId) {
+        List<AssignedApplicantDto> assigned;
+        assigned = evaluatorRepository.findByUserId(evaluatorId).stream()
                 .map(evaluator -> {
-                            Application application = evaluator.getApplication();
-                            ScreeningRound assignedRound = evaluator.getAssignedRound();
-                            ScreeningRoundDto screeningRoundDto = ScreeningRoundDto.builder()
-                                    .roundId(assignedRound.getId())
-                                    .circularId(assignedRound.getCircular().getId())
-                                    .title(assignedRound.getTitle())
-                                    .description(assignedRound.getTitle())
-                                    .maxMark(assignedRound.getMaxMark())
-                                    .passMark(assignedRound.getPassMark())
-                                    .build();
+                    Application application = evaluator.getApplication();
+                    ScreeningRound assignedRound = evaluator.getAssignedRound();
+                    ScreeningRoundDto screeningRoundDto = ScreeningRoundDto.builder()
+                            .roundId(assignedRound.getId())
+                            .circularId(assignedRound.getCircular().getId())
+                            .title(assignedRound.getTitle())
+                            .description(assignedRound.getTitle())
+                            .maxMark(assignedRound.getMaxMark())
+                            .passMark(assignedRound.getPassMark())
+                            .build();
 
-                            AssignedApplicantDto assignedApplicantDto = AssignedApplicantDto.builder()
-                                    .screeningRound(screeningRoundDto)
-                                    .candidatesUid(application.getId() + 1000)
-                                    .build();
-                            return assignedApplicantDto;
-                        }
-                ).toList();
+                    return AssignedApplicantDto.builder()
+                            .screeningRound(screeningRoundDto)
+                            .candidatesUid(application.getId() + 1000)
+                            .build();
+                })
+                .toList();
 
-        return ResponseEntity.ok(assigned);
+        return assigned;
     }
 
     @Override
     @Transactional
     public ResponseEntity<?> assignEvaluatorToApplicants(Long evaluatorId, Long candidateId, Long assignedRoundId) {
-        User user = userService.getById(evaluatorId).orElseThrow();
-        Application application = applicationRepository.findById(candidateId).orElseThrow(EvaluatorAssigningFailedException::new);
+        User user = userService.getUser(evaluatorId).orElseThrow();
+        Application application = applicationRepository.findById(candidateId)
+                .orElseThrow(EvaluatorAssigningFailedException::new);
         Circular circular = application.getCircular();
-        ScreeningRoundMeta screeningRoundMeta = screeningRoundMetaRepository.findByCircularId(circular.getId()).orElseThrow();
+        ScreeningRoundMeta screeningRoundMeta = screeningRoundMetaRepository.findByCircularId(circular.getId())
+                .orElseThrow();
         if (evaluatorRepository.existsByApplicationIdAndAssignedRoundId(application.getId(), assignedRoundId)) {
             throw new EvaluatorAssigningFailedException();
         }
-        if (evaluatorRepository.existsByUserIdAndApplicationIdAndAssignedRoundId(user.getId(), application.getId(), assignedRoundId)) {
+        if (evaluatorRepository.existsByUserIdAndApplicationIdAndAssignedRoundId(user.getId(),
+                application.getId(),
+                assignedRoundId)) {
             throw new EvaluatorAssigningFailedException();
         }
         ScreeningRound applicationCurrentRound = application.getCurrentRound();
@@ -107,7 +112,7 @@ public class EvaluatorServiceImpl implements EvaluatorService {
 
     @Override
     public ResponseEntity<?> updateAssignedApplicantsMarks(Principal principal, MarksDto marksDto) {
-        User user = userService.getUserByPrincipal(principal)
+        User user = userService.getUser(principal)
                 .orElseThrow(ApplicantMarkUpdateFailedException::new);
         long applicationUid = marksDto.getCandidateUid();
         Application application = applicationRepository.findByUniqueIdentifier(applicationUid)
@@ -141,7 +146,7 @@ public class EvaluatorServiceImpl implements EvaluatorService {
 
     @Override
     public ResponseEntity<?> getAllAssignedApplicants(Principal principal) {
-        User user = userService.getUserByPrincipal(principal).orElseThrow();
+        User user = userService.getUser(principal).orElseThrow();
         List<AssignedApplicantDto> assignedEvaluation = evaluatorRepository.findByUserId(user.getId()).stream()
                 .filter(evaluator -> {
                     Application application = evaluator.getApplication();
@@ -166,7 +171,7 @@ public class EvaluatorServiceImpl implements EvaluatorService {
 
                     AssignedApplicantDto assignedApplicantDto = AssignedApplicantDto.builder()
                             .screeningRound(screeningRoundDto)
-                            .candidatesUid(application.getId()+1000)
+                            .candidatesUid(application.getId() + 1000)
                             .build();
 
                     if (roundMarkOp.isPresent()) {
@@ -181,12 +186,14 @@ public class EvaluatorServiceImpl implements EvaluatorService {
     }
 
     @Override
-    public ResponseEntity<?> getEvaluators() {
-        List<User> evaluators = userService.getAllEvaluators();
-        List<EvaluatorDto> evaluatorDto = evaluators.stream().map(evaluator -> EvaluatorDto.builder()
-                .email(evaluator.getEmail())
-                .id(evaluator.getId())
-                .build()).toList();
-        return ResponseEntity.ok(evaluatorDto);
+    public List<EvaluatorDto> getEvaluators() {
+        List<EvaluatorDto> evaluators;
+        evaluators = userService.getAllEvaluators().stream()
+                .map(evaluator -> EvaluatorDto.builder()
+                        .email(evaluator.getEmail())
+                        .id(evaluator.getId())
+                        .build())
+                .toList();
+        return evaluators;
     }
 }

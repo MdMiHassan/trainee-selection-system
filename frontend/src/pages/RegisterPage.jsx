@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Row, Col, Card, Steps } from 'antd';
 import RegisterForm from '../components/forms/RegisterForm';
-import EmailVarification from '../components/forms/EmailVarification';
+import EmailVerification from '../components/forms/EmailVerification.jsx';
 import RegisterPersonalInfo from '../components/forms/RegisterPersionalInfo';
 import '../styles/RegisterPage.css';
 const items = [
@@ -27,7 +27,7 @@ const RegisterPage = () => {
                         labelPlacement="vertical" items={items} size="small" direction='horizontal' /></div>}
                     style={{ marginTop: "10px" }} >
                     {step === 1 && (<RegisterForm setStep={setStep} setUser={setUser}/>)}
-                    {step === 2 && (<EmailVarification setStep={setStep} user={user}/>)}
+                    {step === 2 && (<EmailVerification setStep={setStep} user={user}/>)}
                     {step === 3 && (<RegisterPersonalInfo setStep={setStep}/>)}
                 </Card>
             </Col>

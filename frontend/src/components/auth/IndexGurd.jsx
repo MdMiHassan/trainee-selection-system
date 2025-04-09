@@ -3,12 +3,11 @@ import { Navigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 
 function IndexGuard({ children }) {
-    const { role, token } = useContext(AuthContext);
-    const isAuthenticated = () => {
-        console.log("Token before checking: "+token);
-        return token? true : false;
-    };
+    const { isAuthenticated,getAccessRoles  } = useContext(AuthContext);
+
     if (isAuthenticated()) {
+        const role=getAccessRoles()[0];
+        console.log(role)
         switch (role) {
             case "APPLICANT":
                 return <Navigate to="/applicant" />;

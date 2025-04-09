@@ -6,5 +6,5 @@ import com.example.tss.entity.User;
 import java.util.Optional;
 
 public interface ApplicantProfileService {
-    Optional<ApplicantProfile> getByUser(User user);
+    Optional<ApplicantProfile> getApplicantProfile(User user);
 }

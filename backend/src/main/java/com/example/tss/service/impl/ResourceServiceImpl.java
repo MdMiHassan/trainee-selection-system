@@ -73,7 +73,7 @@ public class ResourceServiceImpl implements ResourceService {
         if (!FileUtils.isValidFileType(fileExtension)) {
             throw new IOException();
         }
-        ResourceType type = fileExtension.equals("pdf") ? (upload ? ResourceType.RESUME : ResourceType.ADMITCARD) : ResourceType.PROFILEPICTURE;
+        ResourceType type = fileExtension.equals("pdf") ? (upload ? ResourceType.RESUME : ResourceType.ADMIT_CARD) : ResourceType.PROFILE_PICTURE;
         byte[] fileByte = multipartFile.getBytes();
 
         Resource resource = Resource.builder()

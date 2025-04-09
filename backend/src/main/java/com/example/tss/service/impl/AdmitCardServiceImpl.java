@@ -44,7 +44,7 @@ public class AdmitCardServiceImpl implements AdmitCardService {
 
     @Override
     public ResourceDto retrieveAdmit(Long resourceId) {
-        Resource resource = resourceRepository.findByIdAndResourceType(resourceId, ResourceType.ADMITCARD)
+        Resource resource = resourceRepository.findByIdAndResourceType(resourceId, ResourceType.ADMIT_CARD)
                 .orElseThrow(() -> new ResourceNotFoundException(resourceId.toString()));
         return modelMapper.map(resource, ResourceDto.class);
     }
@@ -101,7 +101,7 @@ public class AdmitCardServiceImpl implements AdmitCardService {
             byte[] admitCardData = convertHtmlToPdf(admitCardHtml);
             admit.setFileData(admitCardData);
             admit.setFileFormat("pdf");
-            admit.setResourceType(ResourceType.ADMITCARD);
+            admit.setResourceType(ResourceType.ADMIT_CARD);
             admit.setFileName(admit.getId() + ".pdf");
             admit.setFileDelete(false);
             admit.setDeletedByUser(false);
@@ -113,7 +113,6 @@ public class AdmitCardServiceImpl implements AdmitCardService {
             applicationRepository.save(application);
             return true;
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             throw new AdmitCardGenerationException();
         }
     }
