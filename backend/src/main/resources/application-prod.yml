@@ -1,0 +1,21 @@
+spring:
+  mail:
+    host: <smtp-host>
+    port: <port>
+    username: <username>
+    password: <password>
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  datasource:
+    url: <db-url>
+    username: <db-username>
+    password: <db-username>
+  jpa:
+    hibernate:
+      ddl-auto: update
+#      ddl-auto: create-drop
+    show-sql: true
